@@ -1,9 +1,0 @@
-{
-    "productCode": "P00000094", 
-    "sysSource": "1", 
-    "frontTransTime": "2018-02-27 13:56:31", 
-    "interfaceNo": "5035", 
-    "busiCode": "HLAB35", 
-    "inquiryCode": "BMI398266237206762212", 
-    "frontTransNo": "BM50112018030800000135"
-}

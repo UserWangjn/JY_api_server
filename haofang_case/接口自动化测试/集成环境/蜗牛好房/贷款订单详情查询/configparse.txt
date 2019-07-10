@@ -1,9 +1,0 @@
-[config]
-private_url = /broker-interface/api/platform/DecFormRest/5026/v1
-method = post
-head_key = Content-type
-head_value = application/x-www-form-urlencoded
-
-[sign]
-sign_type = app
-

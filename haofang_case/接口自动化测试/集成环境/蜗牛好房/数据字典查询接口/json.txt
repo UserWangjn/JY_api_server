@@ -1,8 +1,0 @@
-{
-    "sysSource": "1", 
-    "frontTransTime": "2018-02-27 13:56:31", 
-    "interfaceNo": "5040", 
-    "busiCode": "HLAB40", 
-    "frontTransNo": "BM500120180227120028", 
-    "dictCode": "IS_BROKERAGE,IN_OUT,EVALUATE_ORG"
-}

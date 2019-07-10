@@ -1,8 +1,0 @@
-{
-    "sysSource": "3", 
-    "frontTransTime": "2018-06-28 10:33:31", 
-    "interfaceNo": "6000", 
-    "busiCode": "HLAB60", 
-    "uniqueCode": "oC0tG41nqQy4cm8E_ulKMxOPuXkw", 
-    "frontTransNo": "BM501120180308020006135"
-}

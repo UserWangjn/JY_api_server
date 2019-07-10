@@ -1,9 +1,0 @@
-{
-    "sysSource": "1", 
-    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
-    "phone": "${phone}", 
-    "interfaceNo": "5002", 
-    "busiCode": "HLAB02", 
-    "password": "BJTYRsQ4j8KedM41KPrIuw==", 
-    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
-}
