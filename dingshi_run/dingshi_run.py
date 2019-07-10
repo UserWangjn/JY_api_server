@@ -21,7 +21,7 @@ import os
 import signal
 import sys
 # mulu=os.path.join(os.path.dirname(os.getcwd()),'HGTP_server','example.db')
-mulu=os.path.join('E:\HGTP_server','example.db')
+mulu=os.path.join('../../HGTP_server','example.db')
 print mulu
 run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
 db = sqlite3.connect(mulu)
