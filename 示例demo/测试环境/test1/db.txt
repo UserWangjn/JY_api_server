@@ -1,0 +1,8 @@
+[db]
+ip=192.168.80.65
+name=lekuda
+password=123456
+[sql]
+sql1_json_code=SELECT params from okcoin_user_local.notice_send_log WHERE behavior = 3071 and user_id = 36189223 ORDER BY id DESC LIMIT 1;
+[data]
+name=3
