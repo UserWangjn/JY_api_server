@@ -1,0 +1,9 @@
+{
+    "cityCode": "123", 
+    "sysSource": "1", 
+    "keyword": "\u534e\u817e", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "interfaceNo": "5016", 
+    "busiCode": "HLAB16", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
+}

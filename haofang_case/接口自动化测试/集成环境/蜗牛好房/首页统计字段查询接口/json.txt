@@ -1,0 +1,7 @@
+{
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}", 
+    "interfaceNo": "5043", 
+    "busiCode": "HLAB43", 
+    "sysSource": "1"
+}

@@ -1,0 +1,8 @@
+{
+    "sysSource": "1", 
+    "frontTransTime": "2018-07-12 17:07:08", 
+    "userId": "1939", 
+    "interfaceNo": "5027", 
+    "busiCode": "HLAB27", 
+    "frontTransNo": "BM15313891888303463503"
+}

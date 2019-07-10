@@ -1,0 +1,11 @@
+{
+    "isBrokerage": "3", 
+    "sysSource": "1", 
+    "pageSize": "10", 
+    "frontTransTime": "2018-07-12 17:07:08", 
+    "userId": "1939", 
+    "interfaceNo": "5028", 
+    "busiCode": "HLAB28", 
+    "curPage": "1", 
+    "frontTransNo": "BM15313891883219854351"
+}

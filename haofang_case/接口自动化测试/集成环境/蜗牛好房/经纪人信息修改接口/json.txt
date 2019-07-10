@@ -1,0 +1,10 @@
+{
+    "sysSource": "1", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "paramType": "4", 
+    "userId": "1235", 
+    "registerCityCode": "110100", 
+    "interfaceNo": "5041", 
+    "busiCode": "HLAB41", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
+}

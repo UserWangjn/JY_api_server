@@ -1,0 +1,11 @@
+{
+    "openAccBank": "\u65e5\u672c ", 
+    "bankCardNo": "6228480419292040191", 
+    "sysSource": "1", 
+    "frontTransTime": "2018-07-12 17:07:08", 
+    "userId": "1939", 
+    "cashAmount": "100.0", 
+    "interfaceNo": "5030", 
+    "busiCode": "HLAB30", 
+    "frontTransNo": "BM15313891889019487720"
+}

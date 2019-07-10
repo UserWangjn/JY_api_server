@@ -1,0 +1,10 @@
+{
+    "sysSource": "1", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "idCard": "${idNumber}", 
+    "userId": "${userId}", 
+    "interfaceNo": "5044", 
+    "busiCode": "HLAB44", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}", 
+    "name": "${name}"
+}

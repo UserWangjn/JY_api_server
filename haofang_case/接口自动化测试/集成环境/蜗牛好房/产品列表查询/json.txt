@@ -1,0 +1,10 @@
+{
+    "sysSource": "1", 
+    "pageSize": "1", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "interfaceNo": "5011", 
+    "busiCode": "HLAB11", 
+    "curPage": "1", 
+    "inquiryCode": "${inquiryCode}", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
+}

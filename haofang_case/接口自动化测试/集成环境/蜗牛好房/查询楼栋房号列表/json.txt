@@ -1,0 +1,8 @@
+{
+    "interfaceNo": "5018", 
+    "sysSource": "1", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "buildingCode": "68168", 
+    "busiCode": "HLAB18", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
+}

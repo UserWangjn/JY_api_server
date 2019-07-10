@@ -1,0 +1,10 @@
+{
+    "sysSource": "1", 
+    "frontTransTime": "2018-03-14 11:22:07", 
+    "estateName": "\u8682\u8681\u519c\u573a\u5c0f\u533a", 
+    "userId": "305", 
+    "propertyCertUrl":"change_json", 
+    "interfaceNo": "5021", 
+    "busiCode": "HLAB21", 
+    "frontTransNo": "20180314112207600"
+}

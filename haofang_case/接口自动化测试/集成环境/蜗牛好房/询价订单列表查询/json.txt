@@ -1,0 +1,11 @@
+{
+    "sysSource": "1", 
+    "pageSize": "5", 
+    "frontTransTime": "${__time(yyyy-MM-dd HH:MM:ss,)}", 
+    "userId": "${userId}", 
+    "interfaceNo": "int(current_app.config.get('LOCAL_SERVER_PORT'))",
+    "busiCode": "HLAB22", 
+    "curPage": "1", 
+    "inquiryStatus": "0", 
+    "frontTransNo": "BM${__time(,)}${__Random(1000000,9999999,)}"
+}
