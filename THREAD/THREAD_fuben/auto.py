@@ -1,10 +1,10 @@
 # -*-coding:utf-8-*-
 import smtplib
 
-server = smtplib.SMTP_SSL("smtp.exmail.qq.com",port=465)
+server = smtplib.SMTP_SSL("smtp.jieyuechina.com",port=25)
 
-server.login('zhen.sun@okcoin.com','gfXD8b7ojmhWbD9u')
+server.login('test@jieyuechina.com','Test.1234*')
 
 
-server.sendmail('zhen.sun@okcoin.com','zhen.sun@okcoin.com','22222')
+server.sendmail('test@jieyuechina.com','test@jieyuechina.com','22222')
 server.close()
