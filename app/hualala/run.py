@@ -80,70 +80,69 @@ def run_hualala(fun):
             name = request.form['name']
         except:
             name = cu.execute('select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get('X-Real-IP')).fetchall()[0][0]
+        if 'run_time' in request.form.keys():
+            run_time = request.form['run_time']
         else:
-            if 'run_time' in request.form.keys():
-                run_time = request.form['run_time']
+            run_time = str(time.time())
+        user_name = [ i.strip() for i in request.form['all_name'].split('#') if i.strip() != '' ]
+        if request.form.has_key('statu') and 'dingshi' in request.form['statu'] and 'run_statu' in request.form.keys():
+            if 'everyday' not in request.form['run_statu'].strip():
+                run_time = time.strftime('%Y-%m-%d', time.localtime(time.time())) + '  ' + run_time
+            if request.form['statu'] == 'dingshi':
+                all = cu.execute('select id from  dingshi_run where name="%s"  and statu in ("0","1","2")order by update_time asc' % name).fetchall()
             else:
-                run_time = str(time.time())
-            user_name = [ i.strip() for i in request.form['all_name'].split('#') if i.strip() != '' ]
-            if request.form.has_key('statu') and 'dingshi' in request.form['statu'] and 'run_statu' in request.form.keys():
-                if 'everyday' not in request.form['run_statu'].strip():
-                    run_time = time.strftime('%Y-%m-%d', time.localtime(time.time())) + '  ' + run_time
-                if request.form['statu'] == 'dingshi':
+                if request.form['statu'] == 'jiekou_dingshi':
                     all = cu.execute('select id from  dingshi_run where name="%s"  and statu in ("0","1","2")order by update_time asc' % name).fetchall()
-                else:
-                    if request.form['statu'] == 'jiekou_dingshi':
-                        all = cu.execute('select id from  dingshi_run where name="%s"  and statu in ("0","1","2")order by update_time asc' % name).fetchall()
-                    if len(all) > 4:
-                        for i in all[-4:]:
-                            cu.execute('delete from dingshi_run where id=%s ' % i)
-                            strr = '#' + str(all[(-1)])
-                            db.commit()
+                if len(all) > 4:
+                    for i in all[-4:]:
+                        cu.execute('delete from dingshi_run where id=%s ' % i)
+                        strr = '#' + str(all[(-1)])
+                        db.commit()
 
-                    try:
-                        if 'everyday' in request.form['time'].encode('utf-8'):
-                            z = time.strftime('%Y-%m-%d', time.localtime(time.time())) + '  ' + request.form['time'].encode('utf-8').split('everyday')[(-1)].strip()
-                            timeArray = time.strptime(z, '%Y-%m-%d %H:%M')
-                        else:
-                            timeArray = time.strptime(request.form['time'].encode('utf-8').split('：')[(-1)].strip(), '%Y-%m-%d %H:%M')
-                        timestamp = time.mktime(timeArray)
-                    except:
-                        return jsonify(statu='error')
+                try:
+                    if 'everyday' in request.form['time'].encode('utf-8'):
+                        z = time.strftime('%Y-%m-%d', time.localtime(time.time())) + '  ' + request.form['time'].encode('utf-8').split('everyday')[(-1)].strip()
+                        timeArray = time.strptime(z, '%Y-%m-%d %H:%M')
+                    else:
+                        timeArray = time.strptime(request.form['time'].encode('utf-8').split('：')[(-1)].strip(), '%Y-%m-%d %H:%M')
+                    timestamp = time.mktime(timeArray)
+                except:
+                    return jsonify(statu='error')
 
-                if request.form['statu'] == 'dingshi':
-                    cu.executemany('INSERT INTO  dingshi_run values (?,?,?,?,?,?,null,?,?,?,?,?)', [(name, time.time(), request.form['time'], request.form['all_path'], '0', email_detail, '', '{}', request.form['all_branch'], job, run_server)])
-                else:
-                    if request.form['statu'] == 'jiekou_dingshi':
-                        cu.executemany('INSERT INTO  dingshi_run values (?,?,?,?,?,?,null,?,?,?,?,?)', [
-                         (name, time.time(),
-                          request.form['time'],
-                          request.form['all_path'], '0',
-                          email_detail, '', '{}',
-                          request.form['all_branch'], job,
-                          run_server)])
-                db.commit()
-                html = '  <tr  class="dingshi_detail"    name="{{i[4]}}"><td   >{{i[1]}}</td><td>  {{i[2]}}</td><td>{{i[3]}}</td> </tr>'
-                if request.form['statu'] == 'dingshi':
-                    dingshi_detail = [ [i[1], i[2], i[4], i[(-1)]] for i in cu.execute('select * from dingshi_run where name="%s" and statu in ("0","1","2") order by update_time desc ' % name).fetchall() ]
-                else:
-                    if request.form['statu'] == 'jiekou_dingshi':
-                        dingshi_detail = [ [i[1], i[2], i[4], i[(-1)]] for i in cu.execute('select * from dingshi_run where name="%s" and run_time like "%s" order by update_time desc ' % (name, u'接口%')).fetchall() ]
-                db.close()
-                for k, i in enumerate(dingshi_detail):
-                    i.insert(0, i[0])
-                    i[1] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[0])))
-                    if i[(-2)].strip() in ('0', '3'):
-                        i[-2] = 'ready'
-                    elif i[(-2)].strip() in ('1', '4'):
-                        i[-2] = 'running'
-                    elif i[(-2)].strip() in ('2', '5'):
-                        i[-2] = 'over'
+            if request.form['statu'] == 'dingshi':
+                cu.executemany('INSERT INTO  dingshi_run values (?,?,?,?,?,?,null,?,?,?,?,?)', [(name, time.time(), request.form['time'], request.form['all_path'], '0', email_detail, '', '{}', request.form['all_branch'], job, run_server)])
+            else:
+                if request.form['statu'] == 'jiekou_dingshi':
+                    cu.executemany('INSERT INTO  dingshi_run values (?,?,?,?,?,?,null,?,?,?,?,?)', [
+                     (name, time.time(),
+                      request.form['time'],
+                      request.form['all_path'], '0',
+                      email_detail, '', '{}',
+                      request.form['all_branch'], job,
+                      run_server)])
+            db.commit()
+            html = '  <tr  class="dingshi_detail"    name="{{i[4]}}"><td   >{{i[1]}}</td><td>  {{i[2]}}</td><td>{{i[3]}}</td> </tr>'
+            if request.form['statu'] == 'dingshi':
+                dingshi_detail = [ [i[1], i[2], i[4], i[(-1)]] for i in cu.execute('select * from dingshi_run where name="%s" and statu in ("0","1","2") order by update_time desc ' % name).fetchall() ]
+            else:
+                if request.form['statu'] == 'jiekou_dingshi':
+                    dingshi_detail = [ [i[1], i[2], i[4], i[(-1)]] for i in cu.execute('select * from dingshi_run where name="%s" and run_time like "%s" order by update_time desc ' % (name, u'接口%')).fetchall() ]
+            db.close()
+            for k, i in enumerate(dingshi_detail):
+                i.insert(0, i[0])
+                i[1] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[0])))
+                if i[(-2)].strip() in ('0', '3'):
+                    i[-2] = 'ready'
+                elif i[(-2)].strip() in ('1', '4'):
+                    i[-2] = 'running'
+                elif i[(-2)].strip() in ('2', '5'):
+                    i[-2] = 'over'
 
-                s = ''
-                for i in dingshi_detail:
-                    s += html.replace('{{i[4]}}', str(i[4])).replace('{{i[1]}}', i[1]).replace('{{i[2]}}', i[2]).replace('{{i[3]}}', i[3])
+            s = ''
+            for i in dingshi_detail:
+                s += html.replace('{{i[4]}}', str(i[4])).replace('{{i[1]}}', i[1]).replace('{{i[2]}}', i[2]).replace('{{i[3]}}', i[3])
 
-                return jsonify(statu='success', html=s)
+            return jsonify(statu='success', html=s)
 
         if len(cu.execute('select name from run where name="%s"' % name).fetchall()) == 0:
             cu.executemany('INSERT INTO  run values (?,?,?,?,?,?,?)', [(1, name, request.headers.get('X-Real-IP'), request.form['all_path'], time.time(), run_time, email_detail)])
@@ -178,31 +177,30 @@ def run_hualala(fun):
             except:
                 os.mkdir(run_dir)
                 os.chdir(run_dir)
-            else:
+            os.popen('git init')
+            for k, i in enumerate(git_path):
+                zanshi_mulu = os.path.join(run_dir, i.split('/')[(-1)].split('.')[0] + git_branch[k])
+                os.mkdir(zanshi_mulu)
+                open(os.path.join(zanshi_mulu, '__init__.py'), 'w').close()
+                os.chdir(zanshi_mulu)
                 os.popen('git init')
-                for k, i in enumerate(git_path):
-                    zanshi_mulu = os.path.join(run_dir, i.split('/')[(-1)].split('.')[0] + git_branch[k])
-                    os.mkdir(zanshi_mulu)
-                    open(os.path.join(zanshi_mulu, '__init__.py'), 'w').close()
-                    os.chdir(zanshi_mulu)
-                    os.popen('git init')
-                    if 'http://' not in i:
-                        i = 'http://' + i
-                    i = i.split('http://')[(-1)]
-                    print 'git clone  -b  %s    %s' % (git_branch[k], i)
-                    os.system('git clone  -b  %s    %s' % (git_branch[k], i))
+                if 'http://' not in i:
+                    i = 'http://' + i
+                i = i.split('http://')[(-1)]
+                print 'git clone  -b  %s    %s' % (git_branch[k], i)
+                os.system('git clone  -b  %s    %s' % (git_branch[k], i))
 
-                if 'statue' in request.form.keys() and request.form['statue'] != 'jiekou_shishi':
-                    open(os.path.join(run_dir, '__init__.py'), 'w').close()
-                    for fpathe, dirs, fs in os.walk(run_dir):
-                        for f in dirs:
-                            if '.git' != f.strip() and '.idea' != f.strip():
-                                open(os.path.join(fpathe, f, '__init__.py'), 'w').close()
+            if 'statue' in request.form.keys() and request.form['statue'] != 'jiekou_shishi':
+                open(os.path.join(run_dir, '__init__.py'), 'w').close()
+                for fpathe, dirs, fs in os.walk(run_dir):
+                    for f in dirs:
+                        if '.git' != f.strip() and '.idea' != f.strip():
+                            open(os.path.join(fpathe, f, '__init__.py'), 'w').close()
 
-                try:
-                    os.chdir('C:\\\\')
-                except:
-                    pass
+            try:
+                os.chdir('C:\\\\')
+            except:
+                pass
 
         else:
             run_dir = os.path.join(current_app.config.get('ALLRUN_FILE'), name)
