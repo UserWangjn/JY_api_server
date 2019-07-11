@@ -1,6 +1,0 @@
-{
-    "source": "SAPP003", 
-    "nickName": "\u9a6c\u987a\u519b", 
-    "telephone": "15974804081", 
-    "email": "mashunjun@163.com"
-}
