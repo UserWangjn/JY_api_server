@@ -289,11 +289,15 @@ def piliang_run_over():
         db.close()
         return jsonify(statu='update_success')
     if request.method == 'GET':
-        run_statu = cu.execute('select run_statu from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()[0][0]
-        run_time = cu.execute('select update_time from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()[0][0]
-        run_time = time.strftime('%Y-%m-%d:  %H:%M:%S ', time.localtime(float(run_time)))
+        run_status, run_time = None, None
+        run_statu_data = cu.execute('select run_statu from  jiekou_mulu  where ip=? and statu=?', (
+         request.headers.get('X-Real-IP'), u'批量')).fetchall()
+        if run_statu_data:
+            run_statu = run_statu_data[0][0]
+        run_time_data = cu.execute('select update_time from  jiekou_mulu  where ip=? and statu=?', (
+         request.headers.get('X-Real-IP'), u'批量')).fetchall()
+        if run_time_data:
+            run_time = time.strftime('%Y-%m-%d:  %H:%M:%S ', time.localtime(float(run_time_data[0][0])))
         return jsonify(run_statu=run_statu, run_time=run_time)
 
 
