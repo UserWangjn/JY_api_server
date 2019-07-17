@@ -21,13 +21,13 @@ import os
 import signal
 import sys
 # mulu=os.path.join(os.path.dirname(os.getcwd()),'HGTP_server','example.db')
-mulu=os.path.join('../../HGTP_server','example.db')
-print mulu
+mulu=os.path.join('HGTP_server','example.db')
+print os.path.abspath(mulu)
+print __name__
+print '============================='
 run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
 db = sqlite3.connect(mulu)
 cu = db.cursor()
-print 11111111111111111111
-print mulu
 class all_run(object):
  def __init__(self):
     while True:
@@ -176,5 +176,5 @@ class all_run(object):
      result = urllib2.urlopen(url=req,data=data) # 发起GET http服务
      res = result.read() #把结果通过.read()函数读取出来
      """
-if __name__=='__main__':
-    all_run()
+#if __name__=='__main__':
+#    all_run()

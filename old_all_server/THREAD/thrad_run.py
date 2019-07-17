@@ -23,14 +23,6 @@ import socket
 import random
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
-s= socket.socket(socket.AF_INET,socket.SOCK_STREAM)   #定义socket类型，网络通信，TCP
-hostname = socket.gethostname()
-k=('127.0.0.1',8061)
-s.bind(k)
-s.listen(15)#开始TCP监听
-#接口实时调试数据池
-basedir = os.path.abspath(os.path.dirname(__file__))
-jiekou_shishi={}
 import shutil
 import requests
 #调用http接口，设置运行状态
@@ -252,10 +244,20 @@ class MyThread(threading.Thread):
                         db.commit()
                         db.close()
                         '''
-while 1:
-       jiekou_shishi
-       name=None
-       conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
-       data=conn.recv(4096)   #把接收的数据实例化
-       ub=MyThread(data)
-       ub.start()
+
+def start():
+    while 1:
+        
+        s= socket.socket(socket.AF_INET,socket.SOCK_STREAM)   #定义socket类型，网络通信，TCP
+        hostname = socket.gethostname()
+        k=('127.0.0.1',8061)
+        s.bind(k)
+        s.listen(15)#开始TCP监听
+        #接口实时调试数据池
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        jiekou_shishi={}
+        name=None
+        conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
+        data=conn.recv(4096)   #把接收的数据实例化
+        ub=MyThread(data)
+        ub.start()
