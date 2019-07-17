@@ -1,6 +1,6 @@
-from HGTP_server.run import run_server
-from old_all_server.dingshi_run.dingshi_run import all_run
-from old_all_server.THREAD.thrad_run import start
+from run_server import run_server
+from dingshi_run.dingshi_run import all_run
+from THREAD.thrad_run import start
 
 from multiprocessing import Process, freeze_support
 
