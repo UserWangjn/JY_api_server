@@ -21,15 +21,15 @@ import os
 import signal
 import sys
 # mulu=os.path.join(os.path.dirname(os.getcwd()),'HGTP_server','example.db')
-mulu='example.db'
-print os.path.abspath(mulu)
-print __name__
-print '============================='
-run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
-db = sqlite3.connect(mulu)
-cu = db.cursor()
 class all_run(object):
  def __init__(self):
+    mulu='example.db'
+    print os.path.abspath(mulu)
+    print __name__
+    print '============================='
+    run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
+    db = sqlite3.connect(mulu)
+    cu = db.cursor()
     while True:
      db = sqlite3.connect(mulu)
      cu = db.cursor()
