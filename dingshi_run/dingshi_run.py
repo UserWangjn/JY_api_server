@@ -9,7 +9,7 @@ import socket
 import time
 import os
 import unittest
-import HTMLTestRunner
+import HtmlTestRunner
 import smtplib
 import json
 import stat
