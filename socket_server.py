@@ -10,7 +10,7 @@ import time
 import os
 import unittest
 import jenkins
-import HTMLTestRunner
+import HtmlTestRunner
 import smtplib
 import json
 import stat

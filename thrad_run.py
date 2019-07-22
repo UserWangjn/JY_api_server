@@ -26,7 +26,7 @@ class MyThread(threading.Thread):
         result_path=os.path.join(r"E:\HGTP_server\app\templates\result\\"+self.data[0]+'.html')
         now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))  # 输出当前时间
         fp = open(result_path, 'wb')
-        runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
+        runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
         runner.run(suite)
         fp.close()
         db = sqlite3.connect(r'E:\HGTP_server\example.db')

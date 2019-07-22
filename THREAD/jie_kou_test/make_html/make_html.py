@@ -6,7 +6,7 @@ import unittest
 import os
 import inspect
 from new import classobj
-import HTMLTestRunner
+import HtmlTestRunner
 import time
 import copy
 class make_suite(object):
@@ -45,7 +45,7 @@ class make_html(object):
         now = time.strftime("%Y-%m-%M-%H_%M_%S", time.localtime(time.time()))
         # 打开一个文件，将result写入此file中
         fp = open(os.path.join(b,'result.html'), 'wb')
-        runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title='test result', description=u'result:')
+        runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title='test result', description=u'result:')
         for i in a:
              runner.run(i )
         fp.close()

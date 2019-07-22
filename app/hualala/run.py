@@ -18,7 +18,7 @@ from flask_bootstrap import Bootstrap
 from flask import current_app
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify
-import datetime, unittest, HTMLTestRunner, functools
+import datetime, unittest, HtmlTestRunner, functools
 
 def run_hualala(fun):
 
@@ -260,16 +260,16 @@ def run_hualala(fun):
 
     return zzds
 
-
+"""
 def run_result(path):
     loader = unittest.TestLoader()
     suite1 = unittest.defaultTestLoader.discover(path, pattern='*.py', top_level_dir='E:\\run_mulu\\lakala')
     now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))
     fp = open('D:\\python text\\11.html', 'wb')
-    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
+    runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
     runner.run(suite1)
     fp.close()
-
+"""
 
 def run_charge(fun):
 
