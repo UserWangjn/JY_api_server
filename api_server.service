@@ -1,0 +1,11 @@
+[Unit]
+Description = api server
+After = network.target
+
+[Service]
+Type = simple
+ExecStart = /usr/bin/python2 ~/api_server/run.py
+WorkingDirectory = ~/api_server
+
+[Install]
+WantedBy = multi-user.target

@@ -13,4 +13,4 @@ if __name__ == '__main__':
     for p in [p_server, p_scheduler, p_thread]:
         print p
         p.start()
-        p.join()
+#        p.join()
