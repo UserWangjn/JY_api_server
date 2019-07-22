@@ -4,8 +4,8 @@ After = network.target
 
 [Service]
 Type = simple
-ExecStart = /usr/bin/python2 ~/api_server/run.py
-WorkingDirectory = ~/api_server
+ExecStart = /usr/bin/python2 /srv/jenkins/api_server/run.py
+WorkingDirectory = /srv/jenkins/api_server
 
 [Install]
 WantedBy = multi-user.target
