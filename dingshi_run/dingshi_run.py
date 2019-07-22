@@ -20,10 +20,10 @@ import urllib
 import os
 import signal
 import sys
-# mulu=os.path.join(os.path.dirname(os.getcwd()),'HGTP_server','example.db')
+from fileconfig import DB_DIZHI
 class all_run(object):
  def __init__(self):
-    mulu='example.db'
+    mulu = DB_DIZHI
     print os.path.abspath(mulu)
     print __name__
     print '============================='

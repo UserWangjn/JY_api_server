@@ -25,6 +25,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 import shutil
 import requests
+from fileconfig import DB_DIZHI
 #调用http接口，设置运行状态
 def run_statu_change(statu,data,ip):
     data=urllib.urlencode({'statu':statu,'data':data})
@@ -139,7 +140,7 @@ class MyThread(threading.Thread):
                         id=str(self.data['id'])
                         #删除结果文件
                         if self.data['statu'] != 'jiekou_shishi':
-                              run_db_mo=os.path.join(self.data['server_di'],'\HGTP_server\example.db')
+                              run_db_mo=os.path.join(self.data['server_di'],'example.db')
                         run_statu_change('running',self.data['id'],self.data['server_ip'])
                         email_detail=json.loads(self.data['email_detail'])
                         #运行job
@@ -229,7 +230,7 @@ class MyThread(threading.Thread):
                         run_statu_change('end_time',json.dumps({'end_time':end_time,'id':self.data['id']}), self.data['server_ip'])
                         s = email_detail
                         if s['receive'].strip() != '' and s['send'].strip() != '':
-                            send_emali(self.data['name'], self.data['id'].split('dingshi')[-1], email_detail,os.path.join(self.data['server_di'],'\HGTP_server - test\example.db'),self.data['server_ip'],self.data['statu'],self.data['pic_mulu'])
+                            send_emali(self.data['name'], self.data['id'].split('dingshi')[-1], email_detail,os.path.join(self.data['server_di'],'test/example.db'),self.data['server_ip'],self.data['statu'],self.data['pic_mulu'])
                         '''
                         result_path=os.path.join(r"C:\HGTP_server - test\app\templates\result",self.data[0]+'.html')
                         now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))  # 输出当前时间

@@ -17,10 +17,11 @@ from email.mime.text import MIMEText
 import shutil
 import urllib2
 import urllib
+from fileconfig import DB_DIZHI
 class all_run(object):
  def __init__(self):
     while True:
-     db = sqlite3.connect(r'C:\HGTP_server\example.db')
+     db = sqlite3.connect(DB_DIZHI)
      cu = db.cursor()
      for i in cu.execute('select * from dingshi_run where statu="0" ' ).fetchall():
         if 'everyday' in i[2]:

@@ -20,7 +20,8 @@ import urllib
 import os
 import signal
 import sys
-mulu=os.path.join(r'C:\jieyuelianhe\old_all_server\HGTP_server','example.db')
+from fileconfig import DB_DIZHI
+mulu = DB_DIZHI
 print mulu
 run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
 db = sqlite3.connect(mulu)
