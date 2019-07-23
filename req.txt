@@ -29,6 +29,7 @@ Flask-WTF
 futures
 gevent
 greenlet
+html-testrunner
 humanize
 idna
 ipaddress
