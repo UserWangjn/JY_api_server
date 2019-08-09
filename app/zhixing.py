@@ -12,7 +12,7 @@ from subprocess import *
 from flask import render_template, flash, redirect, request, g, session
 import random
 from app import db
-from shell_name import *
+from .shell_name import *
 import os, copy, sqlite3
 from flask import current_app
 import time, datetime
@@ -21,11 +21,11 @@ from app import app
 from flask import send_from_directory, send_file, Response
 import socket, os
 from functools import wraps
-from zhixing import *
-from yuansudingwei import *
+from .zhixing import *
+from .yuansudingwei import *
 import time, sqlite3
-from shell_name import *
-from form import *
+from .shell_name import *
+from .form import *
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -75,8 +75,8 @@ class delete(object):
 class deng(object):
 
     def denglu(self):
-        print 55555555555555555
-        print session['user']
+        print(55555555555555555)
+        print(session['user'])
         try:
             session['user']
         except:
@@ -86,8 +86,8 @@ class deng(object):
             self.cu.execute('select time from user where name=?', [session['user']])
             self.time = self.cu.fetchall()[0][0]
             if session['time'] in self.time:
-                print 4444444444444444444444
-                print self.time
+                print(4444444444444444444444)
+                print(self.time)
                 return True
 
         return False
@@ -149,16 +149,16 @@ class zhixing(object):
                 k = [
                  k[0]]
             for i in k[0]:
-                print i
+                print(i)
                 url = session['url'].replace('/', '//')
                 if session['benlei'] == '1':
-                    if session.has_key('fen_ye') and session['fen_ye'] != u'全部':
+                    if 'fen_ye' in session and session['fen_ye'] != '全部':
                         cu.execute('select * from userss where benname=? and mulu=? and benlei=? and biao_qian=? ', (
                          i, session['url'], session['benlei'], session['fen_ye']))
                     else:
                         cu.execute('select * from userss where benname=? and mulu=? ', (i, session['url']))
                 else:
-                    if session.has_key('fen_ye') and session['fen_ye'] != u'全部':
+                    if 'fen_ye' in session and session['fen_ye'] != '全部':
                         cu.execute('select * from userss where benname=? and mulu=?  and benlei-? and biao_qian=?', (i, session['url'], session['benlei'], session['fen_ye']))
                     else:
                         cu.execute('select * from userss where benname=? and mulu=?  and benlei-? ', (
@@ -168,12 +168,12 @@ class zhixing(object):
 
         else:
             if session['benlei'] == '1':
-                if session.has_key('fen_ye') and session['fen_ye'] != u'全部':
+                if 'fen_ye' in session and session['fen_ye'] != '全部':
                     cu.execute('select * from userss where mulu=? and benlei=? and biao_qian=?', (session['url'], session['benlei'], session['fen_ye']))
                 else:
                     cu.execute('select * from userss where mulu=? and benlei=?', (session['url'], session['benlei']))
             else:
-                if session.has_key('fen_ye') and session['fen_ye'] != u'全部':
+                if 'fen_ye' in session and session['fen_ye'] != '全部':
                     cu.execute('select * from userss where mulu=? and biao_qian=?', (session['url'], session['fen_ye']))
                 else:
                     cu.execute('select * from userss where mulu=? ', (
@@ -217,8 +217,8 @@ class zhixing(object):
                             self.s.close()
 
             elif '.txt' in ii or '.jmx' in ii:
-                self.kkk = u'txt 配置文件'
-                self.detal = u'(第一行内容)   ' + self.ss[0].decode('gb2312')
+                self.kkk = 'txt 配置文件'
+                self.detal = '(第一行内容)   ' + self.ss[0].decode('gb2312')
                 self.s.close()
                 self.change_lei = self.add_data([name[ui], self.kkk, self.detal])
 
@@ -277,10 +277,10 @@ class zhixing(object):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         u = self.s.connect(('127.0.0.1', current_app.config.get('SOCKET')))
         self.url = (session['url'] + '\\' + session['user'] + '.py').encode('gb2312')
-        print 1111111111111111111111111
-        print self.url
-        print session['user']
-        print name
+        print(1111111111111111111111111)
+        print(self.url)
+        print(session['user'])
+        print(name)
         self.s.sendall(self.url)
         time.sleep(1)
         self.s.sendall(current_app.config.get('DB_DIZHI'))

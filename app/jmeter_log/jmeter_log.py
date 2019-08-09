@@ -8,7 +8,7 @@ import socket
 
 import os
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 import  chardet
 
@@ -32,7 +32,7 @@ def jemter_add_linux(func):
         cu = db.cursor()
         if len(cu.execute('select * from linux_detail where ip="%s"' % (request.form['ip'])).fetchall())>0:
             db.close()
-            resp = jsonify(statu=u'重复')
+            resp = jsonify(statu='重复')
             resp.headers['Access-Control-Allow-Origin'] = '*'
             return resp
         else:
@@ -139,9 +139,9 @@ def stop_run_linux(func):
         db.commit()
         db.close()
         response = requests.post(url, data=json.dumps(request_data))
-        if u'成功'  in response.text:
+        if '成功'  in response.text:
            resp = jsonify(statu='success')
-        print jsonify
+        print(jsonify)
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
     return stop_run_linux

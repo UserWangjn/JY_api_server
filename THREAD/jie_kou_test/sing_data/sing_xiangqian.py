@@ -40,4 +40,4 @@ if __name__ == '__main__':
     enc_str = e.encrypt('123456')
     # dec_str = e.decrypt(te)
     # print('dec str: ' + dec_str)
-    print  enc_str
+    print(enc_str)

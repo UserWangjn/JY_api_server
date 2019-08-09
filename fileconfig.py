@@ -5,10 +5,9 @@
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\fileconfig.py
 # Compiled at: 2019-03-18 13:47:24
-__author__ = 'SUNZHEN519'
 import os, socket
 SECRET_KEY = 'you-will-never-guess'
-basedir = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
+basedir = os.path.abspath(os.path.dirname(__file__))
 DBPATH = os.path.join(basedir, '..', 'db')
 
 parent_path = os.path.dirname(basedir)

@@ -73,10 +73,10 @@ class assert_run(object):
                                 statu = 1
 
                 elif ceshi == '*str':
-                    if type(j[num]) not in [str, unicode]:
+                    if type(j[num]) not in [str, str]:
                         return False
                 elif ceshi == '*int':
-                    if type(j[num]) not in [int, long]:
+                    if type(j[num]) not in [int, int]:
                         return False
                 elif ceshi == '*float':
                     if type(j[num]) != float:
@@ -94,37 +94,37 @@ class assert_run(object):
             if statu == 0:
                 return False
         if type(v) == dict:
-            for k, i in v.iteritems():
-                if type(j) != dict or k not in j.keys():
+            for k, i in v.items():
+                if type(j) != dict or k not in list(j.keys()):
                     return False
                 if type(i) != dict and type(i) != list:
                     if i in [True, False]:
-                        if k not in j.keys():
+                        if k not in list(j.keys()):
                             return False
                         if i != j[k]:
                             return False
                     if i == None:
                         if j[k] != None:
                             return False
-                    if type(i) not in [int, float, bool, long] and i != None and 'len*' in i:
+                    if type(i) not in [int, float, bool, int] and i != None and 'len*' in i:
                         chang_du = i.split('len*')[(-1)]
                         if len(j[k]) != int(chang_du):
                             return False
                     if i == '*':
                         try:
-                            assert k in j.keys()
+                            assert k in list(j.keys())
                         except:
                             return False
 
                     elif i == '*int':
                         try:
-                            assert type(j[k]) in [int, long]
+                            assert type(j[k]) in [int, int]
                         except:
                             return False
 
                     elif i == '*long':
                         try:
-                            assert type(j[k]) in [int, long]
+                            assert type(j[k]) in [int, int]
                         except:
                             return False
 
@@ -136,7 +136,7 @@ class assert_run(object):
 
                     elif i == '*str':
                         try:
-                            assert type(j[k]) == unicode
+                            assert type(j[k]) == str
                         except:
                             return False
 
@@ -148,7 +148,7 @@ class assert_run(object):
                             return False
 
                 if type(i) == dict:
-                    if k not in j.keys():
+                    if k not in list(j.keys()):
                         return False
                     if self.walk_find(i, j[k]) == False:
                         return False
@@ -168,11 +168,11 @@ def hanshu_assert(assert_data, config):
     sys.path.append(os.path.join(mulu, 'data_config'))
     imp_str = 'import %s' % assert_data.split('&&')[(-1)].split('.')[0]
     try:
-        exec 'del %s' % assert_data.split('&&')[(-1)].split('.')[0]
+        exec('del %s' % assert_data.split('&&')[(-1)].split('.')[0])
     except:
         pass
 
-    exec imp_str
+    exec(imp_str)
     return eval(assert_data.split('&&')[(-1)].split('.')[0] + '.' + assert_data.split('&&')[(-1)].split('.')[(-1)].replace('"', '') + '(req,respons)')
 
 

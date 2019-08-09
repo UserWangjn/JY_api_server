@@ -7,7 +7,7 @@ import re
 import json
 import requests
 import time
-import urllib,urllib2
+import urllib.request, urllib.parse, urllib.error,urllib.request,urllib.error,urllib.parse
 import hashlib
 import sys
 #好房后台加密
@@ -17,8 +17,8 @@ def haofang_server(config):
     password = config.get('login', 'password')
 
 def get_js():
-    print 99999999999999999999999999999999
-    print  os.path.join(os.path.split(os.path.realpath(__file__))[0],"messagehash.js")
+    print(99999999999999999999999999999999)
+    print(os.path.join(os.path.split(os.path.realpath(__file__))[0],"messagehash.js"))
     f = open(os.path.join(os.path.split(os.path.realpath(__file__))[0],"messagehash.js"), 'r') # 打开JS文件
     line = f.readline()
     htmlstr = ''
@@ -34,12 +34,12 @@ def get_des_psswd():
 def haofang_login(name,password,url):
     response = requests.get(url=url)
     cookies = response.cookies.get_dict()['JSESSIONID_COOKIE']
-    print  cookies
+    print(cookies)
     headers={'Cookie':'JSESSIONID_COOKIE='+cookies}
     url=url.split('user/')[0]+'user/login'
     parm={'username': name,'password': password,'ismulpwd': 'chenGnag1'}
     password=get_des_psswd()
-    req = urllib2.Request(url=url, data=urllib.urlencode(parm), headers=headers)
-    res = urllib2.urlopen(req)
-    print   res.read()
+    req = urllib.request.Request(url=url, data=urllib.parse.urlencode(parm), headers=headers)
+    res = urllib.request.urlopen(req)
+    print(res.read())
     return headers

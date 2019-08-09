@@ -15,7 +15,7 @@ url="http://115.182.212.71:8783/core-web-pub/hfFundDeposit/bindCard/confirm"
 url_sing='http://192.168.32.65:8080/xqAppServer/api/APPBizRest/sign/v1/'
 headers={"Content-Type": "application/json"}
 k=requests.post(url_sing,data=json.dumps(data["respData"]),headers=headers)
-print json.loads(k.text)['responseBody']['sign']
+print(json.loads(k.text)['responseBody']['sign'])
 data["sign"]=k
 s=requests.post(url,data=data)
-print s.text
+print(s.text)

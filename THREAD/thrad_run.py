@@ -1,14 +1,14 @@
 #-*-coding:utf-8-*-
 __author__ = 'SUNZHEN519'
 import socket   #socket模块
-import commands   #执行系统命令模块
+import subprocess   #执行系统命令模块
 import os
 import threading
 import sqlite3
 import socket
 import time
-import urllib
-from jie_kou_test.pi_run import *
+import urllib.request, urllib.parse, urllib.error
+from .jie_kou_test.pi_run import *
 import os
 import unittest
 import jenkins
@@ -16,8 +16,8 @@ import HtmlTestRunner
 import smtplib
 import json
 import stat
-import urllib2
-from jie_kou_test.pi_run import all_run
+import urllib.request, urllib.error, urllib.parse
+from .jie_kou_test.pi_run import all_run
 from email.mime.text import MIMEText
 import socket
 import random
@@ -28,12 +28,12 @@ import requests
 from fileconfig import DB_DIZHI
 #调用http接口，设置运行状态
 def run_statu_change(statu,data,ip):
-    data=urllib.urlencode({'statu':statu,'data':data})
+    data=urllib.parse.urlencode({'statu':statu,'data':data})
     url = 'http://' + ip + ':5025/change_run_statu'
-    req=urllib2.Request(url=url, data=data)
+    req=urllib.request.Request(url=url, data=data)
     while True:
         try:
-             res_data = urllib2.urlopen(req).read()
+             res_data = urllib.request.urlopen(req).read()
         except:
             pass
         else:
@@ -59,11 +59,11 @@ def send_emali(name, id,email_detail,server_di,server_ip,run_statu,pic_mulu):
     password=json.loads(fajianren_detail)['data'][1]
     params={'statu':'email'}
     msg = MIMEMultipart('related')
-    if u'各业务线本地使用统计'  in email_detail['title']:
+    if '各业务线本地使用统计'  in email_detail['title']:
         test_parm={'name':str(int(time.time()))}
-        print 7777777777777777777777777777777777777777777777777777
-        print 'http://'+server_ip+':5025/tongji_mail'
-        print   test_parm
+        print(7777777777777777777777777777777777777777777777777777)
+        print('http://'+server_ip+':5025/tongji_mail')
+        print(test_parm)
         html = requests.get('http://'+server_ip+':5025/tongji_mail',params=test_parm).text
     elif 'jiekou'  in run_statu:
         html = requests.get('http://'+server_ip+':5025/jiekou_result/' + str(id),params=params).text
@@ -71,7 +71,7 @@ def send_emali(name, id,email_detail,server_di,server_ip,run_statu,pic_mulu):
          html=requests.get('http://'+server_ip+':5025/dingshi_result/'+str(id),params=params).text
     msg.attach( MIMEText(html, 'html', 'utf-8'))
     msg['Subject'] = subject
-    if u'各业务线本地使用统计' not  in email_detail['title']:
+    if '各业务线本地使用统计' not  in email_detail['title']:
         file = open(os.path.join(pic_mulu,str(id)+'.png'), "rb")
         img_data = file.read()
         file.close()
@@ -106,7 +106,7 @@ def jiekou_path(path,all_git):
                     git_base_name = os.path.basename(s)
                     if s==os.path.dirname(s):
                         break
-                    if git_base_name not in all_git.keys():
+                    if git_base_name not in list(all_git.keys()):
                         s = os.path.dirname(s)
                         continue
                     else:
@@ -136,7 +136,7 @@ class MyThread(threading.Thread):
                                        else:
                                           os.remove(i)
                         run_path=os.path.join(os.path.join(basedir,'run'),self.data['name']+os.path.basename(self.data['run_dir'])+'.py')
-                        print self.data['id']
+                        print(self.data['id'])
                         id=str(self.data['id'])
                         #删除结果文件
                         if self.data['statu'] != 'jiekou_shishi':
@@ -248,8 +248,8 @@ class MyThread(threading.Thread):
 
 def start():
     while 1:
-        print __name__
-        print '=========================='
+        print(__name__)
+        print('==========================')
         s= socket.socket(socket.AF_INET,socket.SOCK_STREAM)   #定义socket类型，网络通信，TCP
         hostname = socket.gethostname()
         k=('127.0.0.1',8061)

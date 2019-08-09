@@ -7,10 +7,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-from  win_exe import *
-from he_zuo_bian_ma import *
+from  .win_exe import *
+from .he_zuo_bian_ma import *
 #from  creat_dang import *
-from creat_dang_qi import *
+from .creat_dang_qi import *
 import unittest
 import xlrd
 class pritce_detail(object):

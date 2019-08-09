@@ -4,33 +4,33 @@ import sys
 import threading
 sys.path.append("../../")
 from selenium import webdriver
-from sing_data.sing_data import *
+from .sing_data.sing_data import *
 import time
 import chardet
 import unittest
-from json_pi_pei.request_result_flask  import *
-from json_pi_pei.json_pi_pei  import *
-from json_pi_pei.request_run import *
+from .json_pi_pei.request_result_flask  import *
+from .json_pi_pei.json_pi_pei  import *
+from .json_pi_pei.request_run import *
 import demjson
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 #from  creat_dang import *
 import unittest
-import ConfigParser
+import configparser
 import xlrd
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import os
 import logging
 import socket
 import copy
 #from header import *
-from just_run.just_run import just_run
-from just_run.change_request_before import *
-from excel_data import *
+from .just_run.just_run import just_run
+from .just_run.change_request_before import *
+from .excel_data import *
 #发送获取目录请求
 class mulu(object):
     def __init__(self):
@@ -38,11 +38,11 @@ class mulu(object):
         while True:
                 time.sleep(2)
                 url = 'http://127.0.0.1:5021/get_mulu'
-                data=urllib.urlencode({'statu':u'调试'})
+                data=urllib.parse.urlencode({'statu':'调试'})
                 #倒数第二个个为接口配置信息，最后一个为目录信息
-                request = urllib2.Request(url)
+                request = urllib.request.Request(url)
                 request.add_header('content-TYPE', 'application/x-www-form-urlencoded')
-                response = urllib2.urlopen(request, data)
+                response = urllib.request.urlopen(request, data)
                 mulu=json.loads(response.read())['mulu']
                 if len(mulu)>0 and mulu!='':
                     if   os.path.isdir(mulu):
@@ -69,12 +69,12 @@ class run(object):
             #判断后台有没有设定的要运行的目录信息
             if num==0 or num==1:
                     url = 'http://127.0.0.1:5021/get_mulu'
-                    data = urllib.urlencode({'statu': u'调试'})
+                    data = urllib.parse.urlencode({'statu': '调试'})
                     # 倒数第二个个为接口配置信息，最后一个为目录信息
-                    request = urllib2.Request(url)
+                    request = urllib.request.Request(url)
                     request.add_header('content-TYPE', 'application/x-www-form-urlencoded')
-                    response = urllib2.urlopen(request, data)
-                    response = urllib2.urlopen(request)
+                    response = urllib.request.urlopen(request, data)
+                    response = urllib.request.urlopen(request)
                     mulu = json.loads(response.read())['mulu']
                     num=0
             if  mulu!=path and mulu.strip()!='':
@@ -96,13 +96,13 @@ class run(object):
                 if len(self.data)!=len(self.data0):
                     self.data0 = self.data
                     #判断是否包含url字段
-                    self.data  = dict(zip(self.key, self.data[-1]))
+                    self.data  = dict(list(zip(self.key, self.data[-1])))
                     self.yongli_name=self.data['Comment']
                     #判断是否包含before_request,若包含则替换
-                    if 'before_request' in self.data.keys():
+                    if 'before_request' in list(self.data.keys()):
                        k=change_request_before()
                        self.data =k.use(self.data)
-                    if 'url' in self.data.keys() and self.data['url'].strip() != '':
+                    if 'url' in list(self.data.keys()) and self.data['url'].strip() != '':
                         self.send.config_path.get('config','public_url')
                         self.url = self.send.config_path.get('config','public_url').strip()+self.data.pop('url')
                     for k, i in enumerate(self.data.keys()):
@@ -122,12 +122,12 @@ class run(object):
                 elif self.data[k]!=self.data0[k]:
                    self.data0 = self.data
                    #获取改变了信息的行信息字典形式
-                   self.data=dict(zip(self.key,self.data[k]))
-                   if 'before_request' in self.data.keys():
+                   self.data=dict(list(zip(self.key,self.data[k])))
+                   if 'before_request' in list(self.data.keys()):
                        k=change_request_before()
                        self.data = k.use(self.data)
                    # 判断是否包含url字段
-                   if 'url' in self.data.keys() and str(self.data['url']).strip() != '':
+                   if 'url' in list(self.data.keys()) and str(self.data['url']).strip() != '':
                        self.url = self.data.pop('url')
                    #调用查询价格单接口
                    #self.query_data=self.query.just_reque(self.data)
@@ -165,19 +165,19 @@ class confi(object):
                     elif 'json' == z.split('.')[0]:
                         self.json_path = os.path.join(self.path, z)
                     elif 'configparse' == z.split('.')[0] :
-                        self.config_path = ConfigParser.SafeConfigParser()
+                        self.config_path = configparser.SafeConfigParser()
                         self.config_data = self.config_path.read(os.path.join(self.path, z))
                                 # 读取公共配置文件
                         public_config_path = os.path.join(os.path.dirname(self.path), 'config.txt')
                         if os.path.isfile(public_config_path):
-                             public_config = ConfigParser.ConfigParser()
+                             public_config = configparser.ConfigParser()
                              public_config.read(public_config_path)
                              private_config_path = os.path.join(self.path, 'configparse.txt')
-                             private_config = ConfigParser.ConfigParser()
+                             private_config = configparser.ConfigParser()
                              private_config.read(private_config_path)
                              if os.path.isfile(os.path.join(os.path.dirname(self.path), 'db.txt')):
                                  db_config_path = os.path.join(os.path.dirname(self.path), 'db.txt')
-                                 db_config = ConfigParser.ConfigParser()
+                                 db_config = configparser.ConfigParser()
                                  db_config.read(db_config_path)
                                  for i in db_config.sections():
                                      self.config_path.add_section(i)
@@ -209,7 +209,7 @@ class confi(object):
                                  self.config_path.set('login_value', str(hash.hexdigest()), json.dumps(headers_dict))
                                  head_key = private_config.get('config', 'head_key').split('.')
                                  head_value = private_config.get('config', 'head_value').split('.')[:len(head_key)]
-                                 header_older = json.dumps(dict(zip(head_key, head_value)))
+                                 header_older = json.dumps(dict(list(zip(head_key, head_value))))
                                  self.config_path.set('login', 'headers_old', header_older)
                              if self.config_path.get('sign', 'sign_type').strip() == 'app':
                                  header_dict = {
@@ -278,7 +278,7 @@ class confi(object):
     def  just_reque(self,data):
         v = json.loads(open(self.json_path).read().decode('GB2312'))
         #判断json字符串在excel表格中是否有数值:
-        if 'json' in self.data.keys()  and self.data['json']!='':
+        if 'json' in list(self.data.keys())  and self.data['json']!='':
             self.req=self.data['json']
         else:
            self.req = self.creat_json(v,data)
@@ -293,7 +293,7 @@ class confi(object):
     def all_send(self,data,url):
         self.url=url
         self.comment=data['Comment']
-        if 'json' in data.keys() and data['json']!='' :
+        if 'json' in list(data.keys()) and data['json']!='' :
             self.req=data['json']
         elif open(self.json_path).read().decode('GB2312').strip()!='':
           v = json.loads(open(self.json_path).read().decode('GB2312'))
@@ -317,9 +317,9 @@ class confi(object):
     #读取json模板信息，并与传入参数匹配生成json字符串，第一个为模板路径，第二个要生成json的数据信息,返回匹配后的json字符串
     def creat_json(self,v,data):
         #判断是否有id_data模块，若有则改成id
-        if 'id'  in data.keys():
+        if 'id'  in list(data.keys()):
             data.pop('id')
-        if 'id_data' in data.keys():
+        if 'id_data' in list(data.keys()):
             data['id']=data.pop('id_data')
         j=data
         #将data中的值用before_request返回的字典中的值替换
@@ -328,16 +328,16 @@ class confi(object):
         #判断哪个键包含有二级参数
         if type(v) == dict:
                 #判断是否为实数，且小数点后面为全部为0
-                for k in j.keys():
+                for k in list(j.keys()):
                     if type(j[k])==float and int(j[k])==j[k]:
                         j[k]=int(j[k])
-                for k in v.keys():
+                for k in list(v.keys()):
                     # print  "第一次dict%s" % str(k)
                     if type(v[k]) != dict and type(v[k]) != list:
                         if k not in j:
                             v.pop(k)
                             continue
-                        if type(j[k]) not in [dict,float,int,long,list] and j[k].strip()=='':
+                        if type(j[k]) not in [dict,float,int,int,list] and j[k].strip()=='':
                             v.pop(k)
                         else:
                            self.s = self.change(v[k], j[k])
@@ -433,8 +433,8 @@ class confi(object):
                 self.data=''
             elif req['method']=='get':
                 public_url=req['url'].split(sign['url'])[0]
-                req['url'] = req['url']+'?'+ urllib.urlencode(eval(data))
-                sign['url']= sign['url']+'?'+ urllib.urlencode(eval(data))
+                req['url'] = req['url']+'?'+ urllib.parse.urlencode(eval(data))
+                sign['url']= sign['url']+'?'+ urllib.parse.urlencode(eval(data))
             if data.strip()!='':
                 data=json.dumps(json.loads(data))
             head=make_head(sign['url'],sign['app_key'],data,self.config_path.get('config','method'),self.config_path)
@@ -487,11 +487,11 @@ class confi(object):
     def read_log(self):
         #发送服务器信息
         url = 'http://127.0.0.1:5021/read_logs'
-        request = urllib2.Request(url)
+        request = urllib.request.Request(url)
         request.add_header('content-TYPE', 'application/x-www-form-urlencoded')
         data={"name":os.path.basename(self.path)}
         try:
-           response = urllib2.urlopen(request,urllib.urlencode(data))
+           response = urllib.request.urlopen(request,urllib.parse.urlencode(data))
            x=response.read().split('\n')
         except:
             pass

@@ -8,7 +8,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -31,7 +31,7 @@ def chongou_test(func):
         if request.method == 'GET':
             git_detail = [ list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall() ]
             team_detail = [ i[0] for i in cu.execute('select team from team').fetchall() ]
-            team_detail.append(u'\u5176\u4ed6')
+            team_detail.append('\u5176\u4ed6')
             for i in git_detail:
                 i[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[3])))
 
@@ -44,13 +44,13 @@ def chongou_test(func):
                 i.insert(0, i[0])
                 i[1] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[0])))
                 if i[-2].strip() == '0':
-                    i[-2] = u'ready'
+                    i[-2] = 'ready'
                 else:
                     if i[-2].strip() == '1':
-                        i[-2] = u'running'
+                        i[-2] = 'running'
                     else:
                         if i[-2].strip() == '2':
-                            i[-2] = u'done'
+                            i[-2] = 'done'
                 if 'everyday' in i[2]:
                     i[2] = i[2].split('everyday')
                     i[2][0] = 'everyday'
@@ -102,24 +102,24 @@ def new_get_run_statu(func):
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
         name = cu.execute('select name from user where ip="%s" order  by time desc limit 0,1 ' % request.headers.get('X-Real-IP')).fetchall()[0][0]
-        if 'statu' in request.form.keys() and request.form['statu'] == 'jiekou_dingshi':
-            dingshi_detail = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where name="%s" and run_time like "%s" order by update_time desc ' % (name, u'\u63a5\u53e3%')).fetchall() ]
-            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and run_time like "%s"  order by update_time desc ' % (name, u'\u63a5\u53e3%')).fetchall()
+        if 'statu' in list(request.form.keys()) and request.form['statu'] == 'jiekou_dingshi':
+            dingshi_detail = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where name="%s" and run_time like "%s" order by update_time desc ' % (name, '\u63a5\u53e3%')).fetchall() ]
+            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and run_time like "%s"  order by update_time desc ' % (name, '\u63a5\u53e3%')).fetchall()
                         ]
         else:
             dingshi_detail = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where name="%s" and statu in ("0","1","2") order by update_time desc ' % name).fetchall() ]
             server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and statu in ("0","1","2")  order by update_time desc ' % name).fetchall()
                         ]
-        shishi_statu = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where run_time="%s"  ' % u'\u63a5\u53e3\u5b9e\u65f6').fetchall()
+        shishi_statu = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where run_time="%s"  ' % '\u63a5\u53e3\u5b9e\u65f6').fetchall()
                        ]
         db.close()
         for k, i in enumerate(dingshi_detail):
-            if i[-2].strip() in (u'0', u'3'):
-                i[-2] = u'ready'
-            elif i[-2].strip() in (u'1', u'4'):
-                i[-2] = u'running'
-            elif i[-2].strip() in (u'2', u'5'):
-                i[-2] = u'done'
+            if i[-2].strip() in ('0', '3'):
+                i[-2] = 'ready'
+            elif i[-2].strip() in ('1', '4'):
+                i[-2] = 'running'
+            elif i[-2].strip() in ('2', '5'):
+                i[-2] = 'done'
 
         return jsonify(statu='success', all_data=dingshi_detail, shishi_statu=shishi_statu)
 
@@ -158,7 +158,7 @@ def get_renwu_detail(func):
         db.close()
         create_time = time.strftime('%Y--%m--%d', time.localtime(float(renwu_detail[1])))
         send_email = json.loads(renwu_detail[5])['send']
-        run_type = renwu_detail[2].split(u'\uff1a')[1]
+        run_type = renwu_detail[2].split('\uff1a')[1]
         all_git = [ i for i in renwu_detail[3].split('#') if i.strip() != '' ]
         receive_email = [ i for i in json.loads(renwu_detail[5])['receive'].split('#') if i.strip() != '' ]
         last_run_time = renwu_detail[7]

@@ -10,7 +10,7 @@ from subprocess import  *
 from flask import render_template, flash, redirect,request,g,session
 import random
 from app import db
-from shell_name import *
+from .shell_name import *
 import os
 import copy
 import sqlite3
@@ -23,13 +23,13 @@ from flask import send_from_directory,send_file,Response
 import socket
 import os
 from functools import wraps
-from zhixing import *
-from yuansudingwei import *
+from .zhixing import *
+from .yuansudingwei import *
 import time
 import sqlite3
 import threading
-from shell_name import *
-from form import  *
+from .shell_name import *
+from .form import  *
 from flask import render_template, flash, redirect,request,g,Response,stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -76,7 +76,7 @@ while 1:
        conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
        if addr:
            conn.sendall('connect successful')
-       print'Connected by',addr    #输出客户端的IP地址
+       print('Connected by',addr)    #输出客户端的IP地址
        kk=0
        tim=0
        while 1:
@@ -85,9 +85,9 @@ while 1:
                 #新建线程运行脚本
                 if 'D:'  in data  and 'example.db' not in data:
                     #保存地址
-                    print 333333333333333333333333
-                    print file
-                    print type(file)
+                    print(333333333333333333333333)
+                    print(file)
+                    print(type(file))
                     file=data
                 elif 'name is' in data:
 

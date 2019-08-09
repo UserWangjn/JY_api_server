@@ -9,10 +9,10 @@ from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
 import socket, os, json
-from StringIO import StringIO
+from io import StringIO
 from io import BytesIO
 from flask import make_response
-import urllib2, re, chardet, time, sqlite3
+import urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -24,25 +24,25 @@ def yunxing_tongji(func):
 
     def yunxing_tongji():
         func()
-        if 'ci_seven_data' in current_app.config.keys():
+        if 'ci_seven_data' in list(current_app.config.keys()):
             time_pic = int(current_app.config.get('ci_seven_data')['time'])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('ci_seven_data')
-        if 'ci_today_data' in current_app.config.keys():
+        if 'ci_today_data' in list(current_app.config.keys()):
             time_pic = int(current_app.config.get('ci_today_data')['time'])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('ci_today_data')
-        if 'ci_seven_data' in current_app.config.keys() and request.form['type'] == 'yewu_seven':
+        if 'ci_seven_data' in list(current_app.config.keys()) and request.form['type'] == 'yewu_seven':
             if current_app.config['ci_seven_data']['all_num'] == 0:
                 tongguolv = 0
             else:
                 tongguolv = int(float(current_app.config['ci_seven_data']['all_pass']) / float(current_app.config['ci_seven_data']['all_num']) * 100)
             return jsonify(detail=json.dumps(current_app.config['ci_seven_data']['all_git_detail']), tongguolv=tongguolv)
-        if 'ci_today_data' in current_app.config.keys() and request.form['type'] == 'yewu_today':
+        if 'ci_today_data' in list(current_app.config.keys()) and request.form['type'] == 'yewu_today':
             if current_app.config['ci_today_data']['all_num'] == 0:
                 tongguolv = 0
             else:
@@ -129,15 +129,15 @@ def test_image(func):
 
     def test_image(id):
         func(id)
-        if 'seven_ci_pic' in current_app.config.keys():
+        if 'seven_ci_pic' in list(current_app.config.keys()):
             time_pic = int(os.path.basename(current_app.config.get('seven_ci_pic')).split('ci_seven')[0])
-        if 'seven_ci_pic' in current_app.config.keys():
+        if 'seven_ci_pic' in list(current_app.config.keys()):
             time_pic = int(os.path.basename(current_app.config.get('seven_ci_pic')).split('ci_seven')[0])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('seven_ci_pic')
-        if 'seven_ci_pic' not in current_app.config.keys() and 'yewu_seven' in id:
+        if 'seven_ci_pic' not in list(current_app.config.keys()) and 'yewu_seven' in id:
             plt.figure(1, figsize=(9, 4))
             plt.rcParams['savefig.dpi'] = 500
             plt.rcParams['figure.dpi'] = 500
@@ -183,8 +183,8 @@ def test_image(func):
             plt.xticks(fontsize=13)
             plt.yticks(fontsize=14)
             img = BytesIO()
-            k = plt.bar(range(len(fail_list)), fail_list, label='fail', fc='r')
-            d = plt.bar(range(len(fail_list)), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
+            k = plt.bar(list(range(len(fail_list))), fail_list, label='fail', fc='r')
+            d = plt.bar(list(range(len(fail_list))), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
             for rect, a, baifenbi in zip(k, d, tongguolv_list):
                 height = rect.get_height() + a.get_height()
                 plt.text(rect.get_x() + rect.get_width() / 2, height, baifenbi, ha='center', va='bottom')
@@ -212,15 +212,15 @@ def pic_yewu_today(func):
 
     def pic_yewu_today(testid):
         func(testid)
-        if 'today_ci_pic' in current_app.config.keys():
+        if 'today_ci_pic' in list(current_app.config.keys()):
             time_pic = int(os.path.basename(current_app.config.get('today_ci_pic')).split('ci_today')[0])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('today_ci_pic')
-        if 'today_ci_pic' not in current_app.config.keys() and 'yewu_today' in testid:
+        if 'today_ci_pic' not in list(current_app.config.keys()) and 'yewu_today' in testid:
             plt.figure(1, figsize=(9, 4))
-            if 'statu' in request.form.keys():
+            if 'statu' in list(request.form.keys()):
                 plt.rcParams['savefig.dpi'] = 300
                 plt.rcParams['figure.dpi'] = 300
             else:
@@ -271,8 +271,8 @@ def pic_yewu_today(func):
             plt.yticks(fontsize=14)
             img = BytesIO()
             len_max = max([max(fail_list), max(pass_list)])
-            k = plt.bar(range(len(fail_list)), fail_list, label='fail', fc='r')
-            d = plt.bar(range(len(fail_list)), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
+            k = plt.bar(list(range(len(fail_list))), fail_list, label='fail', fc='r')
+            d = plt.bar(list(range(len(fail_list))), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
             for rect, a, baifenbi in zip(k, d, tongguolv_list):
                 height = rect.get_height() + a.get_height()
                 plt.text(rect.get_x() + rect.get_width() / 2, height, baifenbi, ha='center', va='bottom')
@@ -316,13 +316,13 @@ def local_seven_pic(func):
 
     def local_seven_pic(testid):
         func(testid)
-        if 'local_seven_pic' in current_app.config.keys():
+        if 'local_seven_pic' in list(current_app.config.keys()):
             time_pic = float(os.path.basename(current_app.config.get('local_seven_pic')).split('local_seven')[0])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('local_seven_pic')
-        if 'local_seven_pic' not in current_app.config.keys():
+        if 'local_seven_pic' not in list(current_app.config.keys()):
             plt.rcParams['savefig.dpi'] = 150
             plt.rcParams['figure.dpi'] = 100
             plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -336,8 +336,8 @@ def local_seven_pic(func):
              otherStyleTime,)).fetchall()
             local_detail = [ list(i) for i in local_detail ]
             for i in local_detail:
-                if i[0] == u'\u65e0\u5206\u7ec4':
-                    i[0] = u'\u5176\u4ed6'
+                if i[0] == '\u65e0\u5206\u7ec4':
+                    i[0] = '\u5176\u4ed6'
 
             db_jeikou.close()
             plt.xticks(fontsize=13)
@@ -345,10 +345,10 @@ def local_seven_pic(func):
             img = BytesIO()
             labels = [ i[0] for i in local_detail ]
             db.close()
-            local_num_detail = dict(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ]))
+            local_num_detail = dict(list(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ])))
             fracs = []
             for i in labels:
-                if i in local_num_detail.keys():
+                if i in list(local_num_detail.keys()):
                     fracs.append(local_num_detail[i])
                 else:
                     fracs.append(0)
@@ -376,7 +376,7 @@ def local_seven_pic(func):
 
             current_app.config['local_seven_pic'] = pic_path
         else:
-            if 'local_seven_pic' in current_app.config.keys() and 'local_seven_pic' in testid:
+            if 'local_seven_pic' in list(current_app.config.keys()) and 'local_seven_pic' in testid:
                 pass
         return jsonify(pic_path=current_app.config.get('local_seven_pic'))
 
@@ -400,13 +400,13 @@ def local_today_pic(func):
 
     def local_today_pic(testid):
         func(testid)
-        if 'local_today_pic' in current_app.config.keys():
+        if 'local_today_pic' in list(current_app.config.keys()):
             time_pic = int(os.path.basename(current_app.config.get('local_today_pic')).split('local_today')[0])
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
                 current_app.config.pop('local_today_pic')
-        if 'local_today_pic' not in current_app.config.keys():
+        if 'local_today_pic' not in list(current_app.config.keys()):
             plt.rcParams['savefig.dpi'] = 150
             plt.rcParams['figure.dpi'] = 200
             plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -422,8 +422,8 @@ def local_today_pic(func):
                 return jsonify(statu='all_zero')
             local_detail = [ list(i) for i in local_detail ]
             for i in local_detail:
-                if i[0] == u'\u65e0\u5206\u7ec4':
-                    i[0] = u'\u5176\u4ed6'
+                if i[0] == '\u65e0\u5206\u7ec4':
+                    i[0] = '\u5176\u4ed6'
 
             db_jeikou.close()
             plt.xticks(fontsize=13)
@@ -431,10 +431,10 @@ def local_today_pic(func):
             img = BytesIO()
             labels = [ i[0] for i in local_detail ]
             db.close()
-            local_num_detail = dict(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ]))
+            local_num_detail = dict(list(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ])))
             fracs = []
             for i in labels:
-                if i in local_num_detail.keys():
+                if i in list(local_num_detail.keys()):
                     fracs.append(local_num_detail[i])
                 else:
                     fracs.append(0)
@@ -462,7 +462,7 @@ def local_today_pic(func):
 
             current_app.config['local_today_pic'] = pic_path
         else:
-            if 'local_today_pic' in current_app.config.keys() and 'local_today_pic' in testid:
+            if 'local_today_pic' in list(current_app.config.keys()) and 'local_today_pic' in testid:
                 response = current_app.config['local_today_pic']
         return jsonify(pic_path=current_app.config.get('local_today_pic'))
 
@@ -476,13 +476,13 @@ def pic_yewu_email(testid):
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
     while True:
-        if 'take_result' in session.keys():
+        if 'take_result' in list(session.keys()):
             run_detail = session['take_result']
             break
         else:
             time.sleep(1)
 
-    git_detail = run_detail.keys()
+    git_detail = list(run_detail.keys())
     pass_list = [ run_detail[i]['success'] for i in git_detail ]
     fail_list = [ run_detail[i]['fail'] for i in git_detail ]
     count = [ run_detail[i]['count'] for i in git_detail ]
@@ -506,14 +506,14 @@ def pic_yewu_email(testid):
             if en(fail_list) == 1:
                 width = 0.9
     len_max = max([max(fail_list), max(pass_list)])
-    plt.ylabel(u'case\u6570')
-    k = plt.bar(range(len(fail_list)), fail_list, label='fail', fc='r', width=0.2)
-    d = plt.bar(range(len(fail_list)), pass_list, bottom=fail_list, label='pass', tick_label=git_detail, fc='#66CC66', width=0.2)
+    plt.ylabel('case\u6570')
+    k = plt.bar(list(range(len(fail_list))), fail_list, label='fail', fc='r', width=0.2)
+    d = plt.bar(list(range(len(fail_list))), pass_list, bottom=fail_list, label='pass', tick_label=git_detail, fc='#66CC66', width=0.2)
     for rect, a, baifenbi in zip(k, d, tongguolv_list):
         height = rect.get_height() + a.get_height()
         plt.text(rect.get_x() + rect.get_width() / 2, height, baifenbi, ha='center', va='bottom')
 
-    for a, b, c in zip(range(len(fail_list)), pass_list, fail_list):
+    for a, b, c in zip(list(range(len(fail_list))), pass_list, fail_list):
         if b == 0 and c == 0:
             continue
         if a < 5:
@@ -550,7 +550,7 @@ def tongji_mail(func):
         cu_jiekou = db_jeikou.cursor()
         git_detail = [ list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall() ]
         team_detail = [ i[0] for i in cu.execute('select team from team').fetchall() if i[0].strip() != '' ]
-        team_detail.append(u'\u65e0\u5206\u7ec4')
+        team_detail.append('\u65e0\u5206\u7ec4')
         team_tongji = {}
         for i in team_detail:
             team_tongji[i] = {'num_user': [], 'all_jiekou': 0, 'all_case': 0, 'pass_case': 0, 'num': 0}
@@ -563,8 +563,8 @@ def tongji_mail(func):
         seven_day = int(time.mktime(time.strptime(today, '%Y-%m-%d'))) - 604800
         seven_day = time.strftime('%Y-%m-%d', time.localtime(seven_day))
         git_detail = cu.execute('select * from local_tongji  where time>"%s"' % seven_day).fetchall()
-        print 99999999999999999999999999999999999999999999999L
-        print seven_day
+        print(99999999999999999999999999999999999999999999999)
+        print(seven_day)
         all_ci_num = 0
         for i in git_detail:
             try:
@@ -580,8 +580,8 @@ def tongji_mail(func):
             team_tongji[i[7]]['num'] = team_tongji[i[7]]['num'] + int(i[8])
             all_ci_num = all_ci_num + int(i[8])
 
-        team_tongji[u'\u5176\u4ed6'] = team_tongji[u'\u65e0\u5206\u7ec4']
-        team_tongji.pop(u'\u65e0\u5206\u7ec4')
+        team_tongji['\u5176\u4ed6'] = team_tongji['\u65e0\u5206\u7ec4']
+        team_tongji.pop('\u65e0\u5206\u7ec4')
         for i in team_tongji:
             if team_tongji[i]['num'] != 0:
                 tongguolv = float(team_tongji[i]['num'] * 100) / all_ci_num
@@ -593,10 +593,10 @@ def tongji_mail(func):
 
         db.close()
         db_jeikou.close()
-        for i in team_tongji.keys():
+        for i in list(team_tongji.keys()):
             team_tongji[i]['num_user'] = len(team_tongji[i]['num_user'])
 
-        if len(request.args.keys()) == 0:
+        if len(list(request.args.keys())) == 0:
             name = str(int(time.time()))
         else:
             name = request.args.get('name')
@@ -649,7 +649,7 @@ def pic_yewu_today_email(func):
             beizhu_list.append(beizhu)
             pass_list.append(all_pass)
 
-        plt.title(u'ci\u672c\u65e5\u7edf\u8ba1\u67f1\u72b6\u56fe', loc='left')
+        plt.title('ci\u672c\u65e5\u7edf\u8ba1\u67f1\u72b6\u56fe', loc='left')
         tongguolv_list = [ str(int(i * 100)) + '%' for i in tongguolv_list ]
         db.close()
         db_jeikou.close()
@@ -657,8 +657,8 @@ def pic_yewu_today_email(func):
         plt.yticks(fontsize=14)
         img = BytesIO()
         len_max = max([max(fail_list), max(pass_list)])
-        k = plt.bar(range(len(fail_list)), fail_list, label='fail', fc='r')
-        d = plt.bar(range(len(fail_list)), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
+        k = plt.bar(list(range(len(fail_list))), fail_list, label='fail', fc='r')
+        d = plt.bar(list(range(len(fail_list))), pass_list, bottom=fail_list, label='pass', tick_label=beizhu_list, fc='y')
         for rect, a, baifenbi in zip(k, d, tongguolv_list):
             height = rect.get_height() + a.get_height()
             plt.text(rect.get_x() + rect.get_width() / 2, height, baifenbi, ha='center', va='bottom')
@@ -690,8 +690,8 @@ def pic_yewu_today_email(func):
          today_day,)).fetchall()
         local_detail = [ list(i) for i in local_detail ]
         for i in local_detail:
-            if i[0] == u'\u65e0\u5206\u7ec4':
-                i[0] = u'\u5176\u4ed6'
+            if i[0] == '\u65e0\u5206\u7ec4':
+                i[0] = '\u5176\u4ed6'
 
         db_jeikou.close()
         plt.xticks(fontsize=13)
@@ -699,10 +699,10 @@ def pic_yewu_today_email(func):
         img = BytesIO()
         labels = [ i[0] for i in local_detail ]
         db.close()
-        local_num_detail = dict(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ]))
+        local_num_detail = dict(list(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ])))
         fracs = []
         for i in labels:
-            if i in local_num_detail.keys():
+            if i in list(local_num_detail.keys()):
                 fracs.append(local_num_detail[i])
             else:
                 fracs.append(0)
@@ -749,8 +749,8 @@ def pic_local_eamil_simple(name):
      today_day,)).fetchall()
     local_detail = [ list(i) for i in local_detail ]
     for i in local_detail:
-        if i[0] == u'\u65e0\u5206\u7ec4':
-            i[0] = u'\u5176\u4ed6'
+        if i[0] == '\u65e0\u5206\u7ec4':
+            i[0] = '\u5176\u4ed6'
 
     db_jeikou.close()
     plt.xticks(fontsize=13)
@@ -758,10 +758,10 @@ def pic_local_eamil_simple(name):
     img = BytesIO()
     labels = [ i[0] for i in local_detail ]
     db.close()
-    local_num_detail = dict(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ]))
+    local_num_detail = dict(list(zip([ i[0] for i in local_detail ], [ int(i[2]) for i in local_detail ])))
     fracs = []
     for i in labels:
-        if i in local_num_detail.keys():
+        if i in list(local_num_detail.keys()):
             fracs.append(local_num_detail[i])
         else:
             fracs.append(0)

@@ -7,12 +7,12 @@
 # Compiled at: 2018-08-23 09:48:54
 __author__ = 'SUNZHEN519'
 from selenium import webdriver
-import time, chardet, unittest, demjson, urllib
+import time, chardet, unittest, demjson, urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, json, urllib2, os
+import unittest, xlrd, json, urllib.request, urllib.error, urllib.parse, os
 
 class read_excel(object):
 
@@ -46,7 +46,7 @@ class pipei(object):
 
     def __init__(self, a, b):
         self.error = {}
-        for i in a.keys():
+        for i in list(a.keys()):
             if a[i].strip() == b[i].strip():
                 pass
             else:

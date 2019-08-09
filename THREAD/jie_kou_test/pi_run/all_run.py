@@ -9,16 +9,16 @@ __author__ = 'SUNZHEN519'
 import sys, os
 sys.path.append(os.path.dirname(os.path.split(os.path.realpath(__file__))[0]))
 from selenium import webdriver
-import time, chardet, unittest, demjson, urllib
+import time, chardet, unittest, demjson, urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, json, urllib2, os, logging, random
+import unittest, xlrd, json, urllib.request, urllib.error, urllib.parse, os, logging, random
 from json_pi_pei.json_pi_pei import *
 from json_pi_pei.request_run import *
 from assert_run.assert_run import *
-from pi_run import *
+from .pi_run import *
 from json_pi_pei.begin_excel import reead_excel
 
 class run(object):
@@ -27,7 +27,7 @@ class run(object):
         self.all = {}
         self.suite = []
         for i in path:
-            if i[1] not in self.all.keys():
+            if i[1] not in list(self.all.keys()):
                 self.all[i[1]] = [
                  i[0]]
             else:
@@ -40,7 +40,7 @@ class run(object):
         self.time = run_time
         self.num = 0
         path = [ i[0].decode('utf-8') for i in path ]
-        for git, mulu in self.all.items():
+        for git, mulu in list(self.all.items()):
             self.all_bianliang = {}
             self.u = reead_excel(mulu)
             self.all_bianliang['before_case_detail'] = self.u.all_case

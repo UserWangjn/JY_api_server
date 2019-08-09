@@ -21,13 +21,13 @@ class creat_dang(object):
         self.wait = WebDriverWait(self.h, 20)
         self.h.get(
     'https://cas.test.vipshop.com:8443/login?service=http%3A%2F%2Fvis-admin.vip.vip.com%2Flogin.php%3FReturnUrl%3Dhttp%253A%252F%252Fvis-admin.vip.vip.com%252Flogin.php')
-        if u'http://vis-admin.vip.vip.com/' not in self.h.current_url:
+        if 'http://vis-admin.vip.vip.com/' not in self.h.current_url:
            self.h.find_element_by_id('UserName').send_keys('alice.xiao')
            self.h.find_element_by_id('UserName').submit()
     def creat(self):
-        self.h.find_element_by_partial_link_text(u'商务管理').click()
-        self.h.find_element_by_partial_link_text(u'销售档期申请').click()
-        self.h.find_element_by_partial_link_text(u'档期列表').click()
+        self.h.find_element_by_partial_link_text('商务管理').click()
+        self.h.find_element_by_partial_link_text('销售档期申请').click()
+        self.h.find_element_by_partial_link_text('档期列表').click()
         self.h.switch_to_frame(self.h.find_element_by_name('biw-ajax'))
         self.wait.until(lambda z:z.find_element_by_id('add_apply_schedule').is_displayed())
         self.h.find_element_by_id('add_apply_schedule').click()
@@ -36,10 +36,10 @@ class creat_dang(object):
         self.h.find_element_by_id('selling_mode').click()
         time.sleep(0.2)
         for i  in self.h.find_element_by_id('selling_mode').find_elements_by_tag_name('option'):
-            if i.text==u'JIT':
+            if i.text=='JIT':
                 i.click()
                 break
-        self.h.find_element_by_id('vendor_name').send_keys(u'五二二')
+        self.h.find_element_by_id('vendor_name').send_keys('五二二')
         time.sleep(2)
         self.wait.until(lambda z:z.find_element_by_class_name('ac_even').is_displayed())
         self.h.find_element_by_class_name('ac_even').click()
@@ -49,7 +49,7 @@ class creat_dang(object):
         self.wait.until(lambda z:z.find_element_by_id('ui-multiselect-brand_name-option-1').is_displayed())
         self.h.find_element_by_id('ui-multiselect-brand_name-option-1').click()
         #销售主体期数
-        self.h.find_element_by_id('selling_action').send_keys(u'测试销售')
+        self.h.find_element_by_id('selling_action').send_keys('测试销售')
         time.sleep(0.2)
         self.s=self.h.find_elements_by_class_name('ac_results')[-1]
         self.wait.until(lambda z:z.find_elements_by_class_name('ac_results')[-1].find_element_by_class_name('ac_even').is_displayed())
@@ -120,10 +120,10 @@ class creat_dang(object):
         self.s.click()
         self.s.find_elements_by_tag_name('option')[1].click()
         #x选择是否保底
-        self.cli_cho(['break_even_flag',u'是'])
+        self.cli_cho(['break_even_flag','是'])
         #设置新导航
         self.h.find_element_by_id('clothesProduct').click()
-        self.cli_cho(['clothesProductSel',u'女装'])
+        self.cli_cho(['clothesProductSel','女装'])
         #售卖平台
         ActionChains(self.h).move_to_element(self.h.find_element_by_id('last_gross_profit_rate_gz'))
         self.h.find_element_by_id('sale_platform1').click()
@@ -137,11 +137,11 @@ class creat_dang(object):
         if len(self.maolilv)==1:
           self.h.find_element_by_id('supply_price').send_keys(self.maolilv[0])
         #采购方式
-        self.cli_cho(['purchase_type',u'虚拟发货'])
+        self.cli_cho(['purchase_type','虚拟发货'])
         #采购方式
-        self.cli_cho(['purchase_type',u'虚拟补货'])
+        self.cli_cho(['purchase_type','虚拟补货'])
         #抽样状况
-        self.cli_cho(['sample_type', u'提供图片'])
+        self.cli_cho(['sample_type', '提供图片'])
         #押金比例
         self.h.find_element_by_id('mortgage_rate').send_keys('1')
         self.h.find_element_by_id('caution_money').send_keys('2')
@@ -150,7 +150,7 @@ class creat_dang(object):
         self.h.find_element_by_id('discount_price_to').send_keys('200')
         #结算方式
         ActionChains(self.h). move_to_element(self.h.find_element_by_id('account_type'))
-        self.cli_cho(['account_type',u'M1'])
+        self.cli_cho(['account_type','M1'])
         #销售金额比
         ActionChains(self.h).move_to_element(self.h.find_element_by_id('save_submit')).perform()
         self.h.find_element_by_id('sales_num_per_gz').send_keys('10')
@@ -197,9 +197,9 @@ class creat_dang(object):
     def shen_he(self):
         self.h.switch_to_default_content()
         time.sleep(0.5)
-        self.wait.until(lambda z: z.find_element_by_partial_link_text(u'部门审批列表').is_enabled())
+        self.wait.until(lambda z: z.find_element_by_partial_link_text('部门审批列表').is_enabled())
         time.sleep(1)
-        self.dengdai(self.h.find_element_by_partial_link_text(u'部门审批列表'))
+        self.dengdai(self.h.find_element_by_partial_link_text('部门审批列表'))
         #self.h.find_element_by_partial_link_text(u'部门审批列表').click()
         self.h.switch_to_frame(self.h.find_element_by_name('biw-ajax'))
         self.wait.until(lambda z: z.find_element_by_name('select_box').is_enabled())
@@ -209,14 +209,14 @@ class creat_dang(object):
         self.h.switch_to_alert().accept()
         time.sleep(0.5)
         u=self.h.switch_to_alert()
-        if u'成功' in u.text:
+        if '成功' in u.text:
             u.accept()
         else:
-            assert u'审批不通过'=='1'
+            assert '审批不通过'=='1'
         self.h.switch_to_default_content()
         time.sleep(0.5)
-        self.wait.until(lambda z:z.find_element_by_partial_link_text(u'VP审批列表').is_enabled())
-        self.dengdai(self.h.find_element_by_partial_link_text(u'VP审批列表'))
+        self.wait.until(lambda z:z.find_element_by_partial_link_text('VP审批列表').is_enabled())
+        self.dengdai(self.h.find_element_by_partial_link_text('VP审批列表'))
         #self.h.find_element_by_partial_link_text(u'VP审批列表').click()
         self.h.switch_to_frame(self.h.find_element_by_name('biw-ajax'))
         self.wait.until(lambda z: z.find_element_by_name('select_box').is_enabled())
@@ -228,7 +228,7 @@ class creat_dang(object):
         self.h.switch_to_alert().accept()
         time.sleep(0.5)
         u=self.h.switch_to_alert()
-        if u'成功' in u.text:
+        if '成功' in u.text:
             u.accept()
             time.sleep(1)
             try:
@@ -236,7 +236,7 @@ class creat_dang(object):
             except:
                 pass
         else:
-            assert u'审批不通过'=='1'
+            assert '审批不通过'=='1'
         # 返回档期id
 
     #选择下拉列表，并根据值选择点击那一个

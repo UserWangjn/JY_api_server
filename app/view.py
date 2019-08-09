@@ -8,27 +8,27 @@
 from tempfile import mktemp
 from flask import send_from_directory, send_file, Response
 import socket
-from StringIO import StringIO
+from io import StringIO
 from io import BytesIO
 import os, sys
-from hualala.check_login import *
-from hualala.git_submit import *
-import json, urllib2, re, chardet
-from jie_kou import *
+from .hualala.check_login import *
+from .hualala.git_submit import *
+import json, urllib.request, urllib.error, urllib.parse, re, chardet
+from .jie_kou import *
 from functools import wraps
-from zhixing import *
-from data_verification import *
-from yuansudingwei import *
+from .zhixing import *
+from .data_verification import *
+from .yuansudingwei import *
 import time, sqlite3
-from shell_name import *
-from form import *
+from .shell_name import *
+from .form import *
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify
 import datetime, json
-from StringIO import StringIO
+from io import StringIO
 from io import BytesIO
 from flask import make_response
 bootstrap = Bootstrap(app)
@@ -36,7 +36,7 @@ UPLOAD_FOLDER = 'static/Uploads'
 
 @app.before_request
 def before_request():
-    if 'path' in request.form.keys() and request.form['path'] == 'server':
+    if 'path' in list(request.form.keys()) and request.form['path'] == 'server':
         pass
     else:
         statu = 0
@@ -53,7 +53,7 @@ def before_request():
             session['deng_lu'] = True
             g.db.close()
         else:
-            if 'deng_lu' not in session.keys() or session['deng_lu'] != True:
+            if 'deng_lu' not in list(session.keys()) or session['deng_lu'] != True:
                 user = [ i[0] for i in g.cu.execute('select ip from user').fetchall() ]
                 g.db.close()
                 if request.headers.get('X-Real-IP') not in user and 'static' not in request.url:
@@ -68,7 +68,7 @@ def teardown_request(exception):
         g.db.close()
 
 
-from lenove_jie_kou.wirte_logs import *
+from .lenove_jie_kou.wirte_logs import *
 
 @app.route('/wirte_logs', methods=['POST', 'GET'])
 def wirte_logs():
@@ -158,7 +158,7 @@ def jie_rueen():
 
 @app.route('/tabs_kaifa', methods=['GET', 'POST'])
 def tabs_kaifa():
-    if 'barcode' not in session.keys() or session['barcode'].strip() == '':
+    if 'barcode' not in list(session.keys()) or session['barcode'].strip() == '':
         session['barcode'] = '201701221000005'
         table = ['no data', 'no data', 'no data']
         data = ['no data', 'no data', 'no data', 'no data', 'no data']
@@ -168,7 +168,7 @@ def tabs_kaifa():
     cur_old = conn_old.cursor()
     cur_new = conn_new.cursor()
     k = read_excel('E:\\osp\\11.xlsx')
-    if 'barcode' in session.keys():
+    if 'barcode' in list(session.keys()):
         cur_new.execute('select * from stock_applications where stock_application_no=%s' % session['barcode'])
         new_data0 = cur_new.fetchone()
         cur_old.execute('select * from normality_sell_stocks_change_log where apply_no=%s' % session['barcode'])
@@ -181,11 +181,11 @@ def tabs_kaifa():
             pass
         else:
             for i in k.data0:
-                if i[0].strip() in new_data0.keys():
+                if i[0].strip() in list(new_data0.keys()):
                     i.insert(1, new_data0[i[0].strip()])
-                if i[2].split('*')[0].strip() in old_data0.keys():
+                if i[2].split('*')[0].strip() in list(old_data0.keys()):
                     i.insert(3, old_data0[i[2].strip()])
-                elif i[2].split('*')[0].strip() in ji_data0.keys():
+                elif i[2].split('*')[0].strip() in list(ji_data0.keys()):
                     i.insert(3, ji_data0[i[2].split('*')[0].strip()])
                 else:
                     i.insert(3, 'no data')
@@ -195,7 +195,7 @@ def tabs_kaifa():
             i.insert(1, 'no data')
             i.insert(3, 'no data')
 
-    if 'barcode' in session.keys():
+    if 'barcode' in list(session.keys()):
         cur_new.execute('select * from stock_application_details where stock_application_no=%s' % session['barcode'])
         new_data1 = cur_new.fetchone()
         cur_old.execute('SELECT * FROM normality_sell_stocks_change_detail WHERE item_code="%s" and  nomal_change_id IN (SELECT id FROM normality_sell_stocks_change_log WHERE apply_no=%s ) ORDER BY id DESC' % (new_data1['barcode'], session['barcode']))
@@ -222,13 +222,13 @@ def tabs_kaifa():
             pass
         else:
             for i in k.data1:
-                if i[0].strip() in new_data1.keys():
+                if i[0].strip() in list(new_data1.keys()):
                     i.insert(1, new_data1[i[0].strip()])
-                if i[2].split('*')[0].strip() in old_data1.keys():
+                if i[2].split('*')[0].strip() in list(old_data1.keys()):
                     i.insert(3, old_data1[i[2].strip()])
-                elif i[2].strip() in ji_data1.keys():
+                elif i[2].strip() in list(ji_data1.keys()):
                     i.insert(3, ji_data1[i[2].strip()])
-                elif i[2].strip() in ji1_data1.keys():
+                elif i[2].strip() in list(ji1_data1.keys()):
                     i.insert(3, ji1_data1[i[2].strip()])
                 else:
                     i.insert(3, 'no data')
@@ -238,7 +238,7 @@ def tabs_kaifa():
             i.insert(1, 'no data')
             i.insert(3, 'no data')
 
-    if 'barcode' in session.keys():
+    if 'barcode' in list(session.keys()):
         cur_new.execute('select * from stock_product_status where stock_application_no=%s' % session['barcode'])
         new_data2 = cur_new.fetchone()
         cur_old.execute('SELECT * FROM visAdmin.normality_sell_goods WHERE goods_barcodes="%s" and nomal_change_id IN (SELECT id FROM visAdmin.normality_sell_stocks_change_log WHERE apply_no=%s) ORDER BY id DESC' % (new_data2['barcode'], session['barcode']))
@@ -247,9 +247,9 @@ def tabs_kaifa():
             pass
         else:
             for i in k.data2:
-                if i[0].strip() in new_data2.keys():
+                if i[0].strip() in list(new_data2.keys()):
                     i.insert(1, new_data2[i[0].strip()])
-                if i[2].split('*')[0].strip() in old_data2.keys():
+                if i[2].split('*')[0].strip() in list(old_data2.keys()):
                     i.insert(3, old_data2[i[2].strip()])
                 else:
                     i.insert(3, 'no data')
@@ -269,7 +269,7 @@ def yan_sql():
     return jsonify(a='1')
 
 
-from lenove_jie_kou.ceshi_no import *
+from .lenove_jie_kou.ceshi_no import *
 
 @app.route('/signal_run', methods=['POST', 'GET'])
 @ceshi_no
@@ -284,18 +284,18 @@ def piliang_run_over():
     cu = db.cursor()
     if request.method == 'POST':
         cu.execute('update jiekou_mulu set run_statu="2" where ip=? and statu=?', (
-         request.form['ip'], u'批量'))
+         request.form['ip'], '批量'))
         db.commit()
         db.close()
         return jsonify(statu='update_success')
     if request.method == 'GET':
         run_status, run_time = None, None
         run_statu_data = cu.execute('select run_statu from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()
+         request.headers.get('X-Real-IP'), '批量')).fetchall()
         if run_statu_data:
             run_statu = run_statu_data[0][0]
         run_time_data = cu.execute('select update_time from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()
+         request.headers.get('X-Real-IP'), '批量')).fetchall()
         if run_time_data:
             run_time = time.strftime('%Y-%m-%d:  %H:%M:%S ', time.localtime(float(run_time_data[0][0])))
         return jsonify(run_statu=run_statu, run_time=run_time)
@@ -314,9 +314,9 @@ def piliang_run_git_over():
         return jsonify(statu='update_success')
     if request.method == 'GET':
         run_statu = cu.execute('select run_statu from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()[0][0]
+         request.headers.get('X-Real-IP'), '批量')).fetchall()[0][0]
         run_time = cu.execute('select update_time from  jiekou_mulu  where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()[0][0]
+         request.headers.get('X-Real-IP'), '批量')).fetchall()[0][0]
         run_time = time.strftime('%Y-%m-%d:  %H:%M:%S ', time.localtime(float(run_time)))
         return jsonify(run_statu=run_statu, run_time=run_time)
 
@@ -326,24 +326,24 @@ def uplate_jiekou_list():
     hostname = socket.gethostname()
     webserver_ip = socket.gethostbyname(hostname)
     if request.method == 'GET':
-        if 'yidi_mulu_ip' not in session.keys():
+        if 'yidi_mulu_ip' not in list(session.keys()):
             session['yidi_mulu_ip'] = '127.0.0.1'
         if session['yidi_mulu_ip'] == request.headers.get('X-Real-IP'):
             yizhi = 1
         else:
             yizhi = 0
-        if session.has_key('mulu_detail'):
+        if 'mulu_detail' in session:
             res = session['mulu_detail']
             return render_template('/hualala/pages/jiekou_list.html', yewu_name=res['yewu_name'], ip_server=session['yidi_mulu_ip'], select_huanjing=res['select_huanjing'], huanjing=res['huanjing'], all_mulu=res['gen_mulu'], yizhi=yizhi, local_port=current_app.config.get('LOCAL_SERVER_PORT'))
         return render_template('/hualala/pages/jiekou_list.html', yewu_name='', select_huanjing='', huanjing='', all_mulu='', yizhi=yizhi, local_port=current_app.config.get('LOCAL_SERVER_PORT'))
     db = sqlite3.connect(current_app.config.get('JIE_KOU'))
     cu = db.cursor()
-    if 'ip_dizhi' in request.form.keys():
+    if 'ip_dizhi' in list(request.form.keys()):
         session['yidi_mulu_ip'] = request.form['ip_dizhi']
         ip_dizhi = request.form['ip_dizhi']
         if ip_dizhi == webserver_ip:
             ip_dizhi = '127.0.0.1'
-        mulu = cu.execute('select  mulu from jiekou_mulu where ip=? and statu=?', (ip_dizhi, u'批量')).fetchall()
+        mulu = cu.execute('select  mulu from jiekou_mulu where ip=? and statu=?', (ip_dizhi, '批量')).fetchall()
         url = 'http://' + ip_dizhi.strip() + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/mulu_detail'
         if len(mulu) == 0:
             return render_template('/hualala/pages/jiekou_list.html', yewu_name='', select_huanjing='', huanjing='', all_mulu='', local_port=current_app.config.get('LOCAL_SERVER_PORT'))
@@ -353,35 +353,35 @@ def uplate_jiekou_list():
         mulu = request.form['mulu']
         ip = request.headers.get('X-Real-IP')
         if len(cu.execute('select * from jiekou_mulu where ip=? and statu=?', (
-         request.headers.get('X-Real-IP'), u'批量')).fetchall()) > 0:
+         request.headers.get('X-Real-IP'), '批量')).fetchall()) > 0:
             cu.execute('update jiekou_mulu set mulu=?,update_time=?,run_statu="0" where ip=? and statu=?', (
-             request.form['mulu'], str(time.time()), request.headers.get('X-Real-IP'), u'批量'))
+             request.form['mulu'], str(time.time()), request.headers.get('X-Real-IP'), '批量'))
         else:
             cu.executemany('INSERT INTO jiekou_mulu VALUES (null,?,?,?,?,?)', [
              (
-              u'批量', request.form['mulu'], request.headers.get('X-Real-IP'), str(time.time()), '0')])
+              '批量', request.form['mulu'], request.headers.get('X-Real-IP'), str(time.time()), '0')])
         url = 'http://' + request.headers.get('X-Real-IP') + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/mulu_detail'
     db.commit()
     db.close()
     mulu = mulu.encode('utf-8')
-    if 'huanjing' in request.form.keys():
+    if 'huanjing' in list(request.form.keys()):
         session['huanjing'] = request.form['huanjing']
     else:
-        if 'huanjing' not in session.keys():
+        if 'huanjing' not in list(session.keys()):
             session['huanjing'] = ''
         test_data = {'mulu': mulu, 'huanjing': session['huanjing'].encode('utf-8')}
-        test_data_urlencode = urllib.urlencode(test_data)
-        req = urllib2.Request(url=url, data=test_data_urlencode)
+        test_data_urlencode = urllib.parse.urlencode(test_data)
+        req = urllib.request.Request(url=url, data=test_data_urlencode)
         try:
-            res_data = json.loads(urllib2.urlopen(req).read())
+            res_data = json.loads(urllib.request.urlopen(req).read())
         except:
-            return u'找不到相应服务或目录'
+            return '找不到相应服务或目录'
         else:
-            if 'error_detail' in res_data.keys():
+            if 'error_detail' in list(res_data.keys()):
                 return res_data['error_detail']
 
-        if 'statu' in res_data.keys() and res_data['statu'] == 'no dir':
-            return u'目录不存在'
+        if 'statu' in list(res_data.keys()) and res_data['statu'] == 'no dir':
+            return '目录不存在'
     res = json.loads(res_data['data'])
     if session['huanjing'].strip() != '':
         res['select_huanjing'] = session['huanjing']
@@ -391,13 +391,13 @@ def uplate_jiekou_list():
         yizhi = 1
     else:
         yizhi = 0
-    print 999999999999999999999999999999
-    print res['gen_mulu']
+    print(999999999999999999999999999999)
+    print(res['gen_mulu'])
     resp = make_response(render_template('/hualala/pages/jiekou_list.html', ip_server=session['yidi_mulu_ip'], yewu_name=res['yewu_name'], select_huanjing=res['select_huanjing'], huanjing=res['huanjing'], all_mulu=res['gen_mulu'], yizhi=yizhi, local_port=current_app.config.get('LOCAL_SERVER_PORT')))
     return resp
 
 
-from lenove_jie_kou.run_jiekou import *
+from .lenove_jie_kou.run_jiekou import *
 
 @app.route('/jie_kou_result', methods=['POST', 'GET'])
 @jiekou_result
@@ -405,7 +405,7 @@ def jiek_result():
     pass
 
 
-from lenove_jie_kou.jiekou_list import jiekou_list_show
+from .lenove_jie_kou.jiekou_list import jiekou_list_show
 
 @app.route('/jiekou_list', methods=['POST', 'GET'])
 @jiekou_list_show
@@ -413,7 +413,7 @@ def jiekou_list_show():
     pass
 
 
-from lenove_jie_kou.jiekou_list import jiekou_result_run
+from .lenove_jie_kou.jiekou_list import jiekou_result_run
 
 @app.route('/simple_jie_kou_run', methods=['POST', 'GET'])
 @jiekou_result_run
@@ -421,7 +421,7 @@ def jiekou_list_showeeaa():
     pass
 
 
-from lenove_jie_kou.change_config import change_config
+from .lenove_jie_kou.change_config import change_config
 
 @app.route('/read_configparse', methods=['POST', 'GET'])
 @change_config
@@ -429,7 +429,7 @@ def jiekou_list_showeeaa():
     pass
 
 
-from lenove_jie_kou.jiekou_list import *
+from .lenove_jie_kou.jiekou_list import *
 
 @app.route('/jiaobenshuru', methods=['POST'])
 @jiaobenshuru
@@ -478,7 +478,7 @@ def jie_kou_result():
     return jsonify(a='1')
 
 
-from lenove_jie_kou.run_jiekou import *
+from .lenove_jie_kou.run_jiekou import *
 
 @app.route('/jie_kou', methods=['POST', 'GET'])
 @piliangjiekou_result
@@ -492,7 +492,7 @@ def jiekou_page():
     pass
 
 
-from hualala.moke_dangban import moke_dangban
+from .hualala.moke_dangban import moke_dangban
 
 @app.route('/moke_dangban', methods=['GET', 'POST'])
 @moke_dangban
@@ -500,7 +500,7 @@ def moke_dangban():
     pass
 
 
-from hualala.moke_dangban import add_case
+from .hualala.moke_dangban import add_case
 
 @app.route('/add_case', methods=['GET', 'POST'])
 @add_case
@@ -508,7 +508,7 @@ def add_case():
     pass
 
 
-from hualala.moke_dangban import case_read
+from .hualala.moke_dangban import case_read
 
 @app.route('/case_read', methods=['GET', 'POST'])
 @case_read
@@ -516,7 +516,7 @@ def case_read():
     pass
 
 
-from hualala.moke_dangban import bianji_case
+from .hualala.moke_dangban import bianji_case
 
 @app.route('/bianji_case', methods=['GET', 'POST'])
 @bianji_case
@@ -524,7 +524,7 @@ def bianji_case():
     pass
 
 
-from hualala.moke_dangban import yewu_bianji_show
+from .hualala.moke_dangban import yewu_bianji_show
 
 @app.route('/yewu_bianji_show', methods=['GET', 'POST'])
 @yewu_bianji_show
@@ -532,7 +532,7 @@ def yewu_bianji_show():
     pass
 
 
-from hualala.moke_dangban import linux_add
+from .hualala.moke_dangban import linux_add
 
 @app.route('/linux_add', methods=['GET', 'POST'])
 @linux_add
@@ -540,7 +540,7 @@ def linux_add():
     pass
 
 
-from hualala.moke_dangban import top_add_ceshi
+from .hualala.moke_dangban import top_add_ceshi
 
 @app.route('/top_add', methods=['GET', 'POST'])
 @top_add_ceshi
@@ -548,7 +548,7 @@ def top_add_ceshi():
     pass
 
 
-from hualala.moke_dangban import moke_return
+from .hualala.moke_dangban import moke_return
 
 @app.route('/moke_return/<id>', methods=['GET', 'POST'])
 @moke_return
@@ -556,7 +556,7 @@ def moke_return(id):
     pass
 
 
-from hualala.moke_dangban import yewuadd
+from .hualala.moke_dangban import yewuadd
 
 @app.route('/yewu_add', methods=['GET', 'POST'])
 @yewuadd
@@ -564,7 +564,7 @@ def yewuadd():
     pass
 
 
-from hualala.moke_dangban import server_use
+from .hualala.moke_dangban import server_use
 
 @app.route('/server_use', methods=['GET', 'POST'])
 @server_use
@@ -572,7 +572,7 @@ def server_use():
     pass
 
 
-from hualala.moke_dangban import delete_moke_xiangmu
+from .hualala.moke_dangban import delete_moke_xiangmu
 
 @app.route('/delete_moke_xiangmu', methods=['GET', 'POST'])
 @delete_moke_xiangmu
@@ -647,13 +647,13 @@ def login_new():
         response = make_response(redirect(url_for('chongou_test')))
         response.set_cookie('flask_login', 'a')
         db.close()
-        print response.headers, response.status, response.get_data()
+        print(response.headers, response.status, response.get_data())
         return response
     db.close()
     return render_template('/hualala/login.html')
 
 
-from hualala.user import *
+from .hualala.user import *
 
 @app.route('/user_manage', methods=['GET', 'POST'])
 @user
@@ -695,7 +695,7 @@ def add_server():
     return jsonify(a=1)
 
 
-from hualala.run import *
+from .hualala.run import *
 
 @app.route('/run_hualala', methods=['GET', 'POST'])
 @run_hualala
@@ -703,7 +703,7 @@ def run_hual():
     pass
 
 
-from hualala.run import *
+from .hualala.run import *
 
 @app.route('/run_charge', methods=['GET', 'POST'])
 @run_charge
@@ -735,7 +735,7 @@ def delete_ben():
     return jsonify(statu='success')
 
 
-from hualala.add_email import *
+from .hualala.add_email import *
 
 @app.route('/add_email', methods=['GET', 'POST'])
 @add_email
@@ -780,7 +780,7 @@ def dingshi_result(id):
         timee = cu.execute('select update_time,last_run_time from dingshi_run where  id=?', (id,)).fetchall()[0]
         z = json.loads(z)
     job = json.loads(cu.execute('select job from dingshi_run where id=?', (id,)).fetchall()[0][0])
-    if 'name' in job.keys() and 'no select' != job['name'].strip():
+    if 'name' in list(job.keys()) and 'no select' != job['name'].strip():
         job_r = job['name'] + ':' + job['result']
     else:
         job_r = 'null'
@@ -807,7 +807,7 @@ def dingshi_result(id):
     return render_template('/hualala/pages/test_result.html', time=str(time.time()), z=z, total=total, timee=timee, job=job_r, taken=run_time_detail, url_detail=url_detail)
 
 
-from hualala.yunxing_tongji import pic_yewu_email
+from .hualala.yunxing_tongji import pic_yewu_email
 
 @app.route('/jiekou_result/<id>', methods=['GET', 'POST'])
 def jiekou_result(id):
@@ -845,7 +845,7 @@ def jiekou_result(id):
                 fail = 0
                 succ = 0
                 count = len(json.loads(all_result[i]))
-                for k, z in json.loads(all_result[i]).iteritems():
+                for k, z in json.loads(all_result[i]).items():
                     result = json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(z['respons']))), parse_int=int), indent=4, sort_keys=False, ensure_ascii=False)
                     id = int(k)
                     req_url = z['req_url']
@@ -868,9 +868,9 @@ def jiekou_result(id):
                         detail.append(['passCase', id, comment, case_assert, result, req, req_url])
 
                 detail = sorted(detail, key=lambda x: x[1])
-                if git_beizhu not in yewuxian_detail.keys():
+                if git_beizhu not in list(yewuxian_detail.keys()):
                     yewuxian_detail[git_beizhu] = {'success': 0, 'fail': 0, 'count': 0, 'all': 0}
-                if git_beizhu not in top_all.keys():
+                if git_beizhu not in list(top_all.keys()):
                     top_all[git_beizhu] = {'success': 0, 'fail': 0, 'count': 0, 'all': []}
                 if statu == 1:
                     top_all[git_beizhu]['all'].append([name, 'failClass', [count, succ, fail, count], detail])
@@ -975,7 +975,7 @@ def teach():
     return render_template('/hualala/pages/texch.html')
 
 
-from hualala.locust_fiel import upload_fil
+from .hualala.locust_fiel import upload_fil
 
 @app.route('/upload_file', methods=['GET', 'POST'])
 @upload_fil
@@ -983,7 +983,7 @@ def upload_file():
     pass
 
 
-from hualala.locust_fiel import upload_fil_beizu
+from .hualala.locust_fiel import upload_fil_beizu
 
 @app.route('/upload_fil_beizu', methods=['GET', 'POST'])
 @upload_fil_beizu
@@ -991,7 +991,7 @@ def upload_file():
     pass
 
 
-from lenove_jie_kou.run_jiekou import jiekou_gitce
+from .lenove_jie_kou.run_jiekou import jiekou_gitce
 
 @app.route('/jiekou_yun', methods=['GET', 'POST'])
 @jiekou_gitce
@@ -999,7 +999,7 @@ def jiekou_git():
     pass
 
 
-from lenove_jie_kou.run_jiekou import guanlian_ip_dizhi
+from .lenove_jie_kou.run_jiekou import guanlian_ip_dizhi
 
 @app.route('/guanlian_ip', methods=['GET', 'POST'])
 @guanlian_ip_dizhi
@@ -1007,7 +1007,7 @@ def guanlian_ip():
     pass
 
 
-from lenove_jie_kou.run_jiekou import debugging
+from .lenove_jie_kou.run_jiekou import debugging
 
 @app.route('/debugging', methods=['GET', 'POST'])
 @debugging
@@ -1015,7 +1015,7 @@ def run_dubbing():
     pass
 
 
-from lenove_jie_kou.jekins import signal_job_detail
+from .lenove_jie_kou.jekins import signal_job_detail
 
 @app.route('/signal_job_detail', methods=['GET', 'POST'])
 @signal_job_detail
@@ -1023,7 +1023,7 @@ def signal_job_detail():
     pass
 
 
-from lenove_jie_kou.jekins import job_gengxin
+from .lenove_jie_kou.jekins import job_gengxin
 
 @app.route('/job_gengxin', methods=['GET', 'POST'])
 @job_gengxin
@@ -1031,7 +1031,7 @@ def job_gengxin():
     pass
 
 
-from lenove_jie_kou.jekins import delete_server
+from .lenove_jie_kou.jekins import delete_server
 
 @app.route('/delete_server', methods=['GET', 'POST'])
 @delete_server
@@ -1039,7 +1039,7 @@ def delete_server():
     pass
 
 
-from hualala.run import change_run_statu
+from .hualala.run import change_run_statu
 
 @app.route('/change_run_statu', methods=['POST'])
 @change_run_statu
@@ -1047,7 +1047,7 @@ def change_run_statu():
     pass
 
 
-from hualala.run import update_host
+from .hualala.run import update_host
 
 @app.route('/updata_html', methods=['POST'])
 @update_host
@@ -1055,7 +1055,7 @@ def update_host22():
     pass
 
 
-from hualala.submit_git import submit_git
+from .hualala.submit_git import submit_git
 
 @app.route('/get_file_git', methods=['POST'])
 @submit_git
@@ -1063,7 +1063,7 @@ def get_file_git():
     pass
 
 
-from hualala.submit_git import get_sumint_statu
+from .hualala.submit_git import get_sumint_statu
 
 @app.route('/get_sumint_statu', methods=['POST'])
 @get_sumint_statu
@@ -1071,7 +1071,7 @@ def get_sumint_statu():
     pass
 
 
-from hualala.yunxing_tongji import yunxing_tongji
+from .hualala.yunxing_tongji import yunxing_tongji
 
 @app.route('/yunxing_tongji', methods=['POST'])
 @yunxing_tongji
@@ -1079,7 +1079,7 @@ def yunxing_tongji():
     pass
 
 
-from hualala.yunxing_tongji import test_image
+from .hualala.yunxing_tongji import test_image
 
 @app.route('/test_image/<id>', methods=['POST', 'GET'])
 @test_image
@@ -1087,7 +1087,7 @@ def test_image(id):
     pass
 
 
-from hualala.yunxing_tongji import pic_yewu_today
+from .hualala.yunxing_tongji import pic_yewu_today
 
 @app.route('/pic_yewu_oday/<testid>', methods=['POST', 'GET'])
 @pic_yewu_today
@@ -1095,7 +1095,7 @@ def pic_yewu_today(testid):
     pass
 
 
-from hualala.yunxing_tongji import pic_yewu_today_email
+from .hualala.yunxing_tongji import pic_yewu_today_email
 
 @app.route('/pic_yewu_today_email', methods=['POST', 'GET'])
 @pic_yewu_today_email
@@ -1103,7 +1103,7 @@ def pic_yewu_today_email():
     pass
 
 
-from hualala.yunxing_tongji import tongji_mail
+from .hualala.yunxing_tongji import tongji_mail
 
 @app.route('/tongji_mail', methods=['POST', 'GET'])
 @tongji_mail
@@ -1111,7 +1111,7 @@ def tongji_mail():
     pass
 
 
-from hualala.user import add_user_team
+from .hualala.user import add_user_team
 
 @app.route('/add_user_team', methods=['POST', 'GET'])
 @add_user_team
@@ -1119,7 +1119,7 @@ def add_user_team():
     pass
 
 
-from hualala.user import gengxin_team
+from .hualala.user import gengxin_team
 
 @app.route('/gengxin_team', methods=['POST', 'GET'])
 @gengxin_team
@@ -1127,7 +1127,7 @@ def gengxin_team():
     pass
 
 
-from hualala.yunxing_tongji import local_tongji_seven
+from .hualala.yunxing_tongji import local_tongji_seven
 
 @app.route('/local_seven_today', methods=['POST', 'GET'])
 @local_tongji_seven
@@ -1135,7 +1135,7 @@ def local_tongji_seven():
     pass
 
 
-from hualala.yunxing_tongji import local_seven_pic
+from .hualala.yunxing_tongji import local_seven_pic
 
 @app.route('/local_seven_pic/<testid>', methods=['POST', 'GET'])
 @local_seven_pic
@@ -1143,7 +1143,7 @@ def local_seven_pic(testid):
     pass
 
 
-from hualala.yunxing_tongji import local_tongji_today
+from .hualala.yunxing_tongji import local_tongji_today
 
 @app.route('/local_today_today', methods=['POST', 'GET'])
 @local_tongji_today
@@ -1151,7 +1151,7 @@ def local_tongji_today():
     pass
 
 
-from hualala.yunxing_tongji import local_today_pic
+from .hualala.yunxing_tongji import local_today_pic
 
 @app.route('/local_today_pic/<testid>', methods=['POST', 'GET'])
 @local_today_pic
@@ -1159,7 +1159,7 @@ def local_today_pic(testid):
     pass
 
 
-from hualala.save_log_jiequ import save_log_jiequ
+from .hualala.save_log_jiequ import save_log_jiequ
 
 @app.route('/save_log_jiequ', methods=['POST', 'GET'])
 @save_log_jiequ
@@ -1178,7 +1178,7 @@ def plot():
     src = 'data:image/png;base64,' + str(data)
 
 
-from hualala.appium_server import appium_server
+from .hualala.appium_server import appium_server
 
 @app.route('/appium_server', methods=['GET', 'POST'])
 @appium_server
@@ -1196,7 +1196,7 @@ def open_window_page_result():
     return render_template('/hualala/pages/local_ui_result.html', port=current_app.config.get('LOCAL_SERVER_PORT'))
 
 
-from jmeter_log.jmeter_log import jemter_add_linux
+from .jmeter_log.jmeter_log import jemter_add_linux
 
 @app.route('/jemter_add_linux', methods=['GET', 'POST'])
 @jemter_add_linux
@@ -1204,7 +1204,7 @@ def jemter_add_linux():
     pass
 
 
-from jmeter_log.jmeter_log import jemter_get_all_linux
+from .jmeter_log.jmeter_log import jemter_get_all_linux
 
 @app.route('/jemter_get_all_linux', methods=['GET', 'POST'])
 @jemter_get_all_linux
@@ -1212,7 +1212,7 @@ def jemter_get_all_linux():
     pass
 
 
-from jmeter_log.jmeter_log import delete_simple_linux
+from .jmeter_log.jmeter_log import delete_simple_linux
 
 @app.route('/delete_simple_linux', methods=['GET', 'POST'])
 @delete_simple_linux
@@ -1220,7 +1220,7 @@ def delete_simple_linux():
     pass
 
 
-from jmeter_log.jmeter_log import run_linux
+from .jmeter_log.jmeter_log import run_linux
 
 @app.route('/run_linux', methods=['GET', 'POST'])
 @run_linux
@@ -1228,7 +1228,7 @@ def run_linux():
     pass
 
 
-from jmeter_log.jmeter_log import bianji_linux
+from .jmeter_log.jmeter_log import bianji_linux
 
 @app.route('/bianji_linux', methods=['GET', 'POST'])
 @bianji_linux
@@ -1236,7 +1236,7 @@ def bianji_linux():
     pass
 
 
-from jmeter_log.jmeter_log import stop_run_linux
+from .jmeter_log.jmeter_log import stop_run_linux
 
 @app.route('/stop_run_linux', methods=['GET', 'POST'])
 @stop_run_linux
@@ -1266,7 +1266,7 @@ def run_jiankong():
     return jsonify(statu='run_success')
 
 
-from hualala.phone import phone_changliang_add
+from .hualala.phone import phone_changliang_add
 
 @app.route('/phone_changliang_add', methods=['GET', 'POST'])
 @phone_changliang_add
@@ -1274,7 +1274,7 @@ def phone_changliang_add():
     pass
 
 
-from hualala.phone import add_phone_modal
+from .hualala.phone import add_phone_modal
 
 @app.route('/add_phone_modal', methods=['GET', 'POST'])
 @add_phone_modal
@@ -1282,7 +1282,7 @@ def add_phone_modal():
     pass
 
 
-from hualala.phone import bianji_phone_modal
+from .hualala.phone import bianji_phone_modal
 
 @app.route('/bianji_phone_modal', methods=['GET', 'POST'])
 @bianji_phone_modal
@@ -1290,7 +1290,7 @@ def bianji_phone_modal():
     pass
 
 
-from hualala.phone import shouye
+from .hualala.phone import shouye
 
 @app.route('/zichan_shouye', methods=['GET', 'POST'])
 @shouye
@@ -1298,7 +1298,7 @@ def shouye():
     pass
 
 
-from hualala.phone import phone_changliang_delete
+from .hualala.phone import phone_changliang_delete
 
 @app.route('/phone_changliang_delete', methods=['GET', 'POST'])
 @phone_changliang_delete
@@ -1306,7 +1306,7 @@ def phone_changliang_delete():
     pass
 
 
-from hualala.phone import phone_simple_caozuo
+from .hualala.phone import phone_simple_caozuo
 
 @app.route('/phone_simple_caozuo/<name>', methods=['GET', 'POST'])
 @phone_simple_caozuo
@@ -1314,7 +1314,7 @@ def phone_simple_caozuo(name):
     pass
 
 
-from hualala.phone import phone_submit
+from .hualala.phone import phone_submit
 
 @app.route('/phone_submit', methods=['GET', 'POST'])
 @phone_submit
@@ -1322,7 +1322,7 @@ def phone_submit():
     pass
 
 
-from hualala.phone import excel_daochu
+from .hualala.phone import excel_daochu
 
 @app.route('/daochu_phone_list', methods=['GET'])
 @excel_daochu
@@ -1330,7 +1330,7 @@ def excel_daochu():
     pass
 
 
-from hualala.phone import all_phone_delete
+from .hualala.phone import all_phone_delete
 
 @app.route('/all_phone_delete', methods=['POST'])
 @all_phone_delete
@@ -1354,7 +1354,7 @@ def get_email_detail():
     return resp
 
 
-from hualala.jiekou_fenxi import jiekou_fenxi_shouye
+from .hualala.jiekou_fenxi import jiekou_fenxi_shouye
 
 @app.route('/jiekou_fenxi', methods=['GET'])
 @jiekou_fenxi_shouye
@@ -1362,7 +1362,7 @@ def jiekou_fenxi_shouye():
     pass
 
 
-from hualala.jiekou_git_chonggou import chongou_test
+from .hualala.jiekou_git_chonggou import chongou_test
 
 @app.route('/chongou_test', methods=['GET'])
 @chongou_test
@@ -1370,7 +1370,7 @@ def chongou_test():
     pass
 
 
-from hualala.jiekou_git_chonggou import git_bianji
+from .hualala.jiekou_git_chonggou import git_bianji
 
 @app.route('/git_bianji', methods=['POST'])
 @git_bianji
@@ -1378,7 +1378,7 @@ def git_bianji():
     pass
 
 
-from hualala.jiekou_git_chonggou import new_get_run_statu
+from .hualala.jiekou_git_chonggou import new_get_run_statu
 
 @app.route('/new_get_run_statu', methods=['POST'])
 @new_get_run_statu
@@ -1413,33 +1413,33 @@ def git_hengfeng_detail():
        'code': '0', 
        'status': 'SUCCESS'}
     data['reqData'] = json.dumps(ss)
-    print data['reqData']
+    print(data['reqData'])
     url_sing = 'http://xq-app-server.jc1.jieyue.com/xqAppServer/api/APPBizRest/sign/v1/'
     headers = {'Content-Type': 'application/json'}
     headers_sing = {'Content-Type': 'application/json'}
     headers_sing['reqJSON'] = data['reqData']
     k = requests.post(url_sing, data=data['reqData'], headers=headers_sing)
-    print 8888888888888888888888888
-    print k.text
+    print(8888888888888888888888888)
+    print(k.text)
     k = json.loads(k.text)['responseBody']['sign']
-    print k
+    print(k)
     data['sign'] = k
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     dd = 'http://47.95.110.16:8096/bha-neo-app/lanmaotech/gateway'
     s = requests.post(dd, data=data, headers=headers)
-    print 11111111111111111111111111111111
-    print data
+    print(11111111111111111111111111111111)
+    print(data)
     requestkey = s.text.split("requestKey: '")[(-1)].split("',")[0]
-    print requestkey
-    print 222222222222222
+    print(requestkey)
+    print(222222222222222)
     url_msg = 'http://47.95.110.16:8096/bha-neo-app/gateway/sms/smsForEnterprise'
     data = {'requestKey': requestkey, 
        'bizType': 'REGISTER', 
        'mobile': '19992131029'}
     s = requests.post(url_msg, data=data, headers=headers)
-    print 3333333333333333333333333
-    print s.text
-    print 44444444444444444
+    print(3333333333333333333333333)
+    print(s.text)
+    print(44444444444444444)
     url3 = 'http://47.95.110.16:8096/bha-neo-app/gateway/mobile/personalRegisterExpand/register'
     data = {'serviceType': 'BANKCARD_AUTH', 
        'realName': '苏秦', 
@@ -1468,7 +1468,7 @@ def test_hengfeng_aa():
     return render_template('/1.html')
 
 
-from hualala.jiekou_git_chonggou import get_renwu_detail
+from .hualala.jiekou_git_chonggou import get_renwu_detail
 
 @app.route('/get_renwu_detail', methods=['POST', 'GET'])
 @get_renwu_detail

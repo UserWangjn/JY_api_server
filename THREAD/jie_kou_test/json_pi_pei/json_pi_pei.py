@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 import sys
 sys.path.append('../../')
 import json
-from excel_data import *
+from .excel_data import *
 
 def creat_json(v, data):
     if type(data) not in [list, dict]:
@@ -17,7 +17,7 @@ def creat_json(v, data):
     else:
         j = data
     if type(v) == dict:
-        for k in v.keys():
+        for k in list(v.keys()):
             if k == 'id_canshu':
                 k = 'id'
             if k == 'result_data':
@@ -26,7 +26,7 @@ def creat_json(v, data):
                 if k not in j:
                     v.pop(k)
                     continue
-                if type(j[k]) not in [float, int, long] and j[k].strip() == '':
+                if type(j[k]) not in [float, int, int] and j[k].strip() == '':
                     continue
                 s = change(v[k], j[k])
                 v[k] = s
@@ -63,7 +63,7 @@ def change(a, b):
                     pass
 
             else:
-                if type(a) in [str, unicode]:
+                if type(a) in [str, str]:
                     b = str(b)
                 else:
                     try:
@@ -83,7 +83,7 @@ def creat_json(v, data):
     else:
         j = data
     if type(v) == dict:
-        for k in v.keys():
+        for k in list(v.keys()):
             if v[k] == 'change_json':
                 v[k] = j[k]
             elif type(v[k]) != dict and type(v[k]) != list:
@@ -91,7 +91,7 @@ def creat_json(v, data):
                     v.pop(k)
                     continue
                 else:
-                    if type(j[k]) not in [float, int, long] and j[k] != None:
+                    if type(j[k]) not in [float, int, int] and j[k] != None:
                         try:
                             j[k].strip() == 'data_empty'
                         except:
@@ -130,12 +130,12 @@ def json_change(a, b):
                         b[k] = float(b[k])
                     elif type(a[k]) == bool:
                         b[k] == bool(b[k])
-                    elif type(a[k]) in [str, unicode] and a[k] != 'change_json':
+                    elif type(a[k]) in [str, str] and a[k] != 'change_json':
                         b[k] == str(b[k])
 
         elif type(a) == dict:
             for k in a:
-                if type(b) == dict and k in b.keys():
+                if type(b) == dict and k in list(b.keys()):
                     if type(a[k]) in [list, dict]:
                         json_change(a[k], b[k])
                     else:
@@ -147,9 +147,9 @@ def json_change(a, b):
                             b[k] = float(b[k])
                         elif type(a[k]) == bool:
                             b[k] == bool(b[k])
-                        elif type(a[k]) in [str, unicode] and a[k] != 'change_json':
+                        elif type(a[k]) in [str, str] and a[k] != 'change_json':
                             b[k] == str(b[k])
-                        elif type(a[k]) in [str, unicode] and a[k] != 'empty_data':
+                        elif type(a[k]) in [str, str] and a[k] != 'empty_data':
                             b[k] == ''
 
 
@@ -163,7 +163,7 @@ def change_json_data(v, excel_data):
 
         if type(v) == dict:
             for k in v:
-                if type(v[k]) not in [str, unicode]:
+                if type(v[k]) not in [str, str]:
                     change_json_data(v[k], excel_data)
                 elif v[k] == 'change_json':
                     for u in excel_data:

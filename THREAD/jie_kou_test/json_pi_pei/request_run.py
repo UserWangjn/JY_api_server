@@ -9,11 +9,11 @@ __author__ = 'SUNZHEN519'
 import sys
 sys.path.append('../../')
 import requests, copy
-from json_pi_pei import *
+from .json_pi_pei import *
 from sing_data.sing_data import *
-import urllib, urllib2, hashlib
+import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, hashlib
 from sing_data.sing_data import *
-from excel_data import *
+from .excel_data import *
 
 class request_run(object):
 
@@ -48,12 +48,12 @@ class request_run(object):
     def get_run(self, data, *url):
         if str(data).strip() != '':
             if len(url) != 0:
-                url = url[0] + '?' + urllib.urlencode(eval(data))
+                url = url[0] + '?' + urllib.parse.urlencode(eval(data))
             else:
-                url = self.url + '?' + urllib.urlencode(eval(data))
+                url = self.url + '?' + urllib.parse.urlencode(eval(data))
         else:
             if len(url) == 0:
-                url = self.url + '?' + urllib.urlencode(eval(data))
+                url = self.url + '?' + urllib.parse.urlencode(eval(data))
             else:
                 url = url[0]
         self.sign_url = url.split(self.config['url'].split(self.sign['url'])[0])[(-1)]
@@ -64,7 +64,7 @@ class request_run(object):
     def post(self, data, config, *url):
         data = change_data_db(config, data).data
         json_change(copy.deepcopy(self.json_moban), json.loads(data))
-        if 'sign_type' not in dict(self.path.items('sign')).keys() or self.path.get('sign', 'sign_type') == 'web_nosign':
+        if 'sign_type' not in list(dict(self.path.items('sign')).keys()) or self.path.get('sign', 'sign_type') == 'web_nosign':
             head_data = {config.get('config', 'head_key'): config.get('config', 'head_value')}
             parm = json.loads(data)
             parm['api_key'] = config.get('sign', 'api_key')
@@ -95,8 +95,8 @@ class request_run(object):
             respons = requests.post(url=all_url, json=parm, auth=auth).text
         if self.path.get('sign', 'sign_type') == 'Backstage_web':
             parm = json.loads(data)
-            print 777777777777777777777777777777777777777777777
-            print self.path.get('login', 'token')
+            print(777777777777777777777777777777777777777777777)
+            print(self.path.get('login', 'token'))
             header = {'Authorization': self.path.get('login', 'token'), 'Content-type': 'application/json'}
             if len(url) != 0:
                 if 'http://' in url[0] or 'https://' in url[0]:
@@ -108,11 +108,11 @@ class request_run(object):
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
                     header['Content-Type'] = 'application/x-www-form-urlencoded'
-                    request = urllib2.Request(all_url, urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
                 else:
-                    request = urllib2.Request(all_url, json.dumps(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, json.dumps(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
@@ -128,12 +128,12 @@ class request_run(object):
                 all_url = self.url
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
-                    respons = urllib2.Request(url=all_url, data=urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(respons)
+                    respons = urllib.request.Request(url=all_url, data=urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(respons)
                     respons = respons.read()
                 else:
-                    respons = urllib2.Request(url=all_url, data=json.dumps(parm), headers=header)
-                    respons = urllib2.urlopen(respons)
+                    respons = urllib.request.Request(url=all_url, data=json.dumps(parm), headers=header)
+                    respons = urllib.request.urlopen(respons)
                     respons = respons.read()
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
@@ -150,12 +150,12 @@ class request_run(object):
                 all_url = self.url
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
-                    respons = urllib2.Request(url=all_url, data=urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(respons)
+                    respons = urllib.request.Request(url=all_url, data=urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(respons)
                     respons = respons.read()
                 else:
-                    respons = urllib2.Request(url=all_url, data=json.dumps(parm), headers=header)
-                    respons = urllib2.urlopen(respons)
+                    respons = urllib.request.Request(url=all_url, data=json.dumps(parm), headers=header)
+                    respons = urllib.request.urlopen(respons)
                     respons = respons.read()
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
@@ -202,8 +202,8 @@ class request_run(object):
                     respons = requests.post(all_url, data=json.dumps(parm), headers=header).text
                 else:
                     header['authorization'] = 'UzAwMQ=='
-                    request = urllib2.Request(all_url, urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
@@ -213,13 +213,13 @@ class request_run(object):
             head_key = self.path.get('config', 'head_key').split(',')
             head_value = self.path.get('config', 'head_value').split(',')
             if len(head_key) == len(head_value):
-                head = dict(zip(head_key, head_key))
+                head = dict(list(zip(head_key, head_key)))
                 header['Content-Type'] = 'application/json'
             else:
                 header_dict = {'Content-Type': 'application/json'}
             header['Content-Type'] = 'application/json'
             if 'head_data' in self.path.sections():
-                for k, i in json.loads(self.path.get('head_data', 'head_data')).iteritems():
+                for k, i in json.loads(self.path.get('head_data', 'head_data')).items():
                     header[k] = i
 
             if len(url) != 0:
@@ -232,31 +232,31 @@ class request_run(object):
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
                     header['Content-Type'] = 'application/x-www-form-urlencoded'
-                    request = urllib2.Request(all_url, urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
                 else:
-                    request = urllib2.Request(all_url, data=json.dumps(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
-                    print 4444444444444444444444444444444444444444
-                    print respons
+                    request = urllib.request.Request(all_url, data=json.dumps(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
+                    print(4444444444444444444444444444444444444444)
+                    print(respons)
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print '接口返回信息'
-            print respons
+            print('接口返回信息')
+            print(respons)
         if self.path.get('sign', 'sign_type') == 'xiang_qian':
             parm = json.loads(data)
             header = {}
             head_key = self.path.get('config', 'head_key').split(',')
             head_value = self.path.get('config', 'head_value').split(',')
             if len(head_key) == len(head_value):
-                head = dict(zip(head_key, head_key))
+                head = dict(list(zip(head_key, head_key)))
                 header['Content-Type'] = 'application/json'
             else:
                 header_dict = {'Content-Type': 'application/json'}
             header['Content-Type'] = 'application/json'
             if 'head_data' in self.path.sections():
-                for k, i in json.loads(self.path.get('head_data', 'head_data')).iteritems():
+                for k, i in json.loads(self.path.get('head_data', 'head_data')).items():
                     header[k] = i
 
             if len(url) != 0:
@@ -271,16 +271,16 @@ class request_run(object):
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
                     header['Content-Type'] = 'application/x-www-form-urlencoded'
-                    request = urllib2.Request(all_url, urllib.urlencode(parm), headers=header)
-                    respons = en_de_aes.decrypt(json.loads(urllib2.urlopen(request, timeout=60).read())['aesResponse'])
+                    request = urllib.request.Request(all_url, urllib.parse.urlencode(parm), headers=header)
+                    respons = en_de_aes.decrypt(json.loads(urllib.request.urlopen(request, timeout=60).read())['aesResponse'])
                 else:
-                    request = urllib2.Request(all_url, data=json.dumps(parm), headers=header)
-                    respons = en_de_aes.decrypt(json.loads(urllib2.urlopen(request, timeout=60).read())['aesResponse'])
+                    request = urllib.request.Request(all_url, data=json.dumps(parm), headers=header)
+                    respons = en_de_aes.decrypt(json.loads(urllib.request.urlopen(request, timeout=60).read())['aesResponse'])
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print '接口返回信息 '
-            print respons
+            print('接口返回信息 ')
+            print(respons)
         if self.path.get('sign', 'sign_type') == 'jy_appServer':
             parm = all_jiami(data, self.path.get('sign_url', 'encode_url'))
             header = {}
@@ -295,17 +295,17 @@ class request_run(object):
             try:
                 if 'request_type' in self.path.options('config') and self.path.get('config', 'request_type').strip() == 'form_data':
                     header['Content-Type'] = 'application/x-www-form-urlencoded'
-                    request = urllib2.Request(all_url, urllib.urlencode(parm), headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, urllib.parse.urlencode(parm), headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
                 else:
-                    request = urllib2.Request(all_url, data=parm, headers=header)
-                    respons = urllib2.urlopen(request, timeout=60).read()
+                    request = urllib.request.Request(all_url, data=parm, headers=header)
+                    respons = urllib.request.urlopen(request, timeout=60).read()
                     respons = all_jiemi(respons, self.path.get('sign_url', 'decode_url'))
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print '接口返回信息'
-            print respons
+            print('接口返回信息')
+            print(respons)
         config.set('config', 'req', json.dumps(parm))
         try:
             config.set('config', 'respons', respons)
@@ -317,8 +317,8 @@ class request_run(object):
     def delete(self, data, config, *url):
         data = change_data_db(config, data).data
         json_change(copy.deepcopy(self.json_moban), json.loads(data))
-        if 'sign_type' not in dict(self.path.items('sign')).keys() or config.get('sign', 'sign_type') == 'v1':
-            head_data = dict(zip(config.get('config', 'head_key'), config.get('config', 'head_value')))
+        if 'sign_type' not in list(dict(self.path.items('sign')).keys()) or config.get('sign', 'sign_type') == 'v1':
+            head_data = dict(list(zip(config.get('config', 'head_key'), config.get('config', 'head_value'))))
             parm = json.loads(data)
             parm['sign'] = buildMySign(parm, config.get('sign', 'secretKey'))
             if len(url) != 0:
@@ -402,8 +402,8 @@ class request_run(object):
             else:
                 all_url = self.url
             try:
-                request = urllib2.Request(all_url, data=urllib.urlencode(parm), headers=header)
-                respons = urllib2.urlopen(request, timeout=60).read()
+                request = urllib.request.Request(all_url, data=urllib.parse.urlencode(parm), headers=header)
+                respons = urllib.request.urlopen(request, timeout=60).read()
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
@@ -412,7 +412,7 @@ class request_run(object):
     def get(self, data, congig, *url):
         data = change_data_db(self.path, data).data
         json_change(copy.deepcopy(self.json_moban), json.loads(data))
-        if 'sign_type' not in dict(self.path.items('sign')).keys() or self.path.get('sign', 'sign_type') == 'v1':
+        if 'sign_type' not in list(dict(self.path.items('sign')).keys()) or self.path.get('sign', 'sign_type') == 'v1':
             parm = json.loads(data)
             if len(url) != 0:
                 if 'http://' in url[0]:
@@ -422,7 +422,7 @@ class request_run(object):
             else:
                 all_url = self.url
             try:
-                respons = requests.get(url=all_url, params=parm, headers=dict(zip(self.path.get('config', 'head_key'), self.path.get('config', 'head_value'))), verify=False).text
+                respons = requests.get(url=all_url, params=parm, headers=dict(list(zip(self.path.get('config', 'head_key'), self.path.get('config', 'head_value')))), verify=False).text
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
@@ -474,7 +474,7 @@ class request_run(object):
             head_key = self.path.get('config', 'head_key').split(',')
             head_value = self.path.get('config', 'head_value').split(',')
             if len(head_key) == len(head_value):
-                head = dict(zip(head_key, head_key))
+                head = dict(list(zip(head_key, head_key)))
                 header['Content-Type'] = 'application/json'
             else:
                 header_dict = {'Content-Type': 'application/json'}
@@ -496,15 +496,15 @@ class request_run(object):
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print '接口返回信息 '
-            print respons
+            print('接口返回信息 ')
+            print(respons)
         if self.path.get('sign', 'sign_type') == 'xiang_qian':
             parm = json.loads(data)
             header = {}
             head_key = self.path.get('config', 'head_key').split(',')
             head_value = self.path.get('config', 'head_value').split(',')
             if len(head_key) == len(head_value):
-                head = dict(zip(head_key, head_key))
+                head = dict(list(zip(head_key, head_key)))
                 header['Content-Type'] = 'application/json'
             else:
                 header_dict = {'Content-Type': 'application/json'}
@@ -528,8 +528,8 @@ class request_run(object):
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print '接口返回信息 '
-            print respons
+            print('接口返回信息 ')
+            print(respons)
         if self.path.get('sign', 'sign_type') == 'Backstage_web':
             parm = json.loads(data)
             header = json.loads(self.path.get('app_head', 'app_head'))

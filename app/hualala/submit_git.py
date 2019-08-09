@@ -8,7 +8,7 @@ import socket
 
 import os
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 import  chardet
 import time
@@ -16,7 +16,7 @@ import shutil
 import sqlite3
 import smtplib
 from email.mime.text import MIMEText
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from tempfile import mktemp
 from flask import render_template, flash, redirect,request,g,Response,stream_with_context
 from flask_bootstrap import Bootstrap
@@ -33,16 +33,16 @@ import  subprocess
 def  submit_git(func):
     def submit_git1():
         current_app.config['submit_git']=1
-        print  1111111111111111111111111111111111111111
+        print(1111111111111111111111111111111111111111)
         file = request.files['image1']
         save_mulu=os.path.join(current_app.config.get('GIT_FILE_MULU'),str(time.time()).replace('.',''))
         if not os.path.exists(save_mulu):
             os.makedirs(save_mulu)
         #下载git库
         os.chdir(save_mulu)
-        print  9999999999999999999999999999999999999
-        print    request.headers
-        print  request.headers.get('git_address')
+        print(9999999999999999999999999999999999999)
+        print(request.headers)
+        print(request.headers.get('git_address'))
         if 'http' not in request.headers.get('git_address'):
             git_address='http://'+ request.headers.get('git_address').strip()
         else:
@@ -51,8 +51,8 @@ def  submit_git(func):
         os.popen('git clone '+git_address)
         #删除git库文件
         path=os.path.join(save_mulu,[i for i in os.listdir(save_mulu) if i!='.git'][0])
-        print  9999999999999999999999999999999999999
-        print   path
+        print(9999999999999999999999999999999999999)
+        print(path)
         s=[i for i in os.listdir(path) if i!='.git']
         # if len(s)!=0:
         #   path=os.path.join(path,s[0])
@@ -87,11 +87,11 @@ def  submit_git(func):
         # executor = ThreadPoolExecutor(1)
         r = zipfile.is_zipfile(filename)
         zip_file = zipfile.ZipFile(filename)
-        print 2222222222222222222222222222222
-        print time.time()
+        print(2222222222222222222222222222222)
+        print(time.time())
         for file in zip_file.namelist():
             zip_file.extract(file, os.path.dirname(filename))
-        print time.time()
+        print(time.time())
         zip_file.close()
         os.remove(os.path.join(path,filename))
         #git 上传
@@ -104,14 +104,14 @@ def  submit_git(func):
 
         proc = subprocess.Popen('git push -u origin master -f', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         num=0
-        print 777777777777777777777777
+        print(777777777777777777777777)
         # for line in iter(proc.stdout.readline, b''):
         #     print line,
         # proc.stdout.close()
         # proc.wait()
         ouput_detail=proc.stdout.read()
-        print ouput_detail
-        print  888888888888888888888
+        print(ouput_detail)
+        print(888888888888888888888)
         os.popen('rmdir /s/q' + ' ' + save_mulu)
         try:
           [shutil.rmtree(os.path.join(current_app.config.get('GIT_FILE_MULU'),i))  for i in os.listdir(current_app.config.get('GIT_FILE_MULU'))]
@@ -128,8 +128,8 @@ def  submit_git(func):
 def get_sumint_statu(func):
     def get_sumint_statu():
         func()
-        print  888888888888888888888888888888888888888888
-        if 'submit_git'  in current_app.config.keys()  and current_app.config['submit_git']==1:
+        print(888888888888888888888888888888888888888888)
+        if 'submit_git'  in list(current_app.config.keys())  and current_app.config['submit_git']==1:
             return jsonify(statu="fail")
         return jsonify(statu="success")
     return get_sumint_statu
@@ -140,7 +140,7 @@ def submit_git_def(zip_file,save_mulu):
     zip_file = zipfile.ZipFile(zip_file)
     for file in zip_file.namelist():
         zip_file.extract(file, os.path.dirname(zip_file))
-    print time.time()
+    print(time.time())
     zip_file.close()
     os.remove(os.path.join(path, zip_file))
     # git 上传
@@ -150,13 +150,13 @@ def submit_git_def(zip_file,save_mulu):
     os.popen('git commit -m  server_submit')
     # os.popen('git push -u origin master -f')
     p = subprocess.Popen('git push -u origin master -f', shell=True, stdout=subprocess.PIPE)
-    print  666666666666666666666666666666666
-    print  p.stdout.read()
+    print(666666666666666666666666666666666)
+    print(p.stdout.read())
     out, err = p.communicate()
-    print 77777777777777777777777777777777777777777777
-    print out
-    print  3333333333333333333333333333
-    print err
+    print(77777777777777777777777777777777777777777777)
+    print(out)
+    print(3333333333333333333333333333)
+    print(err)
     os.popen('rmdir /s/q' + ' ' + save_mulu)
     try:
         [shutil.rmtree(os.path.join(current_app.config.get('GIT_FILE_MULU'), i)) for i in

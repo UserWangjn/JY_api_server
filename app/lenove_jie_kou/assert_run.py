@@ -17,7 +17,7 @@ class assert_run(object):
 
     def walk_find(self, v, j):
         if type(v) == dict:
-            for k, i in v.iteritems():
+            for k, i in v.items():
                 if type(i) != dict and type(i) != list:
                     if i == '*':
                         try:
@@ -31,16 +31,16 @@ class assert_run(object):
                         except:
                             return False
 
-            for k, i in v.iteritems():
+            for k, i in v.items():
                 if type(i) == dict:
                     self.walk_find(i, j[k])
                 if type(i) == list:
                     for b in i:
                         statu = 0
                         for z in j[k]:
-                            for u, a in b.iteritems():
+                            for u, a in b.items():
                                 if type(u) != list and type(u) != dict:
-                                    if u in z.keys() and a == z[u]:
+                                    if u in list(z.keys()) and a == z[u]:
                                         pass
                                     else:
                                         statu = 1

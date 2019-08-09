@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app

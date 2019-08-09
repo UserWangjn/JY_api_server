@@ -1,4 +1,3 @@
-__author__ = 'SUNZHEN519'
 from flask import Flask,render_template
 import os
 import sys
@@ -7,7 +6,7 @@ from celery import Celery
 # monkey.patch_all()
 # from gevent import pywsgi
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from app  import app
+from app import app
 from gevent import monkey
 from gevent.pywsgi import WSGIServer
 

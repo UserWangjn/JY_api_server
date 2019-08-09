@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #处理excel表格中的特殊数据
-__author__ = 'SUNZHEN519'
 import sys
 import random
 import requests
@@ -10,7 +9,7 @@ import time
 import chardet
 import unittest
 import demjson
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -19,12 +18,12 @@ from selenium.webdriver.support import expected_conditions
 import unittest
 import xlrd
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import os
 import logging
 import datetime
-import ConfigParser
-from json_pi_pei.excel_data import  *
+import configparser
+from THREAD.jie_kou_test.json_pi_pei.excel_data import  *
 import re
 class excel_data_exe(object):
     # 处理excel表格中的特殊数据,带#的为要运行的代码数据，必须有一个返回值
@@ -32,7 +31,7 @@ class excel_data_exe(object):
         if type(data)==list:
             for k,i in enumerate(data):
                 if type(i)==dict:
-                    for z,u in i.iteritems():
+                    for z,u in i.items():
                         if "##" in u:
                             self.b = 'self.a='
                             exec (self.b + u.split('##')[1])
@@ -47,14 +46,14 @@ class change(object):
     def __init__(self,data):
         self.data=data
         if type(data)==dict:
-            for k in data.keys():
-                 if type(data[k]) not in [dict,list]  and type(data[k])  in [str,unicode]:
+            for k in list(data.keys()):
+                 if type(data[k]) not in [dict,list]  and type(data[k])  in [str,str]:
                      self.data[k]=self.change_data(self.data[k])
                  else:
                      change(self.data[k])
         elif type(data)==list:
             for k,i in enumerate(data):
-                if type(i) not in [dict,list]  and type(i)  in [str,unicode]:
+                if type(i) not in [dict,list]  and type(i)  in [str,str]:
                     self.change_data(i)
                 else:
                     change(i)
@@ -77,13 +76,13 @@ def save_data_config(excel_data,path,old_config,*result):
                     except:
                         error_statu=True
             db_path=os.path.join(os.path.dirname(path),'db.txt')
-            cf = ConfigParser.ConfigParser()
+            cf = configparser.ConfigParser()
             cf.read(db_path)
             if 'data' not in cf.sections():
                 cf.add_section('data')
             if 'data' not in old_config.sections():
                 old_config.add_section('data')
-            if 'save_data' in excel_data.keys() and  excel_data['save_data'].strip()!='':
+            if 'save_data' in list(excel_data.keys()) and  excel_data['save_data'].strip()!='':
                 for i in  excel_data['save_data'].split(','):
                     if re.findall(re.compile(r'=[[]"(.*?)["]]', re.S), i)[0]=='request':
                             data_key=re.findall(re.compile(r'(.*?)=', re.S), i)[0]
@@ -122,7 +121,7 @@ def save_data_config(excel_data,path,old_config,*result):
 #测试中
 def save_data_normal(path,sec,op,va):
     db_path = os.path.join(os.path.dirname(path), 'db.txt')
-    cf = ConfigParser.ConfigParser()
+    cf = configparser.ConfigParser()
     cf.read(db_path)
     if  sec not in cf.sections():
         cf.add_section(sec)
@@ -156,7 +155,7 @@ def save_sql_config(excel_data, path, old_config, *result):
             except:
                 error_statu = True
     db_path = os.path.join(os.path.dirname(path), 'db.txt')
-    cf = ConfigParser.ConfigParser()
+    cf = configparser.ConfigParser()
     cf.read(db_path)
     [cf.remove_option('data', i) for i in current_app.config.get('CLEAR_DB_DATA') if
      i in cf.options('data')]
@@ -164,7 +163,7 @@ def save_sql_config(excel_data, path, old_config, *result):
         cf.add_section('data')
     if 'data' not in old_config.sections():
         old_config.add_section('data')
-    if 'save_data' in excel_data.keys() and excel_data['save_data'].strip() != '':
+    if 'save_data' in list(excel_data.keys()) and excel_data['save_data'].strip() != '':
         for i in excel_data['save_data'].split(','):
             if re.findall(re.compile(r'=[[]"(.*?)["]]', re.S), i)[0] == 'request':
                 data_key = re.findall(re.compile(r'(.*?)=', re.S), i)[0]

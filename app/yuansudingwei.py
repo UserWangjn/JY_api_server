@@ -11,10 +11,10 @@ from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
 import socket, os
-from zhixing import *
+from .zhixing import *
 import time, sqlite3
-from shell_name import *
-from form import *
+from .shell_name import *
+from .form import *
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask import current_app
 from werkzeug.utils import secure_filename
@@ -58,11 +58,11 @@ class openn(object):
 
             else:
                 self.s.append(0)
-            print self.s
+            print(self.s)
             return self.s
 
     def yuansuadd(self, form, sessionn):
-        if '' in form.values():
+        if '' in list(form.values()):
             return False
         self.conn = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         self.cu = self.conn.cursor()
@@ -91,7 +91,7 @@ class openn(object):
         self.s = self.cu.fetchall()
         self.filename = xlwt.Workbook()
         self.sheet = self.filename.add_sheet(session)
-        for k, i in enumerate([u'元素编号', u'元素所在页面', u'元素名', u'定位方式', u'定位参数']):
+        for k, i in enumerate(['元素编号', '元素所在页面', '元素名', '定位方式', '定位参数']):
             self.sheet.write(0, k, i)
 
         for k, i in enumerate(self.s):

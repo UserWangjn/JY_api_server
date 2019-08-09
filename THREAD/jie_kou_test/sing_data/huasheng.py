@@ -3,7 +3,7 @@ import requests
 import json
 import pymysql
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 def  get_db_data(db_detail,sql):
     db = pymysql.connect(db_detail[0],db_detail[1],db_detail[2],db_detail[3])
     cursor = db.cursor()
@@ -79,7 +79,7 @@ if __name__=="__main__":
     get_mendian_detail_url='http://10.50.181.42:9041'
     login_url="http://10.50.181.42:9041rt"
     phone="19992131026"
-    dianpu=u"太原测试三"
+    dianpu="太原测试三"
     lingpai="19870217"
     db_detail=["10.50.181.45","hk_insurance_dev","hk_dev","hk_insurance"]
     sql="SELECT * FROM t_sms_info  WHERE phone=%s  ORDER BY expire_time DESC LIMIT 0,1"   %  phone
@@ -90,7 +90,7 @@ if __name__=="__main__":
     url = "http://10.50.181.42:9041/hk-peanut-car/weChat/car/getOrderList"
 
     k = requests.post(url, json=data, headers=token)
-    print   k.text
+    print(k.text)
 
 
 

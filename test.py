@@ -13,12 +13,12 @@ socketio.init_app(app)
 @socketio.on('request_for_response',namespace='/testnamespace')
 def give_response(data):
     value = data.get('data')
-    print data
+    print(data)
     if request.headers.get('X-Real-IP') == '127.0.0.1':
        ip = '192.168.18.129'
-    if not current_app.config.has_key(ip):
+    if ip not in current_app.config:
         current_app.config[ip]='null'
-    print current_app.config[ip]
+    print((current_app.config[ip]))
     while True:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect(('192.168.18.129', 8065))
@@ -27,10 +27,10 @@ def give_response(data):
         s.sendall(ip)
         b = s.recv(1024)
         if b!=current_app.config[ip]:
-            print 333333333333333333333333333333
+            print((333333333333333333333333333333))
             current_app.config[ip]=b
-            print current_app.config[ip]
-            print b
+            print((current_app.config[ip]))
+            print(b)
             emit('response', {'re': b})
             break
         else:

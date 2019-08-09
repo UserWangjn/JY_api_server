@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-from  win_exe import *
+from  .win_exe import *
 import MySQLdb
 #价格审核
 class price_shen(object):
@@ -18,10 +18,10 @@ class price_shen(object):
         self.wait = WebDriverWait(self.h, 10)
         self.h.find_element_by_id('UserName').send_keys('alice.xiao')
         self.h.find_element_by_id('UserName').submit()
-        self.wait.until(lambda z:z.find_element_by_partial_link_text(u'常态销售').is_displayed())
-        self.h.find_element_by_partial_link_text(u'常态销售').click()
-        self.wait.until(lambda z: z.find_element_by_partial_link_text(u'常态商品价格审核').is_displayed())
-        self.h.find_element_by_partial_link_text(u'常态商品价格审核').click()
+        self.wait.until(lambda z:z.find_element_by_partial_link_text('常态销售').is_displayed())
+        self.h.find_element_by_partial_link_text('常态销售').click()
+        self.wait.until(lambda z: z.find_element_by_partial_link_text('常态商品价格审核').is_displayed())
+        self.h.find_element_by_partial_link_text('常态商品价格审核').click()
         self.wait.until(lambda z: z.find_element_by_name('biw-ajax').is_displayed())
         self.h.switch_to_frame(self.h.find_element_by_name('biw-ajax'))
         #点击第一个审核按钮，弹出页面
@@ -32,7 +32,7 @@ class price_shen(object):
         u = self.h.find_element_by_class_name('pop_part').find_elements_by_tag_name('input')
         #审核按钮为第二个
         for i in u :
-            if u'审核通过'  in  i.get_attribute('value'):
+            if '审核通过'  in  i.get_attribute('value'):
                 i.click()
                 break
         time.sleep(1)
@@ -56,7 +56,7 @@ class price_shen(object):
         self.conn.close()
         #搜索主题
         self.wait.until(lambda z: z.find_element_by_name('checkboxHeadId').is_displayed())
-        self.h.find_element_by_name('subject').send_keys(u'测试销售主题')
+        self.h.find_element_by_name('subject').send_keys('测试销售主题')
         self.h.find_element_by_class_name('glyphicon-search').click()
         time.sleep(1)
         #self.h.find_element_by_class_name('ui-dialog-autofocus').click()

@@ -1,7 +1,7 @@
 #-*-coding:utf-8-*-
 __author__ = 'SUNZHEN519'
 import socket   #socket模块
-import commands   #执行系统命令模块
+import subprocess   #执行系统命令模块
 import os
 import threading
 import sqlite3
@@ -15,9 +15,9 @@ import smtplib
 import json
 import stat
 from email.mime.text import MIMEText
-import urllib
-import urllib2
-from pi_run import all_run
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
+from .pi_run import all_run
 class socket_run(object):
     def __init__(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 定义socket类型，网络通信，TCP
@@ -32,7 +32,7 @@ class socket_run(object):
 #获取目录后遍历目录，返回json文件信息
 class bianli(object):
     def __init__(self,path,select_huanjing):
-        self.path=unicode(path)
+        self.path=str(path)
         self.select_huanjing=select_huanjing
         yewu_name = {}
         # 需要跳转的环境

@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -53,7 +53,7 @@ def show_email(func):
         for i in emali_list:
             html += '<tr name="%s"><td>%s</td><td>%s</td><td><div class="btn-group"><button type="button" class="btn btn-default" name ="delete_email" id="%s">delete</button></div></td></tr>' % (user + '#' + i[0], i[0], i[1], user + '#' + i[0])
 
-        print html
+        print(html)
         return jsonify(a='add-success', html=html)
 
     return aaee
@@ -95,7 +95,7 @@ def send_emali(func):
                 file_name.append(i)
 
         url = os.path.join(current_app.config.get('RUN_FILE'), name, sorted(file_name)[(-1)]).replace('\\', '/')
-        print url
+        print(url)
         content = open(url, 'r').read()
         sender = 'luohancombridge@163.com'
         receiver = email_address
@@ -122,8 +122,8 @@ def add_fajianren(func):
         func()
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
-        print 1111111111111111111111111111111111111111
-        print request.form['beizhu']
+        print(1111111111111111111111111111111111111111)
+        print(request.form['beizhu'])
         cu.executemany('INSERT INTO  fajianren values (?,?,?,?,null)', [
          (request.form['email'],
           request.form['email_password'],
@@ -133,7 +133,7 @@ def add_fajianren(func):
         id = cu.execute('select id from fajianren where name="%s" order by id desc limit 0,1' % request.form['name']).fetchall()[0][0]
         db.close()
         html = '<tr name="%s"><td>%s</td><td>%s</td><td><div class="btn-group"><button type="button" class="btn btn-default" name ="delete_email_fa" id="fajianren%s">delete</button></div></td></tr>' % (request.form['name'], request.form['email'], request.form['beizhu'], id)
-        print html
+        print(html)
         return jsonify(a='add-success', html=html)
 
     return add_fajianren
@@ -161,9 +161,9 @@ def delete_fajianren(func):
 
     def delete_fajianren():
         func()
-        print 1111111111111111111111111
+        print(1111111111111111111111111)
         id = request.args.get('id').split('fajianren')[(-1)]
-        print 'delete  from fajianren where id=%s' % id
+        print('delete  from fajianren where id=%s' % id)
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
         fajian_detail = cu.execute('delete  from fajianren where id=%s' % id)
@@ -179,8 +179,8 @@ def add_jekins(func):
 
     def add_jekins():
         func()
-        print 1111111111111111111111111111111111111
-        print request.form
+        print(1111111111111111111111111111111111111)
+        print(request.form)
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
         cu.executemany('INSERT INTO  jekins values (?,?,?,?,null,?,?,?)', [
@@ -195,7 +195,7 @@ def add_jekins(func):
         id = cu.execute('select id from jekins where name="%s" order by id desc limit 0,1' % request.form['name']).fetchall()[0][0]
         db.close()
         html = '<tr name="%s"><td>%s</td><td>%s</td><td><div class="btn-group"><button type="button" class="btn btn-default" name ="delete_jekins" id="fajianren%s">delete</button></div></td></tr>' % (id, request.form['job'], request.form['beizhu'], id)
-        print html
+        print(html)
         return jsonify(a='add-success', html=html)
 
     return add_jekins
@@ -231,8 +231,8 @@ def jekins_delete(func):
 
     def jekins_delete():
         func()
-        print 1111111111111111111111111
-        print request.args
+        print(1111111111111111111111111)
+        print(request.args)
         id = request.form['id']
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()

@@ -5,20 +5,19 @@
 # [GCC 9.1.0]
 # Embedded file name: E:\old_all_server\THREAD\THREAD_fuben\jie_kou_test\just_run\just_run.py
 # Compiled at: 2019-05-06 18:20:06
-__author__ = 'SUNZHEN519'
 import sys
+import importlib
 sys.path.append('../../')
-reload(sys)
-sys.setdefaultencoding('utf-8')
+importlib.reload(sys)
 from selenium import webdriver
 import time as timee, chardet
 from sing_data.haofang_server import haofang_login
-import unittest, demjson, urllib, random
+import unittest, demjson, urllib.request, urllib.parse, urllib.error, random
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, ConfigParser, json, urllib2, os, logging, hashlib
+import unittest, xlrd, configparser, json, urllib.request, urllib.error, urllib.parse, os, logging, hashlib
 from excel_data import *
 from json_pi_pei.request_result_flask import *
 from json_pi_pei.json_pi_pei import *
@@ -40,7 +39,7 @@ class just_run(object):
                 elif 'json' == z.split('.')[0]:
                     self.json_path = os.path.join(self.path, z)
                 elif 'configparse' == z.split('.')[0]:
-                    self.config_path = ConfigParser.SafeConfigParser()
+                    self.config_path = configparser.SafeConfigParser()
                     self.config_data = self.config_path.read(os.path.join(self.path, z))
                     db_config_path = os.path.join(os.path.dirname(self.path), 'db.txt')
                     content = open(db_config_path).read()
@@ -48,7 +47,7 @@ class just_run(object):
                     content = re.sub('\\xff\\xfe', '', content)
                     content = re.sub('\\xef\\xbb\\xbf', '', content)
                     open(db_config_path, 'w').write(content)
-                    db_config = ConfigParser.ConfigParser()
+                    db_config = configparser.ConfigParser()
                     db_config.read(db_config_path)
                     if os.path.isfile(os.path.join(os.path.dirname(self.path), 'db.txt')) and self.config_path.get('sign', 'sign_type').strip() == 'zhixin':
                         for i in db_config.sections():
@@ -58,8 +57,8 @@ class just_run(object):
                     if os.path.isfile(os.path.join(os.path.dirname(self.path), 'config.txt')):
                         public_config_path = os.path.join(os.path.dirname(self.path), 'config.txt')
                         private_config_path = os.path.join(self.path, 'configparse.txt')
-                        self.private_config = ConfigParser.ConfigParser()
-                        public_config = ConfigParser.ConfigParser()
+                        self.private_config = configparser.ConfigParser()
+                        public_config = configparser.ConfigParser()
                         public_config.read(public_config_path)
                         self.private_config.read(private_config_path)
                         if os.path.isfile(public_config_path):
@@ -83,7 +82,7 @@ class just_run(object):
                                 self.config_path.set('login', 'headers_dict', config_path.get('login', 'headers_dict'))
                                 head_key = self.private_config.get('config', 'head_key').split('.')
                                 head_value = self.private_config.get('config', 'head_value').split('.')[:len(head_key)]
-                                header_older = json.dumps(dict(zip(head_key, head_value)))
+                                header_older = json.dumps(dict(list(zip(head_key, head_value))))
                                 self.config_path.set('login', 'headers_old', header_older)
                             else:
                                 if self.config_path.get('sign', 'sign_type').strip() == 'Backstage_web':
@@ -117,7 +116,7 @@ class just_run(object):
                                             self.config_path.set('login', 'phone', public_config.get('login', 'phone'))
                                             self.config_path.set('login', 'ling_pai', public_config.get('login', 'ling_pai'))
                                             self.config_path.set('login', 'dian_pu', public_config.get('login', 'dian_pu'))
-                                            if 'huasheng_headertoken' in self.all_bianliang.keys():
+                                            if 'huasheng_headertoken' in list(self.all_bianliang.keys()):
                                                 if self.config_path.get('login', 'phone') == self.all_bianliang['phone'] and self.config_path.get('login', 'ling_pai') == self.all_bianliang['ling_pai'] and self.config_path.get('login', 'dian_pu') == self.all_bianliang['dian_pu']:
                                                     self.config_path.set('login', 'huasheng_headertoken', self.all_bianliang['huasheng_headertoken'])
                                             else:
@@ -145,7 +144,7 @@ class just_run(object):
                                                     self.config_path.set('login', 'password', db_config.get('data', 'login_password'))
                                                 if 'login_secret' in db_config.options('data'):
                                                     self.config_path.set('login', 'secret', db_config.get('data', 'login_secret'))
-                                                if 'login_token' in self.all_bianliang.keys() and 'login' in self.config_path.sections():
+                                                if 'login_token' in list(self.all_bianliang.keys()) and 'login' in self.config_path.sections():
                                                     if self.config_path.get('login', 'name') == self.all_bianliang['name'] and self.config_path.get('login', 'password') == self.all_bianliang['password']:
                                                         self.config_path.set('login', 'token', self.all_bianliang['login_token'])
                                                 header_dict = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko', 
@@ -171,7 +170,7 @@ class just_run(object):
                                                         self.config_path.set('login', 'url', public_config.get('login', 'url'))
                                                         self.config_path.set('login', 'name', public_config.get('login', 'name'))
                                                         self.config_path.set('login', 'password', public_config.get('login', 'password'))
-                                                        if 'haofang_headertoken' in self.all_bianliang.keys():
+                                                        if 'haofang_headertoken' in list(self.all_bianliang.keys()):
                                                             if self.config_path.get('login', 'name') == self.all_bianliang['name'] and self.config_path.get('login', 'password') == self.all_bianliang['password']:
                                                                 self.config_path.set('login', 'haofang_headertoken', self.all_bianliang['haofang_headertoken'])
                                                             else:
@@ -196,7 +195,7 @@ class just_run(object):
             self.config_path.set('sign', 'run_interval', self.all_config_path.get('sign', 'run_interval'))
         if os.path.isfile(os.path.join(os.path.dirname(self.path), 'db.txt')) and self.config_path.get('sign', 'sign_type').strip() != 'zhixin':
             db_config_path = os.path.join(os.path.dirname(self.path), 'db.txt')
-            db_config = ConfigParser.ConfigParser()
+            db_config = configparser.ConfigParser()
             db_config.read(db_config_path)
             for i in db_config.sections():
                 self.config_path.add_section(i)
@@ -224,7 +223,7 @@ class just_run(object):
 
         for i in range(1, self.table.nrows):
             if str(int(str(self.table.row_values(i)[k]).split('#')[(-1)].split('.')[0])).strip() == str(id).strip():
-                self.data = dict(zip(self.key, self.table.row_values(i)))
+                self.data = dict(list(zip(self.key, self.table.row_values(i))))
                 break
 
         for z in self.data:
@@ -274,19 +273,19 @@ class just_run(object):
         self.data = json.loads(change_data_db(self.config_path, self.data).data)
         change_json_data(j, self.data)
         self.data = change(self.config_path, self.data)
-        if 'id_data' in self.data.keys():
+        if 'id_data' in list(self.data.keys()):
             self.data['id'] = self.data.pop('id_data')
-        if 'url' in self.data.keys() and str(self.data['url']).strip() != '':
+        if 'url' in list(self.data.keys()) and str(self.data['url']).strip() != '':
             self.url = self.data.pop('url')
-        if 'json' in self.data.keys() and str(self.data['json']).strip() != '':
+        if 'json' in list(self.data.keys()) and str(self.data['json']).strip() != '':
             self.req = self.data['json']
         else:
             self.req = self.data
-        if 'before_sql' in self.data.keys() and self.data['before_sql'] != '':
+        if 'before_sql' in list(self.data.keys()) and self.data['before_sql'] != '':
             before_after_sql(self.data['before_sql'], self.config_path)
             self.data.pop('before_sql')
         after_sql = ''
-        if 'after_sql' in self.data.keys() and self.data['after_sql'] != '':
+        if 'after_sql' in list(self.data.keys()) and self.data['after_sql'] != '':
             after_sql = self.data.pop('after_sql')
         self.req = creat_json(copy.deepcopy(j), self.req)
         port = request_run(j, self.config_path, self.path)
@@ -333,14 +332,14 @@ class just_run(object):
 
         if after_sql != '':
             before_after_sql(after_sql, self.config_path)
-        if 'save_data' in self.data.keys():
+        if 'save_data' in list(self.data.keys()):
             save_data_config(self.data, self.path, self.all_config_path, self.respons)
         self.assert_run = assert_run(self.config_path)
         self.assert_result = self.assert_run.walk_find(self.data['result'], self.respons)
         if self.assert_result == False:
             raise Exception('错误接口名' + self.path)
         self.path = path.replace('\\', '/')
-        if self.path in self.all_bianliang['before_case_detail'].keys() and len(self.all_bianliang['before_case_detail'][self.path][int(id)]) == 0:
+        if self.path in list(self.all_bianliang['before_case_detail'].keys()) and len(self.all_bianliang['before_case_detail'][self.path][int(id)]) == 0:
             self.all_bianliang['before_case_detail'][self.path][int(id)] = {}
             self.all_bianliang['before_case_detail'][self.path][int(id)]['request'] = json.loads(self.req)
             try:
@@ -350,7 +349,7 @@ class just_run(object):
 
 
 if __name__ == '__main__':
-    x = just_run('C:\\Users\\wo\\Desktop\\\ufefflr_test的副本\\okex系统\\http接口v3新版\\下单交易', 1)
-    print x.respons
-    for k, u in x.respons.iteritems():
-        print u
+    x = just_run('C:\\Users\\wo\\Desktop\\\\ufefflr_test的副本\\okex系统\\http接口v3新版\\下单交易', 1)
+    print(x.respons)
+    for k, u in x.respons.items():
+        print(u)

@@ -2,7 +2,7 @@
 __author__ = 'SUNZHEN519'
 #增加用户权限表quanxian，字段值模型为众筹,   只有出现在字段中 的模块用户才会有权限进行脚本管理
 import sqlite3
-from fileconfig import DB_DIZHI
+from .fileconfig import DB_DIZHI
 conn = sqlite3.connect(DB_DIZHI)
 
 c = conn.cursor()
@@ -35,7 +35,7 @@ c.execute('delete  from git_detail ')
 #接口result表格，name接口名，ip接口地址，data接口dict信息，time接口操作时间戳
 #c.execute("create table jiekou_result(name nvarchar(50),ip nvarchar(300),data nvarchar(300),time nvarchar(300))")
 
-print c.fetchall()
+print((c.fetchall()))
 conn.commit()
 
 #查询表结构

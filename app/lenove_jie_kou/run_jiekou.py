@@ -2,7 +2,7 @@
 __author__ = 'SUNZHEN519'
 #批量运行结果页面
 from tempfile import mktemp
-from assert_run import  *
+from .assert_run import  *
 from app import app
 from flask import send_from_directory,send_file,Response
 import socket
@@ -39,7 +39,7 @@ def piliangjiekou_result(func):
                  count=len(json.loads(i[2]))
                  fail=0
                  succ=0
-                 for k,z in json.loads(i[2]).iteritems():
+                 for k,z in json.loads(i[2]).items():
                      #result=json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(z['respons']))), parse_int=int), indent=4, sort_keys=False,
                                    #ensure_ascii=False)
                      result=json.dumps(z['respons'],indent=4,ensure_ascii=False)
@@ -48,7 +48,7 @@ def piliangjiekou_result(func):
                          if z['case_assert']=='':
                              assert_data=''
                          elif '&&' in z['case_assert']:
-                             assert_data=u"调用断言函数：%s" % z['case_assert'].split('&&')[-1]
+                             assert_data="调用断言函数：%s" % z['case_assert'].split('&&')[-1]
                          else:
                              try:
                                  if type(z['case_assert'])  in ['str','unicode']:
@@ -100,7 +100,7 @@ def jiekou_result(func):
         #删除原有数据根据ip地址
         cu.execute('delete  from jiekou_result where ip=? and time!=?',[ip,str(time)])
         db.commit()
-        for k,i in eval(data).iteritems():
+        for k,i in eval(data).items():
             cu.executemany('INSERT INTO  jiekou_result(name,ip,data,time) VALUES (?,?,?,?,null)', [(k,ip,str(i),str(time))])
             db.commit()
         #cu.executemany('INSERT INTO  jiekou_result(name,ip,data,time) VALUES (?,?,?,?)', [(1,2,3,time.time())])
@@ -123,13 +123,13 @@ def jiekou_gitce(func):
             name = name[0][0]
         if request.method == 'GET':
             user_team=cu.execute('select team from  user_team where user="%s" ' % (name)).fetchall()
-            if len(user_team)>0 and user_team[0][0]==u"资产" or  name in current_app.config.get('ZICHAN_QUANXIAN'):
+            if len(user_team)>0 and user_team[0][0]=="资产" or  name in current_app.config.get('ZICHAN_QUANXIAN'):
                git_detail = [list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall()]
             else:
-                zichan_all_user=cu.execute('select user from  user_team where team="%s" ' % (u'资产')).fetchall()
+                zichan_all_user=cu.execute('select user from  user_team where team="%s" ' % ('资产')).fetchall()
                 git_detail = [list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall()  ]
             team_detail=[i[0] for i in cu.execute('select team from team').fetchall()]
-            team_detail.append(u'其他')
+            team_detail.append('其他')
             for i in git_detail:
                 i[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[3])))
             email_detail = [i[0] for i in
@@ -142,11 +142,11 @@ def jiekou_gitce(func):
                 i.insert(0, i[0])
                 i[1] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(float(i[0])))
                 if i[-2].strip() == '0':
-                    i[-2] = u'ready'
+                    i[-2] = 'ready'
                 elif i[-2].strip() == '1':
-                    i[-2] = u'running'
+                    i[-2] = 'running'
                 elif i[-2].strip() == '2':
-                    i[-2] = u'over'
+                    i[-2] = 'over'
             time_date = time.strftime('%Y-%m-%d ', time.localtime(time.time()))
             server_detail = [i[1] for i in cu.execute('select * from all_server where statu="1"').fetchall()]
             db.close()
@@ -221,7 +221,7 @@ def debugging(func):
         db = sqlite3.connect(current_app.config.get('JIE_KOU'))
         cu = db.cursor()
         if len(cu.execute('select * from guanlian_ip where client_ip=?', (request.headers.get('X-Real-IP'),)).fetchall()) == 0:
-               return u"没有关联ip"
+               return "没有关联ip"
         else:
             session['yidi_mulu_ip']=cu.execute('select server_ip from guanlian_ip where client_ip=?', (request.headers.get('X-Real-IP'),)).fetchall()[0][0]
         return redirect(url_for('shishitiaoshi'))

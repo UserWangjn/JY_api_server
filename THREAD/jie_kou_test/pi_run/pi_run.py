@@ -9,12 +9,12 @@ __author__ = 'SUNZHEN519'
 import sys, os, re
 sys.path.append(os.path.dirname(os.path.split(os.path.realpath(__file__))[0]))
 from selenium import webdriver
-import time as timee, traceback, chardet, unittest, demjson, urllib, random
+import time as timee, traceback, chardet, unittest, demjson, urllib.request, urllib.parse, urllib.error, random
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, ConfigParser, json, urllib2, os, logging
+import unittest, xlrd, configparser, json, urllib.request, urllib.error, urllib.parse, os, logging
 from excel_data import *
 import hashlib
 from just_run.save_global_data import set_global_data
@@ -44,7 +44,7 @@ class pi_run(object):
                 elif 'json' == z.split('.')[0]:
                     self.json_path = os.path.join(self.path, z)
                 elif 'configparse' == z.split('.')[0]:
-                    self.config_path = ConfigParser.SafeConfigParser()
+                    self.config_path = configparser.SafeConfigParser()
                     self.config_path.read(os.path.join(self.path, z))
                     self.config_path.set('config', 'mulu', self.path)
                     db_config_path = os.path.join(os.path.dirname(self.path), 'db.txt')
@@ -53,7 +53,7 @@ class pi_run(object):
                     content = re.sub('\\xff\\xfe', '', content)
                     content = re.sub('\\xef\\xbb\\xbf', '', content)
                     open(db_config_path, 'w').write(content)
-                    db_config = ConfigParser.ConfigParser()
+                    db_config = configparser.ConfigParser()
                     db_config.read(db_config_path)
                     db_sql = {}
                     if os.path.isfile(os.path.join(os.path.dirname(self.path), 'db.txt')) and self.config_path.get('sign', 'sign_type').strip() in ('zhixin', ):
@@ -69,8 +69,8 @@ class pi_run(object):
                     if os.path.isfile(os.path.join(os.path.dirname(self.path), 'config.txt')):
                         public_config_path = os.path.join(os.path.dirname(self.path), 'config.txt')
                         private_config_path = os.path.join(self.path, 'configparse.txt')
-                        private_config = ConfigParser.ConfigParser()
-                        public_config = ConfigParser.ConfigParser()
+                        private_config = configparser.ConfigParser()
+                        public_config = configparser.ConfigParser()
                         public_config.read(public_config_path)
                         private_config.read(private_config_path)
                         if os.path.isfile(public_config_path):
@@ -99,7 +99,7 @@ class pi_run(object):
                                 self.config_path.set('login_value', str(hash.hexdigest()), json.dumps(headers_dict))
                                 head_key = private_config.get('config', 'head_key').split('.')
                                 head_value = private_config.get('config', 'head_value').split('.')[:len(head_key)]
-                                header_older = json.dumps(dict(zip(head_key, head_value)))
+                                header_older = json.dumps(dict(list(zip(head_key, head_value))))
                                 self.config_path.set('login', 'headers_old', header_older)
                             else:
                                 if self.config_path.get('sign', 'sign_type').strip() in ('app',
@@ -127,7 +127,7 @@ class pi_run(object):
                                                 self.config_path.set('login', 'password', db_config.get('data', 'login_password'))
                                             if 'login_secret' in db_config.options('data'):
                                                 self.config_path.set('login', 'password', db_config.get('data', 'login_secret'))
-                                            if 'login_token' in self.all_bianliang.keys() and 'login' in self.config_path.sections():
+                                            if 'login_token' in list(self.all_bianliang.keys()) and 'login' in self.config_path.sections():
                                                 if self.config_path.get('login', 'name') == self.all_bianliang['name'] and self.config_path.get('login', 'password') == self.all_bianliang['password']:
                                                     self.config_path.set('login', 'token', self.all_bianliang['login_token'])
                                             header_dict = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko', 
@@ -149,7 +149,7 @@ class pi_run(object):
                                                 self.config_path.set('login', 'url', public_config.get('login', 'url'))
                                                 self.config_path.set('login', 'name', public_config.get('login', 'name'))
                                                 self.config_path.set('login', 'password', public_config.get('login', 'password'))
-                                                if 'login_token' in self.all_bianliang.keys() and 'login' in self.config_path.sections():
+                                                if 'login_token' in list(self.all_bianliang.keys()) and 'login' in self.config_path.sections():
                                                     if self.config_path.get('login', 'name') == self.all_bianliang['name'] and self.config_path.get('login', 'password') == self.all_bianliang['password']:
                                                         self.config_path.set('login', 'token', self.all_bianliang['login_token'])
                                                 header_dict = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko', 
@@ -169,7 +169,7 @@ class pi_run(object):
                                                     self.config_path.set('login', 'url', public_config.get('login', 'url'))
                                                     self.config_path.set('login', 'name', public_config.get('login', 'name'))
                                                     self.config_path.set('login', 'password', public_config.get('login', 'password'))
-                                                    if 'haofang_headertoken' in self.all_bianliang.keys():
+                                                    if 'haofang_headertoken' in list(self.all_bianliang.keys()):
                                                         if self.config_path.get('login', 'name') == self.all_bianliang['name'] and self.config_path.get('login', 'password') == self.all_bianliang['password']:
                                                             self.config_path.set('login', 'haofang_headertoken', self.all_bianliang['haofang_headertoken'])
                                                         else:
@@ -187,7 +187,7 @@ class pi_run(object):
                                                         self.config_path.set('login', 'phone', public_config.get('login', 'phone'))
                                                         self.config_path.set('login', 'ling_pai', public_config.get('login', 'ling_pai'))
                                                         self.config_path.set('login', 'dian_pu', public_config.get('login', 'dian_pu'))
-                                                        if 'huasheng_headertoken' in self.all_bianliang.keys():
+                                                        if 'huasheng_headertoken' in list(self.all_bianliang.keys()):
                                                             if self.config_path.get('login', 'phone') == self.all_bianliang['phone'] and self.config_path.get('login', 'ling_pai') == self.all_bianliang['ling_pai'] and self.config_path.get('login', 'dian_pu') == self.all_bianliang['dian_pu']:
                                                                 self.config_path.set('login', 'huasheng_headertoken', self.all_bianliang['huasheng_headertoken'])
                                                         else:
@@ -208,7 +208,7 @@ class pi_run(object):
 
         if os.path.isfile(os.path.join(os.path.dirname(self.path), 'db.txt')) and self.config_path.get('sign', 'sign_type').strip() != 'zhixin':
             db_config_path = os.path.join(os.path.dirname(self.path), 'db.txt')
-            db_config = ConfigParser.ConfigParser()
+            db_config = configparser.ConfigParser()
             db_config.read(db_config_path)
             for i in db_config.sections():
                 self.config_path.add_section(i)
@@ -232,14 +232,14 @@ class pi_run(object):
             if type(i) == float:
                 self.key[k] = int(i)
 
-        self.data = [ dict(zip(self.key, self.table.row_values(i))) for i in range(1, self.table.nrows) ]
+        self.data = [ dict(list(zip(self.key, self.table.row_values(i)))) for i in range(1, self.table.nrows) ]
         before_request = change_request_before(self.all_bianliang)
         self.all_result = {}
         self.flask_result = {}
         self.config_path.set('config', 'mulu_path', self.path)
         for k, i in enumerate(self.data):
             if len(db_sql) != 0:
-                for sql_key, sql_value in db_sql.iteritems():
+                for sql_key, sql_value in db_sql.items():
                     self.config_path.set('sql', sql_key, sql_value)
 
             if str(i['id']).strip() == '' or str(i['Comment']) == '' or '#' in str(i['id']):
@@ -262,9 +262,9 @@ class pi_run(object):
                     else:
                         j = ''
                     try:
-                        print '开始调用,id值为%s,路径为%s' % (str(self.data[k]['id']), self.excel_path.decode('gb2312'))
+                        print('开始调用,id值为%s,路径为%s' % (str(self.data[k]['id']), self.excel_path.decode('gb2312')))
                     except:
-                        print '开始调用,id值为%s,路径为%s' % (str(self.data[k]['id']), self.excel_path)
+                        print('开始调用,id值为%s,路径为%s' % (str(self.data[k]['id']), self.excel_path))
 
                     if 'global_data' in self.key and i['global_data'].strip() != '':
                         set_global_data().set_global_data(i, self.config_path, self.path, all_bianliang)
@@ -277,13 +277,13 @@ class pi_run(object):
                     if 'before_request' in self.key:
                         i['before_request'] = i['before_request'].strip()
                         self.data[k] = before_request.use(i, self.path, self.config_path)
-                        if type(self.data[k]) in [str, unicode]:
+                        if type(self.data[k]) in [str, str]:
                             self.data[k] = json.loads(self.data[k])
-                    if 'before_request' in self.key and i['before_request'].strip() != '' and 'err_detail' in self.data[k].keys():
+                    if 'before_request' in self.key and i['before_request'].strip() != '' and 'err_detail' in list(self.data[k].keys()):
                         self.all_result[self.result_key + 'jo.in' + json.dumps(json.dumps({'before_request_error': str(self.data[k]['err_detail'])}))] = self.data[k]
                         continue
                     self.s = excel_data_exe()
-                    for key, value in i.iteritems():
+                    for key, value in i.items():
                         if key == 'contactList':
                             pass
                         try:
@@ -292,7 +292,7 @@ class pi_run(object):
                         except:
                             pass
                         else:
-                            if type(value) not in [float, int, long] and value != None and '##' in value:
+                            if type(value) not in [float, int, int] and value != None and '##' in value:
                                 self.s = excel_data_exe()
                                 self.data[k][key] = self.s.han_shu(value)
                                 i[key] = self.s.han_shu(value)
@@ -303,20 +303,20 @@ class pi_run(object):
 
                     self.url = ''
                     change_json_data(j, i)
-                    if 'id_data' in i.keys():
+                    if 'id_data' in list(i.keys()):
                         i['id'] = i.pop('id_data')
-                    if 'result_data' in i.keys():
+                    if 'result_data' in list(i.keys()):
                         i['result'] = i.pop('result_data')
-                    if 'url' in i.keys() and i['url'].strip() != '':
+                    if 'url' in list(i.keys()) and i['url'].strip() != '':
                         if os.path.isfile(os.path.join(os.path.dirname(self.path), 'config.txt')) and public_config.get('url', 'public_url').strip() != '':
                             url = self.config_path.get('config', 'url')
                             i['url'] = public_config.get('url', 'public_url').strip() + i['url']
                         self.url = str(i['url'])
-                    if 'json' in i.keys() and i['json'] != '':
+                    if 'json' in list(i.keys()) and i['json'] != '':
                         self.req = json.dumps(json.loads(i['json']))
                     else:
                         self.req = i
-                    if 'id_canshu' in self.req.keys():
+                    if 'id_canshu' in list(self.req.keys()):
                         self.id_beifen = self.req.pop('id')
                         self.req['id'] = self.req.pop('id_canshu')
                     self.req = creat_json(copy.deepcopy(j), self.req)
@@ -379,7 +379,7 @@ class pi_run(object):
                         sql_statu = before_after_sql(after_sql, db_config)
                         if sql_statu['statu'] != 'success':
                             self.respons = sql_statu
-                    if 'save_data' in i.keys():
+                    if 'save_data' in list(i.keys()):
                         save_data_config(i, self.path, self.config_path, self.respons)
                     if type(self.req) != dict:
                         self.req = json.loads(self.req)
@@ -394,10 +394,10 @@ class pi_run(object):
                 case_assert = result_data
                 self.assert_result = self.assert_run.walk_find(case_assert, self.respons)
             except Exception as e:
-                print traceback.format_exc()
+                print(traceback.format_exc())
                 error_detail = list([ i for i in re.findall('.*File "(.*)", line (.*), in(.*)', traceback.format_exc()) if os.path.isfile(i[0]) ][(-1)])
                 error_detail.append(traceback.format_exc().split('\n')[(-2)])
-                print error_detail
+                print(error_detail)
                 for k, i in enumerate(error_detail):
                     if chardet.detect(i)['encoding'] not in ('utf-8', 'ascii', None):
                         error_detail[k] = i.decode(chardet.detect(i)['encoding'])

@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -239,16 +239,16 @@ def phone_submit(func):
         detail = {}
         duiying1 = ['pinpai', 'jixing', 'xitong', 'chicun', 'xuliehao', 'fenbianlv', 'mima', 'shoushimima',
          'jieyongrenyuan', 'jieyongriqi', 'guihuanriqi', 'statu', 'yanse']
-        duiying = [u'品牌', u'机型', u'系统', u'尺寸', u'资产编号', u'分辨率', u'密码', u'业务线', u'借用人员', u'借用日期', u'归还日期', u'状态', u'颜色']
+        duiying = ['品牌', '机型', '系统', '尺寸', '资产编号', '分辨率', '密码', '业务线', '借用人员', '借用日期', '归还日期', '状态', '颜色']
         for i in range(sheet2.ncols):
             data = sheet2.col_values(i)
             detail[data[0]] = data[1:]
 
-        for i in detail.keys():
+        for i in list(detail.keys()):
             if i not in duiying:
-                print i
+                print(i)
 
-        for i in range(len(detail[u'品牌'])):
+        for i in range(len(detail['品牌'])):
             cu.executemany('INSERT INTO phone_detail VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)', [
              (
               detail[duiying[0]][i], detail[duiying[1]][i], detail[duiying[2]][i], detail[duiying[3]][i], detail[duiying[4]][i], detail[duiying[5]][i], detail[duiying[6]][i], detail[duiying[7]][i], detail[duiying[8]][i], detail[duiying[9]][i], detail[duiying[10]][i], detail[duiying[11]][i], detail[duiying[12]][i])])
@@ -277,7 +277,7 @@ def excel_daochu(func):
 
         db = sqlite3.connect(current_app.config.get('PHONE_DB'))
         cu = db.cursor()
-        duiying = [u'品牌', u'机型', u'系统', u'尺寸', u'资产编号', u'分辨率', u'密码', u'业务线', u'借用人员', u'借用日期', u'归还日期', u'状态', u'颜色']
+        duiying = ['品牌', '机型', '系统', '尺寸', '资产编号', '分辨率', '密码', '业务线', '借用人员', '借用日期', '归还日期', '状态', '颜色']
         file = xlwt.Workbook()
         table = file.add_sheet('sheet name')
         for k, i in enumerate(duiying):
@@ -287,7 +287,7 @@ def excel_daochu(func):
             for z, u in enumerate(i):
                 table.write(k + 1, z, u)
 
-        file_name = u'资产列表.xls'
+        file_name = '资产列表.xls'
         file_path = os.path.join(current_app.config.get('PHONE_FILE_DOWNLOAD'), str(time.time()))
         os.mkdir(file_path)
         file.save(os.path.join(file_path, file_name))
@@ -302,7 +302,7 @@ def all_phone_delete(func):
         func()
         db = sqlite3.connect(current_app.config.get('PHONE_DB'))
         cu = db.cursor()
-        str_time = u'已删除' + str(time.time())
+        str_time = '已删除' + str(time.time())
         cu.execute('update phone_detail set  statu="%s"' % str_time)
         db.commit()
         db.close()

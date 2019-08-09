@@ -7,7 +7,7 @@ import re
 import json
 import requests
 import time
-import urllib,urllib2
+import urllib.request, urllib.parse, urllib.error,urllib.request,urllib.error,urllib.parse
 #第一个参数是单点登录的地址，第二个参数是用户名，第三个参数是密码
 def ceshizhong(url,name,password):
     #url = "http://172.18.101.98/cas/login?source=S001&service=http://172.18.100.212:8080/loan/user/caslogin"
@@ -27,8 +27,8 @@ def ceshizhong(url,name,password):
     }
     return  headers
 def get_host(url):
-    protocol, s1 = urllib.splittype(url)
-    host, s2 = urllib.splithost(s1)
+    protocol, s1 = urllib.parse.splittype(url)
+    host, s2 = urllib.parse.splithost(s1)
     return 'http://'+host
 #第一个参数为调用url返回的text信息，第二个为用户名,第三个为密码
 def login_request_data(res,name,password):
@@ -75,8 +75,8 @@ def test(header):
     url='http://172.18.100.212:8080/loan/lbTIntoInfo/checkIntoCanEdit?intoId=120153854739'
     data={'intoId': 120153854739}
     headers=header
-    req = urllib2.Request(url, json.dumps(data), headers)
-    response = urllib2.urlopen(req)
+    req = urllib.request.Request(url, json.dumps(data), headers)
+    response = urllib.request.urlopen(req)
     return response.read()
 
 if __name__=='__main__':
@@ -84,5 +84,5 @@ if __name__=='__main__':
     password='Cs654321'
     url = "http://172.18.101.98/cas/login?source=S001&service=http://172.18.100.212:8080/loan/user/caslogin"
     header=ceshizhong(url,name,password)
-    print header
-    print  test(header)
+    print(header)
+    print(test(header))

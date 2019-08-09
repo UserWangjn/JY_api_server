@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 from run_server import run_server
 from dingshi_run.dingshi_run import all_run
 from THREAD.thrad_run import start
@@ -11,6 +13,6 @@ if __name__ == '__main__':
     p_scheduler = Process(target=all_run)
     p_thread = Process(target=start)
     for p in [p_server, p_scheduler, p_thread]:
-        print p
+        print(p)
         p.start()
 #        p.join()

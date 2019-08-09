@@ -1,7 +1,7 @@
 #-*-coding:utf-8-*-
 __author__ = 'SUNZHEN519'
 import socket   #socket模块
-import commands   #执行系统命令模块
+import subprocess   #执行系统命令模块
 import os
 import threading
 import sqlite3
@@ -15,19 +15,19 @@ import json
 import stat
 from email.mime.text import MIMEText
 import shutil
-import urllib2
-import urllib
+import urllib.request, urllib.error, urllib.parse
+import urllib.request, urllib.parse, urllib.error
 import os
 import signal
 import sys
 from fileconfig import DB_DIZHI
 mulu = DB_DIZHI
-print mulu
+print(mulu)
 run_mulu=os.path.join(os.path.dirname(os.getcwd()),'run_mulu')
 db = sqlite3.connect(mulu)
 cu = db.cursor()
-print 11111111111111111111
-print mulu
+print(11111111111111111111)
+print(mulu)
 class all_run(object):
  def __init__(self):
     while True:
@@ -40,7 +40,7 @@ class all_run(object):
                  if os.path.isfile(fullpath):
                      os.chmod(fullpath, stat.S_IWRITE)
                      os.remove(fullpath)
-                     print fullpath + " removed!"
+                     print(fullpath + " removed!")
            try:
                    files = os.listdir(run_mulu)
                    for file in files:
@@ -64,7 +64,7 @@ class all_run(object):
            #          pass
      #如果没有运行自动化则是杀死程序
      for i in cu.execute('select * from dingshi_run where statu="0" ' ).fetchall():
-       if u'实时' not in i[2]:
+       if '实时' not in i[2]:
         if 'everyday' in i[2]:
            split_time=i[2].split('everyday')[-1]
              #转换为当天的时间
@@ -78,7 +78,7 @@ class all_run(object):
              db.commit()
              #转化为文件命名的字符串，everyday+当天时间+id
              id=str(i[6])
-             req = urllib2.Request('http://127.0.0.1:5025/run_hualala')
+             req = urllib.request.Request('http://127.0.0.1:5025/run_hualala')
              data={}
              data['all_path']=i[3]
              email_detail=json.loads(i[5])
@@ -93,11 +93,11 @@ class all_run(object):
              data['all_branch'] = i[9]
              data['job'] = i[10]
              data['run_server'] = 'Automatic distribution'
-             data = urllib.urlencode(data)
-             result = urllib2.urlopen(url=req, data=data)
+             data = urllib.parse.urlencode(data)
+             result = urllib.request.urlopen(url=req, data=data)
              res = result.read()
         else:
-           split_time=i[2].split(u'定时设置 ：')[-1].strip()
+           split_time=i[2].split('定时设置 ：')[-1].strip()
              #转换为当天的时间
            shijianchuo_run=time.mktime(time.strptime(split_time, "%Y-%m-%d %H:%M"))
            if shijianchuo_run > time.time():
@@ -107,7 +107,7 @@ class all_run(object):
                    time.strftime("%Y-%m-%d", time.localtime(time.time())), int(i[6])))
              db.commit()
              #转化为文件命名的字符串，everyday+当天时间+id
-             req = urllib2.Request('http://127.0.0.1:5025/run_hualala')
+             req = urllib.request.Request('http://127.0.0.1:5025/run_hualala')
              run_time=time.strftime("%Y-%m-%d ", time.localtime(time.time())) + split_time
              id=str(i[6])
              data={}
@@ -124,8 +124,8 @@ class all_run(object):
              data['job'] = i[10]
              data['run_server'] = 'Automatic distribution'
              data['job_id']=json.loads(i[10])['job_id']
-             data = urllib.urlencode(data)
-             result = urllib2.urlopen(url=req, data=data)
+             data = urllib.parse.urlencode(data)
+             result = urllib.request.urlopen(url=req, data=data)
              res = result.read()
 
      for i in cu.execute('select * from dingshi_run where statu="2" ' ).fetchall():
@@ -145,7 +145,7 @@ class all_run(object):
              db.commit()
              #转化为文件命名的字符串，everyday+当天时间+id
              id='dingshi' +str(i[6])
-             req = urllib2.Request('http://127.0.0.1:5025/run_hualala')
+             req = urllib.request.Request('http://127.0.0.1:5025/run_hualala')
              data={}
              data['all_path']=i[3]
              email_detail = json.loads(i[5])
@@ -160,8 +160,8 @@ class all_run(object):
              data['all_branch'] = i[9]
              data['job'] = i[10]
              data['run_server'] ='Automatic distribution'
-             data = urllib.urlencode(data)
-             result = urllib2.urlopen(url=req, data=data)
+             data = urllib.parse.urlencode(data)
+             result = urllib.request.urlopen(url=req, data=data)
              res = result.read()
      db.close()
 """

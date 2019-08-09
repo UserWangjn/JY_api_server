@@ -8,13 +8,13 @@
 __author__ = 'SUNZHEN519'
 import sys, re, requests, json, datetime
 from selenium import webdriver
-import time, chardet, unittest, demjson, pymysql, urllib
+import time, chardet, unittest, demjson, pymysql, urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, json, urllib2, os, logging, random, pymysql
-from excel_data import *
+import unittest, xlrd, json, urllib.request, urllib.error, urllib.parse, os, logging, random, pymysql
+from .excel_data import *
 
 def before_after_sql(sql_detail, config):
     type_re = '(\\[.*?\\]\\[.*?\\]\\[.*?\\])'
@@ -33,8 +33,8 @@ def before_after_sql(sql_detail, config):
                 statu = 1
                 break
 
-        print 9999999999999999999999999999999999999999999999999999999
-        print assert_str
+        print(9999999999999999999999999999999999999999999999999999999)
+        print(assert_str)
         if statu == 1:
             if not eval(assert_str):
                 ex = Exception('sql断言失败%s' % s.simple_data.replace('[none]', ''))

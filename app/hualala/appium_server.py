@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -24,8 +24,8 @@ def appium_server(fun):
         case_url = 'http://' + current_app.config.get('APPIUM_IP') + '/cases'
         response = requests.get(case_url)
         case_json = json.loads(response.text)['cases']
-        print 9999999999999999999999999999999
-        print case_json
+        print(9999999999999999999999999999999)
+        print(case_json)
         return render_template('/hualala/jiekou_test/appium_url.html', case_json=case_json)
 
     return appium_server

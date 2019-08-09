@@ -1,7 +1,7 @@
 #-*-coding:utf-8-*-
 __author__ = 'SUNZHEN519'
 import socket   #socket模块
-import commands   #执行系统命令模块
+import subprocess   #执行系统命令模块
 import os
 import threading
 import sqlite3
@@ -37,14 +37,14 @@ class MyThread(threading.Thread):
         elif self.data == 'get_jiekou_tiaoshi':
             self.conn.send('plsase send addr')
             ip = self.conn.recv(1024)
-            if jiekou_shishi.has_key(ip):
+            if ip in jiekou_shishi:
                 self.conn.send(jiekou_shishi[ip])
             else:
                 self.conn.send('none')
         self.conn.close()
 while 1:
        conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
-       print'Connected by',addr    #输出客户端的IP地址
+       print(('Connected by',addr))    #输出客户端的IP地址
        ub = MyThread(conn,addr)
        ub.start()
 

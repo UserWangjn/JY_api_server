@@ -23,7 +23,7 @@ def change_config(func):
             yewu_name, jiekou_name = request.args.get('path').split('#')
             huanjing = [ os.path.join(current_app.config.get('JIE_KOU_URL'), i.decode('gb2312')) for i in os.listdir(current_app.config.get('JIE_KOU_URL')) if i.strip() != '' and 'git' not in i
                        ]
-            if 'jie_kou_huan_jing' in session.keys():
+            if 'jie_kou_huan_jing' in list(session.keys()):
                 pass
             else:
                 session['jie_kou_huan_jing'] = huanjing[0]

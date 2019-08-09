@@ -19,8 +19,8 @@ class CoinbaseExchangeAuth(AuthBase):
         self.secret_key = secret_key
         self.pass_word=pass_word
     def __call__(self, request):
-        print  self.api_key
-        print self.secret_key
+        print(self.api_key)
+        print(self.secret_key)
 
         timestamp = str(time.time())
         message = timestamp + request.method + request.path_url + (request.body or '')
@@ -51,13 +51,13 @@ API_URL = 'http://192.168.80.60:8814/api/spot/v3'
 PRODUCT_ID = ("BCH_BTC", "BCS_BTC", "LTC_BTC", "ETH_BTC", "ETC_BTC", "ETH_USDT", "BTC_USDT")
 def getHelper(method, auth=AUTH_3):
     r = requests.get(API_URL + method, auth=auth)
-    print("response status: ", r.status_code, "response json: ", r.json())
+    print(("response status: ", r.status_code, "response json: ", r.json()))
 def postHelper(method, body={}, auth=AUTH_3):
     r = requests.post(API_URL + method, json=body, auth=auth)
-    print("response status: ", r.status_code, "response json: ", r.json())
+    print(("response status: ", r.status_code, "response json: ", r.json()))
 def deleteHelper(method, body={}, auth=AUTH_3):
     r = requests.delete(API_URL + method, json=body, auth=auth)
-    print("response status: ", r.status_code, r.content)
+    print(("response status: ", r.status_code, r.content))
 # 行情
 def testTicker():
     for p in PRODUCT_ID:

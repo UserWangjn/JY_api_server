@@ -5,19 +5,18 @@
 # [GCC 9.1.0]
 # Embedded file name: E:\old_all_server\THREAD\THREAD_fuben\jie_kou_test\just_run\change_request_before.py
 # Compiled at: 2019-05-06 18:19:53
-__author__ = 'SUNZHEN519'
 import sys
+import importlib
 sys.path.append('../../')
-reload(sys)
-sys.setdefaultencoding('utf-8')
+importlib.reload(sys)
 from selenium import webdriver
-import time as timee, chardet, unittest, demjson, urllib, random
+import time as timee, chardet, unittest, demjson, urllib.request, urllib.parse, urllib.error, random
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, ConfigParser, json, urllib2, os, logging
-from just_run import *
+import unittest, xlrd, configparser, json, urllib.request, urllib.error, urllib.parse, os, logging
+from .just_run import *
 from excel_data import *
 import copy
 from json_pi_pei.request_result_flask import *
@@ -33,13 +32,13 @@ class change_request_before(object):
     def use(self, data, path, config_path):
         self.config_path = config_path
         self.path = os.path.dirname(path)
-        if 'before_request' in data.keys() and data['before_request'].strip() != '':
+        if 'before_request' in list(data.keys()) and data['before_request'].strip() != '':
             self.all = []
             self.data = copy.deepcopy(data)
             self.all.append(data['before_request'])
-            while 'before_request' in self.data.keys() and self.data['before_request'].strip() != '':
+            while 'before_request' in list(self.data.keys()) and self.data['before_request'].strip() != '':
                 self.s = read_data(self.data['before_request'], self.path.decode('utf-8')).data
-                if 'before_request' in self.s.keys() and self.s['before_request'].strip() != '':
+                if 'before_request' in list(self.s.keys()) and self.s['before_request'].strip() != '':
                     self.all.append(self.s['before_request'])
                     self.data = self.s
                 else:
@@ -49,15 +48,15 @@ class change_request_before(object):
                 self.s = just_run(os.path.join(os.path.dirname(self.path), self.all[(-1)].split('$')[0].strip()), self.all[(-1)].split('$')[1], data={}, before_req='', config_path=self.config_path, all_bianliang=self.all_bianliang)
             else:
                 self.s = just_run(os.path.join(os.path.dirname(self.path), self.all[(-1)].split('$')[0].strip()), self.all[(-1)].split('$')[1], data={}, before_req='', config_path=self.config_path, all_bianliang=self.all_bianliang)
-            if 'err_detail' in self.s.data.keys():
+            if 'err_detail' in list(self.s.data.keys()):
                 return self.s.data
             for i in list(reversed(self.all[:-1])):
                 self.s = just_run(os.path.join(os.path.dirname(self.path), i.split('$')[0].strip()), i.split('$')[1], json.loads(self.s.respons), self.s.full_data, self.config_path, self.all_bianliang)
-                if 'err_detail' in self.s.data.keys():
+                if 'err_detail' in list(self.s.data.keys()):
                     return self.s.data
 
-            for k, u in data.iteritems():
-                if type(self.s.respons) == unicode:
+            for k, u in data.items():
+                if type(self.s.respons) == str:
                     self.s.respons = json.loads(self.s.respons)
                 if '{{' in str(u) and '}}' in str(u):
                     self.kk = [
@@ -81,7 +80,7 @@ class change_request_before(object):
                                 self.change_before_data = float(self.change_before_data)
                             elif self.change_statu == '"*int"':
                                 self.change_before_data = int(float(self.change_before_data))
-                        if type(self.change_before_data) in [float, int, bool, long] or self.change_before_data == None:
+                        if type(self.change_before_data) in [float, int, bool, int] or self.change_before_data == None:
                             data[k] = self.change_before_data
                         else:
                             data[k] = self.kk[0] + self.change_before_data + self.kk[(-1)]
@@ -137,7 +136,7 @@ class read_data(object):
         excel_name = os.path.basename(self.path)
         public_config_path = os.path.join(os.path.dirname(self.path), 'config.txt')
         if os.path.isfile(public_config_path):
-            public_config = ConfigParser.ConfigParser()
+            public_config = configparser.ConfigParser()
             public_config.read(public_config_path)
             public_config.read(public_config_path)
         for dir, b, file in os.walk(self.path):
@@ -147,7 +146,7 @@ class read_data(object):
                 elif 'json' == z.split('.')[0]:
                     self.json_path = os.path.join(self.path, z)
                 elif 'configparse' == z.split('.')[0]:
-                    self.config_path = ConfigParser.SafeConfigParser()
+                    self.config_path = configparser.SafeConfigParser()
                     self.config_data = self.config_path.read(os.path.join(self.path, z))
 
         if os.path.isfile(os.path.join(os.path.dirname(self.path), 'config.txt')):
@@ -167,17 +166,17 @@ class read_data(object):
 
         for i in range(1, self.table.nrows):
             if str(int(str(self.table.row_values(i)[k]).split('#')[(-1)].split('.')[0])).strip() == str(self.id).strip():
-                self.data = dict(zip(self.key, self.table.row_values(i)))
+                self.data = dict(list(zip(self.key, self.table.row_values(i))))
                 break
 
         try:
-            for i in self.data.keys():
+            for i in list(self.data.keys()):
                 pass
 
         except:
             pass
 
-        for z in self.data.keys():
+        for z in list(self.data.keys()):
             if '##' in str(self.data[z]):
                 self.s = excel_data_exe()
                 self.data[z] = self.s.han_shu(self.data[z])

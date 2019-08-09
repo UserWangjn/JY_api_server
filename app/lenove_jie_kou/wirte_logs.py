@@ -7,7 +7,7 @@
 # Compiled at: 2019-02-21 11:38:53
 __author__ = 'SUNZHEN519'
 from tempfile import mktemp
-from assert_run import *
+from .assert_run import *
 from app import app
 from flask import send_from_directory, send_file, Response
 import socket, os, time, sqlite3

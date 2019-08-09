@@ -15,7 +15,7 @@ from flask import current_app
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify
 import json, demjson
 from functools import wraps
-import sys, urllib2
+import sys, urllib.request, urllib.error, urllib.parse
 sys.path.append('C:\\exec\\jie_kou_test')
 
 def jiekou_list_show(func):
@@ -44,7 +44,7 @@ def jiekou_result_run(func):
             ip = request.headers.get('X-Real-IP')
             huanjing = [ os.path.join(current_app.config.get('JIE_KOU_URL'), i.decode('gb2312')) for i in os.listdir(current_app.config.get('JIE_KOU_URL')) if i.strip() != '' and 'git' not in i
                        ]
-            if 'jie_kou_huan_jing' in session.keys():
+            if 'jie_kou_huan_jing' in list(session.keys()):
                 pass
             else:
                 session['jie_kou_huan_jing'] = huanjing[0]
@@ -53,7 +53,7 @@ def jiekou_result_run(func):
             for i in all_req:
                 all_url.append(os.path.join(os.path.join(url, i[0]), i[1]))
 
-            print all_url
+            print(all_url)
             all_run.run(all_url, 'C:\\work\\lenove_jie_kou', ip)
             error = '1'
             return jsonify(a=str(error))
@@ -107,10 +107,10 @@ def url_insert(func):
         db.close()
         url = 'http://' + request.headers.get('X-Real-IP') + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/jiankong_mulu'
         test_data = {'mulu': mulu.encode('utf-8').replace('\\', '/')}
-        test_data_urlencode = urllib.urlencode(test_data)
-        req = urllib2.Request(url=url, data=test_data_urlencode)
-        res_data = json.loads(urllib2.urlopen(req).read())
-        session[u'调试'] = request.args.get('mulu')
+        test_data_urlencode = urllib.parse.urlencode(test_data)
+        req = urllib.request.Request(url=url, data=test_data_urlencode)
+        res_data = json.loads(urllib.request.urlopen(req).read())
+        session['调试'] = request.args.get('mulu')
         return jsonify(statu='success')
 
     return hk
@@ -120,7 +120,7 @@ def get_mulua(func):
 
     @wraps(func)
     def hk():
-        if session.has_key('调试'):
+        if '调试' in session:
             mulu = session['调试']
         else:
             db = sqlite3.connect(current_app.config.get('JIE_KOU'))
@@ -136,7 +136,7 @@ def shishitiaoshi(func):
 
     @wraps(func)
     def aa():
-        if 'yidi_mulu_ip' in session.keys() and session['yidi_mulu_ip'] != '127.0.0.1' and session['yidi_mulu_ip'] != request.headers.get('X-Real-IP'):
+        if 'yidi_mulu_ip' in list(session.keys()) and session['yidi_mulu_ip'] != '127.0.0.1' and session['yidi_mulu_ip'] != request.headers.get('X-Real-IP'):
             yidi_ip = '1'
         else:
             yidi_ip = 'q'
@@ -167,11 +167,11 @@ def shishitiaoshi(func):
             result_statu = 'none'
 
         if request.method == 'GET':
-            if 'yidi_mulu_ip' not in session.keys():
+            if 'yidi_mulu_ip' not in list(session.keys()):
                 return redirect(url_for('uplate_jiekou_list'))
             port = current_app.config.get('LOCAL_SERVER_PORT')
             return render_template('/hualala/pages/shishitiaoshi.html', port=port, yidi_mulu_ip=session['yidi_mulu_ip'].strip(), yidi_ip=yidi_ip, case_name=case_name, shuru=shuru, shuchu=shuchu, jiekou_name=jiekou_name, result_statu=result_statu)
-        if 'request_url' not in data.keys():
+        if 'request_url' not in list(data.keys()):
             request_url = ''
         else:
             request_url = data['request_url']
@@ -180,24 +180,24 @@ def shishitiaoshi(func):
     return aa
 
 
-import urllib, urllib2
+import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse
 
 def piliang_run(func):
 
     @wraps(func)
     def ceshipi():
-        if 'local_today_pic' in current_app.config.keys():
+        if 'local_today_pic' in list(current_app.config.keys()):
             current_app.config.pop('local_today_pic')
-        if 'local_seven_pic' in current_app.config.keys():
+        if 'local_seven_pic' in list(current_app.config.keys()):
             current_app.config.pop('local_seven_pic')
-        if 'local_seven_pic' not in current_app.config.keys():
-            print 77777777777777777777777777777777777777777777
+        if 'local_seven_pic' not in list(current_app.config.keys()):
+            print(77777777777777777777777777777777777777777777)
         session['run_time'] = str(time.time())
         ip_dizhi = request.form['ip_dizhi']
         ip = request.headers.get('X-Real-IP')
         all_mulu = json.loads(request.form['all_jiekou_re'])['all_mulu']
         for k, i in enumerate(all_mulu):
-            if session.has_key(request.headers.get('X-Real-IP') + 'all_url'):
+            if request.headers.get('X-Real-IP') + 'all_url' in session:
                 gen_mulu = session[(request.headers.get('X-Real-IP') + 'all_url')]
             else:
                 gen_mulu = request.form['gen_mulu']
@@ -206,24 +206,24 @@ def piliang_run(func):
         db = sqlite3.connect(current_app.config.get('JIE_KOU'))
         cu = db.cursor()
         cu.execute('delete from jiekou_result where ip="%s"' % ip)
-        if len(cu.execute('select * from jiekou_mulu where ip=? and statu=? ', (request.headers.get('X-Real-IP'), u'批量')).fetchall()) > 0:
+        if len(cu.execute('select * from jiekou_mulu where ip=? and statu=? ', (request.headers.get('X-Real-IP'), '批量')).fetchall()) > 0:
             cu.execute('update jiekou_mulu set run_statu="1",update_time=? where ip=? and statu=?', (
-             time.time(), request.headers.get('X-Real-IP'), u'批量'))
+             time.time(), request.headers.get('X-Real-IP'), '批量'))
         else:
-            cu.execute('insert into  jiekou_mulu values(null,?,?,?,?,?)', (u'批量', request.form['gen_mulu'], request.headers.get('X-Real-IP'), time.time(), 1))
+            cu.execute('insert into  jiekou_mulu values(null,?,?,?,?,?)', ('批量', request.form['gen_mulu'], request.headers.get('X-Real-IP'), time.time(), 1))
         db.commit()
         db.commit()
         db.close()
         data = json.dumps({'all_jiekou': all_mulu, 'huanjing': request.form['huanjing'], 'run_time': session['run_time'], 'gen_mulu': request.form['gen_mulu'], 'ip_dizhi': request.headers.get('X-Real-IP')})
         url = 'http://' + ip_dizhi.strip() + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/piliang_run'
         test_data = {'data': data}
-        test_data_urlencode = urllib.urlencode(test_data)
-        req = urllib2.Request(url=url, data=test_data_urlencode)
+        test_data_urlencode = urllib.parse.urlencode(test_data)
+        req = urllib.request.Request(url=url, data=test_data_urlencode)
         try:
-            res_data = urllib2.urlopen(req)
+            res_data = urllib.request.urlopen(req)
         except:
             time.sleep(1)
-            res_data = urllib2.urlopen(req)
+            res_data = urllib.request.urlopen(req)
 
         return jsonify(data='success')
 
@@ -242,14 +242,14 @@ def piliang_run_resulttt(func):
         time_test = request.form['time']
         name = request.form['jeikou_name']
         ip = request.form['ip']
-        if 'user_name' not in session.keys():
+        if 'user_name' not in list(session.keys()):
             session['user_name'] = all_cu.execute('select name from  user where ip="%s"' % ip).fetchall()[0][0]
-        if 'local_seven_pic' in current_app.config.keys():
+        if 'local_seven_pic' in list(current_app.config.keys()):
             current_app.config.pop('local_seven_pic')
         pass_num = 0
         fail_num = 0
         result_data = json.loads(request.form['result'])
-        for i in result_data.keys():
+        for i in list(result_data.keys()):
             if result_data[i]['assert_result'] == True:
                 pass_num += 1
             else:
@@ -260,7 +260,7 @@ def piliang_run_resulttt(func):
         seven_day = time.strftime('%Y-%m-%d', time.localtime(seven_day))
         user_team = all_cu.execute('select team from  user_team where user=? ', (session['user_name'],)).fetchall()
         if len(user_team) == 0:
-            user_team = u'无分组'
+            user_team = '无分组'
         else:
             user_team = user_team[0][0]
         all_cu.execute('delete from local_tongji  where name=? and time<=?', (session['user_name'], seven_day))
@@ -305,13 +305,13 @@ def piliang_git_result(func):
     def ceshi_pi_gi11t():
         func()
         current_app.config['NUM_JISHU'] = current_app.config.get('NUM_JISHU') + 1
-        if 'seven_ci' in current_app.config.keys():
+        if 'seven_ci' in list(current_app.config.keys()):
             current_app.config.pop('seven_ci_pic')
-        if 'today_ci_pic' in current_app.config.keys():
+        if 'today_ci_pic' in list(current_app.config.keys()):
             current_app.config.pop('today_ci_pic')
-        if 'ci_seven_data' in current_app.config.keys():
+        if 'ci_seven_data' in list(current_app.config.keys()):
             current_app.config.pop('ci_seven_data')
-        if 'ci_today_data' in current_app.config.keys():
+        if 'ci_today_data' in list(current_app.config.keys()):
             current_app.config.pop('ci_today_data')
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
@@ -337,13 +337,13 @@ def piliang_git_result(func):
         pass_num = 0
         fail_num = 0
         result_data = json.loads(request.form['result'])
-        for i in result_data.keys():
+        for i in list(result_data.keys()):
             if result_data[i]['assert_result'] == True:
                 pass_num += 1
             else:
                 fail_num += 1
 
-        git_url = [ git_url_detail[i] for i in git_url_detail.keys() if i in request.form['path_mulu'] ][0]
+        git_url = [ git_url_detail[i] for i in list(git_url_detail.keys()) if i in request.form['path_mulu'] ][0]
         name = cu.execute('select name from dingshi_run where id=%s' % id).fetchall()[0][0]
         otherStyleTime = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         seven_day = int(time.mktime(time.strptime(otherStyleTime, '%Y-%m-%d'))) - 604800
@@ -387,7 +387,7 @@ def run_jiekou(func):
                     count = len(eval(i[2]))
                     fail = 0
                     succ = 0
-                    for k, z in eval(i[2]).iteritems():
+                    for k, z in eval(i[2]).items():
                         z = json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(z))), parse_int=int), indent=4, sort_keys=False, ensure_ascii=False)
                         result, id, comment, req = k.split('jo.in')
                         req = json.loads(req)

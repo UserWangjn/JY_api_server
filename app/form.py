@@ -9,14 +9,14 @@ __author__ = 'SUNZHEN519'
 from flask_wtf import Form
 from wtforms import StringField, SubmitField, FileField, BooleanField, TextAreaField
 from wtforms.validators import Required
-from shell_name import file
+from .shell_name import file
 
 class NameForm(Form):
     u = file()
     u = u.xx()
     u.insert(0, 0)
     for i in u:
-        print 111
+        print(111)
         i = BooleanField(i)
 
     name = StringField('What is your name?', validators=[Required()])
@@ -33,5 +33,5 @@ class login(Form):
 
 
 class Textt(Form):
-    bodytt = TextAreaField(u'正文', validators=[Required()])
-    submitttt = SubmitField(u'发表')
+    bodytt = TextAreaField('正文', validators=[Required()])
+    submitttt = SubmitField('发表')

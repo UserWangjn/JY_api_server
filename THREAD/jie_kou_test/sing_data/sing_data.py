@@ -7,7 +7,7 @@ import re
 import json
 import requests
 import time
-import urllib,urllib2
+import urllib.request, urllib.parse, urllib.error,urllib.request,urllib.error,urllib.parse
 import hashlib
 #第一个参数是单点登录的地址，第二个参数是用户名，第三个参数是密码
 def second(url,name,password):
@@ -16,8 +16,8 @@ def second(url,name,password):
     res = response.text
     cookies = requests.utils.dict_from_cookiejar(response.cookies)
     first_id = cookies['JSESSIONID_COOKIE']
-    protocol, s1 = urllib.splittype(url)
-    host, s2 = urllib.splithost(s1)
+    protocol, s1 = urllib.parse.splittype(url)
+    host, s2 = urllib.parse.splithost(s1)
     url = 'http://'+host+'/loan/user/login'
     headers = {'Content-Type': 'application/x-www-form-urlencoded,Cookie', 'JSESSIONID_COOKIE': first_id}
     param = {'username': name, 'password': password}
@@ -52,8 +52,8 @@ def ceshizhong(url,name,password):
     }
     return  headers
 def get_host(url):
-    protocol, s1 = urllib.splittype(url)
-    host, s2 = urllib.splithost(s1)
+    protocol, s1 = urllib.parse.splittype(url)
+    host, s2 = urllib.parse.splithost(s1)
     return 'http://'+host
 #第一个参数为调用url返回的text信息，第二个为用户名,第三个为密码
 def login_request_data(res,name,password):
@@ -101,8 +101,8 @@ def test(header):
     url='http://172.18.100.212:8080/loan/lbTIntoInfo/checkIntoCanEdit?intoId=120153854739'
     data={'intoId': 120153854739}
     headers=header
-    req = urllib2.Request(url, json.dumps(data), headers)
-    response = urllib2.urlopen(req)
+    req = urllib.request.Request(url, json.dumps(data), headers)
+    response = urllib.request.urlopen(req)
     return response.read()
 #后台加密登录
 def houtai_jiami(user,password,url):
@@ -112,29 +112,29 @@ def houtai_jiami(user,password,url):
     parm = {'phone': user, 'pwd':toke, 'flag': "", 'type': 1}
     header_dict = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
                    "Content-Type": "application/json"}
-    req = urllib2.Request(url=url, data=json.dumps(parm), headers=header_dict)
-    res = urllib2.urlopen(req)
+    req = urllib.request.Request(url=url, data=json.dumps(parm), headers=header_dict)
+    res = urllib.request.urlopen(req)
     res = res.read()
     return json.loads(res)['data']['token']
 #严雪泪 ，后台加密，返回接口解密
 def all_jiami(req,jiami_url):
     header = {}
     header['Content-Type'] = 'application/json'
-    request = urllib2.Request(jiami_url, req, headers=header)
+    request = urllib.request.Request(jiami_url, req, headers=header)
     # print r.text
-    return  urllib2.urlopen(request, timeout=20).read()
+    return  urllib.request.urlopen(request, timeout=20).read()
 #严雪泪 ，返回接口解密
 def all_jiemi(respons,jeimi_url):
     header = {}
     header['Content-Type'] = 'application/json'
-    request = urllib2.Request(jeimi_url, respons, headers=header)
+    request = urllib.request.Request(jeimi_url, respons, headers=header)
     # print r.text
-    return  urllib2.urlopen(request, timeout=20).read()
+    return  urllib.request.urlopen(request, timeout=20).read()
 
 if __name__=='__main__':
     name='10025186'
     password='Cs654321'
     url = "http://172.18.101.98/cas/login?source=S001&service=http://172.18.100.212:8080/loan/user/caslogin"
     header=ceshizhong(url,name,password)
-    print header
-    print  test(header)
+    print(header)
+    print(test(header))

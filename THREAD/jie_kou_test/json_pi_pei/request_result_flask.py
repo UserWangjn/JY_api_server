@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'SUNZHEN519'
 import sys
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import json
 sys.path.append("../../")
 class request_flask(object):
@@ -16,15 +16,15 @@ class request_flask(object):
         ua_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0"
         }
-        urllib.urlencode({'path':path,'jeikou_name': name.encode('utf-8'), 'result': data.encode('utf-8'), "time": str(time).encode('utf-8'), "ip": id_id.encode('utf-8'),'git_base_name':git_base_name})
+        urllib.parse.urlencode({'path':path,'jeikou_name': name.encode('utf-8'), 'result': data.encode('utf-8'), "time": str(time).encode('utf-8'), "ip": id_id.encode('utf-8'),'git_base_name':git_base_name})
         # url='http://'+server_ip+':5025/piliang_run_result'
         # test_data = urllib.urlencode({'jeikou_name':name.encode('utf-8'),'result':data.encode('utf-8'),"time":str(time).encode('utf-8'),"ip":id_id.encode('utf-8'),'path':'server'})
         # req = urllib2.Request(url=url, data=test_data,headers=ua_headers)
         # res_data=urllib2.urlopen(req).read()
         url='http://'+id_id+':5025/piliang_git_result'
-        test_data = urllib.urlencode({'jeikou_name':name.encode('utf-8'),'result':data.encode('utf-8'),"time":str(time).encode('utf-8'),"id":server_ip.encode('utf-8'),'path':'server','path_mulu':path,'run_id':run_id,'git_base_name':git_base_name})
-        req = urllib2.Request(url=url, data=test_data,headers=ua_headers)
-        res_data=urllib2.urlopen(req).read()
+        test_data = urllib.parse.urlencode({'jeikou_name':name.encode('utf-8'),'result':data.encode('utf-8'),"time":str(time).encode('utf-8'),"id":server_ip.encode('utf-8'),'path':'server','path_mulu':path,'run_id':run_id,'git_base_name':git_base_name})
+        req = urllib.request.Request(url=url, data=test_data,headers=ua_headers)
+        res_data=urllib.request.urlopen(req).read()
         try:
            res_data = json.loads(res_data)
         except:

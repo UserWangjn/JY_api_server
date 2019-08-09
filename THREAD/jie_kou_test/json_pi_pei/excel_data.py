@@ -8,12 +8,12 @@
 __author__ = 'SUNZHEN519'
 import sys, re, requests, cx_Oracle, json, datetime
 from selenium import webdriver
-import time, chardet, unittest, demjson, pymysql, urllib
+import time, chardet, unittest, demjson, pymysql, urllib.request, urllib.parse, urllib.error
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-import unittest, xlrd, json, urllib2, os, logging, random, string
+import unittest, xlrd, json, urllib.request, urllib.error, urllib.parse, os, logging, random, string
 from sing_data.sing_xiangqian import *
 
 class excel_data_exe(object):
@@ -27,10 +27,10 @@ class excel_data_exe(object):
             if type(exe_data) == list:
                 for k, i in enumerate(exe_data):
                     if type(i) == dict:
-                        for z, u in i.iteritems():
+                        for z, u in i.items():
                             if '##' in u:
                                 self.b = 'self.a='
-                                exec self.b + u.split('##')[1]
+                                exec(self.b + u.split('##')[1])
                                 exe_data[k][z] = self.a
 
                 return json.dumps(exe_data)
@@ -38,7 +38,7 @@ class excel_data_exe(object):
                 for k, i in exe_data:
                     if '##' in i:
                         self.b = 'self.a='
-                        exec self.b + i.split('##')[1]
+                        exec(self.b + i.split('##')[1])
                         exe_data[k] = self.a
 
             else:
@@ -48,7 +48,7 @@ class excel_data_exe(object):
                     return s.encrypt(de_str)
                 if exe_data.split('##')[1] != 'random.str:12':
                     self.b = 'self.a='
-                    exec self.b + exe_data.split('##')[1]
+                    exec(self.b + exe_data.split('##')[1])
                     return self.a
             return ('').join(random.sample(string.ascii_letters + string.digits, int(data.split('##')[1].split(':')[(-1)])))
 
@@ -66,7 +66,7 @@ class change_data_db(object):
             self.data = data
         else:
             if type(self.data) == dict:
-                for k in self.data.keys():
+                for k in list(self.data.keys()):
                     if 'Comment' == k.strip():
                         continue
                     if type(self.data[k]) in [list, dict]:
@@ -75,7 +75,7 @@ class change_data_db(object):
                         except:
                             pass
 
-                    if type(self.data[k]) in [str, unicode]:
+                    if type(self.data[k]) in [str, str]:
                         self.data[k] = self.change_data(self.data[k], take_data)
                     elif len(take_data) != 0:
                         change_data_db(self.config, self.data[k], take_data)
@@ -91,7 +91,7 @@ class change_data_db(object):
                             except:
                                 pass
 
-                        if type(self.data[k]) in [str, unicode]:
+                        if type(self.data[k]) in [str, str]:
                             self.data[k] = self.change_data(i, take_data)
                         elif len(take_data) != 0:
                             change_data_db(self.config, i, take_data)
@@ -116,7 +116,7 @@ class change_data_db(object):
         except:
             self.take_data = take_data
         else:
-            if type(simple_data) in [unicode, str]:
+            if type(simple_data) in [str, str]:
                 jisuan = '(\\(.*?\\))'
                 if len(re.findall(jisuan, self.simple_data, re.M)) == 0 or 'select' in self.simple_data:
                     pattern = '(\\[.*?\\]\\[.*?\\]\\[.*?\\])'
@@ -238,7 +238,7 @@ class change_data_db(object):
 
                             elif type_guid_simple.strip() == 'long' and error_data == '':
                                 try:
-                                    self.simple_data = long(float(self.simple_data))
+                                    self.simple_data = int(float(self.simple_data))
                                 except:
                                     pass
 
@@ -315,7 +315,7 @@ class change_data_db(object):
 
                         try:
                             self.simple_data = eval(re.findall('(\\(.*?\\))', self.simple_data, re.M)[0][1:-1])
-                            print type_guid_simple
+                            print(type_guid_simple)
                         except:
                             pass
 
@@ -326,7 +326,7 @@ class change_data_db(object):
                         elif type_guid_simple == 'float':
                             self.simple_data = float(self.simple_data)
                         elif type_guid_simple == 'long':
-                            self.simple_data = long(float(self.simple_data))
+                            self.simple_data = int(float(self.simple_data))
                         elif type_guid_simple == 'none':
                             self.simple_data = 'sql_run_success'
             try:

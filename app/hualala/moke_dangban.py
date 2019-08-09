@@ -9,7 +9,7 @@ __author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
-import socket, os, json, urllib2, re, chardet, time, sqlite3
+import socket, os, json, urllib.request, urllib.error, urllib.parse, re, chardet, time, sqlite3
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -109,8 +109,8 @@ def yewuadd(func):
         db.close()
         name = request.form['name']
         id = request.form['id']
-        print 999999999999999999999999999999999
-        print id
+        print(999999999999999999999999999999999)
+        print(id)
         request_url = request.form['request_url']
         jiekou_type = request.form['jiekou_type']
         yewu_request_method = request.form['yewu_request_method']
@@ -248,20 +248,20 @@ def moke_return(func):
         header_json = json.loads(yewu_detail[9].strip())
         if header_json != '':
             for i in header_json:
-                if i in request.headers.keys() and ']I9 ]' == header_json[i]:
+                if i in list(request.headers.keys()) and ']I9 ]' == header_json[i]:
                     continue
                     return jsonify(statu='header error')
 
         if yewu_detail[6] == 'get':
-            request_json = dict(zip(request.args.keys(), request.args.values()))
+            request_json = dict(list(zip(list(request.args.keys()), list(request.args.values()))))
         if yewu_detail[6] == 'post':
             if yewu_detail[7] == 'json':
                 if header_json != '':
                     request_json = json.loads(request.get_data())
             elif yewu_detail[7] == 'form_data':
-                request_json = dict(zip(request.form.keys(), request.form.values()))
+                request_json = dict(list(zip(list(request.form.keys()), list(request.form.values()))))
         for i in case_detail:
-            print i[2]
+            print(i[2])
             if json.loads(i[2]) == request_json:
                 return jsonify(i[3])
 

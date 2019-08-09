@@ -1,7 +1,7 @@
 # -*-coding:utf-8-*-
 __author__ = 'SUNZHEN519'
 import socket  # socket模块
-import commands  # 执行系统命令模块
+import subprocess  # 执行系统命令模块
 import os
 import threading
 import sqlite3
@@ -17,7 +17,7 @@ from fileconfig import DB_DIZHI, basedir
 result_path = os.path.join(basedir, "../result_mulu",str(time.time())+'.html', )
 now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))  # 输出当前时间
 fp = open(result_path, 'wb')
-runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
+runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title='用例执行情况', description='报告:')
 runner.run(unittest.defaultTestLoader.discover(basedir + "..//run_mulu/git/1505985874.94", pattern="*.py",top_level_dir=None))
 fp.close()
 db = sqlite3.connect(DB_DIZHI)

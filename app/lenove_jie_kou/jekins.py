@@ -37,8 +37,8 @@ def job_gengxin(func):
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
         data = json.loads(request.form['data'])
-        print 22222222222222222222222222222222222222222222222
-        print data.keys()
+        print(22222222222222222222222222222222222222222222222)
+        print(list(data.keys()))
         cu.executemany('update  jekins  set user=?,token_id=?,job_name=?,url=?,beizhu=?,canshu=? where id=?', [
          (
           data['user'], data['token'], data['job_name'], data['url'], data['beizhu'], data['canshu'], data['data_id'])])
