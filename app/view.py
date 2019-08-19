@@ -11,17 +11,17 @@ import socket
 from io import StringIO
 from io import BytesIO
 import os, sys
-from .hualala.check_login import *
-from .hualala.git_submit import *
+from app.hualala.check_login import *
+from app.hualala.git_submit import *
 import json, urllib.request, urllib.error, urllib.parse, re, chardet
-from .jie_kou import *
+from app.jie_kou import *
 from functools import wraps
-from .zhixing import *
-from .data_verification import *
-from .yuansudingwei import *
+from app.zhixing import *
+from app.data_verification import *
+from app.yuansudingwei import *
 import time, sqlite3
-from .shell_name import *
-from .form import *
+from app.shell_name import *
+from app.form import *
 from flask import render_template, flash, redirect, request, g, Response, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask import current_app
@@ -68,7 +68,7 @@ def teardown_request(exception):
         g.db.close()
 
 
-from .lenove_jie_kou.wirte_logs import *
+from app.lenove_jie_kou.wirte_logs import *
 
 @app.route('/wirte_logs', methods=['POST', 'GET'])
 def wirte_logs():
@@ -269,7 +269,7 @@ def yan_sql():
     return jsonify(a='1')
 
 
-from .lenove_jie_kou.ceshi_no import *
+from app.lenove_jie_kou.ceshi_no import *
 
 @app.route('/signal_run', methods=['POST', 'GET'])
 @ceshi_no
@@ -397,7 +397,7 @@ def uplate_jiekou_list():
     return resp
 
 
-from .lenove_jie_kou.run_jiekou import *
+from app.lenove_jie_kou.run_jiekou import *
 
 @app.route('/jie_kou_result', methods=['POST', 'GET'])
 @jiekou_result
@@ -405,7 +405,7 @@ def jiek_result():
     pass
 
 
-from .lenove_jie_kou.jiekou_list import jiekou_list_show
+from app.lenove_jie_kou.jiekou_list import jiekou_list_show
 
 @app.route('/jiekou_list', methods=['POST', 'GET'])
 @jiekou_list_show
@@ -413,7 +413,7 @@ def jiekou_list_show():
     pass
 
 
-from .lenove_jie_kou.jiekou_list import jiekou_result_run
+from app.lenove_jie_kou.jiekou_list import jiekou_result_run
 
 @app.route('/simple_jie_kou_run', methods=['POST', 'GET'])
 @jiekou_result_run
@@ -421,7 +421,7 @@ def jiekou_list_showeeaa():
     pass
 
 
-from .lenove_jie_kou.change_config import change_config
+from app.lenove_jie_kou.change_config import change_config
 
 @app.route('/read_configparse', methods=['POST', 'GET'])
 @change_config
@@ -429,7 +429,7 @@ def jiekou_list_showeeaa():
     pass
 
 
-from .lenove_jie_kou.jiekou_list import *
+from app.lenove_jie_kou.jiekou_list import *
 
 @app.route('/jiaobenshuru', methods=['POST'])
 @jiaobenshuru
@@ -478,7 +478,7 @@ def jie_kou_result():
     return jsonify(a='1')
 
 
-from .lenove_jie_kou.run_jiekou import *
+from app.lenove_jie_kou.run_jiekou import *
 
 @app.route('/jie_kou', methods=['POST', 'GET'])
 @piliangjiekou_result
@@ -492,7 +492,7 @@ def jiekou_page():
     pass
 
 
-from .hualala.moke_dangban import moke_dangban
+from app.hualala.moke_dangban import moke_dangban
 
 @app.route('/moke_dangban', methods=['GET', 'POST'])
 @moke_dangban
@@ -500,7 +500,7 @@ def moke_dangban():
     pass
 
 
-from .hualala.moke_dangban import add_case
+from app.hualala.moke_dangban import add_case
 
 @app.route('/add_case', methods=['GET', 'POST'])
 @add_case
@@ -508,7 +508,7 @@ def add_case():
     pass
 
 
-from .hualala.moke_dangban import case_read
+from app.hualala.moke_dangban import case_read
 
 @app.route('/case_read', methods=['GET', 'POST'])
 @case_read
@@ -516,7 +516,7 @@ def case_read():
     pass
 
 
-from .hualala.moke_dangban import bianji_case
+from app.hualala.moke_dangban import bianji_case
 
 @app.route('/bianji_case', methods=['GET', 'POST'])
 @bianji_case
@@ -524,7 +524,7 @@ def bianji_case():
     pass
 
 
-from .hualala.moke_dangban import yewu_bianji_show
+from app.hualala.moke_dangban import yewu_bianji_show
 
 @app.route('/yewu_bianji_show', methods=['GET', 'POST'])
 @yewu_bianji_show
@@ -532,7 +532,7 @@ def yewu_bianji_show():
     pass
 
 
-from .hualala.moke_dangban import linux_add
+from app.hualala.moke_dangban import linux_add
 
 @app.route('/linux_add', methods=['GET', 'POST'])
 @linux_add
@@ -540,7 +540,7 @@ def linux_add():
     pass
 
 
-from .hualala.moke_dangban import top_add_ceshi
+from app.hualala.moke_dangban import top_add_ceshi
 
 @app.route('/top_add', methods=['GET', 'POST'])
 @top_add_ceshi
@@ -548,7 +548,7 @@ def top_add_ceshi():
     pass
 
 
-from .hualala.moke_dangban import moke_return
+from app.hualala.moke_dangban import moke_return
 
 @app.route('/moke_return/<id>', methods=['GET', 'POST'])
 @moke_return
@@ -556,7 +556,7 @@ def moke_return(id):
     pass
 
 
-from .hualala.moke_dangban import yewuadd
+from app.hualala.moke_dangban import yewuadd
 
 @app.route('/yewu_add', methods=['GET', 'POST'])
 @yewuadd
@@ -564,7 +564,7 @@ def yewuadd():
     pass
 
 
-from .hualala.moke_dangban import server_use
+from app.hualala.moke_dangban import server_use
 
 @app.route('/server_use', methods=['GET', 'POST'])
 @server_use
@@ -572,7 +572,7 @@ def server_use():
     pass
 
 
-from .hualala.moke_dangban import delete_moke_xiangmu
+from app.hualala.moke_dangban import delete_moke_xiangmu
 
 @app.route('/delete_moke_xiangmu', methods=['GET', 'POST'])
 @delete_moke_xiangmu
@@ -653,7 +653,7 @@ def login_new():
     return render_template('/hualala/login.html')
 
 
-from .hualala.user import *
+from app.hualala.user import *
 
 @app.route('/user_manage', methods=['GET', 'POST'])
 @user
@@ -695,7 +695,7 @@ def add_server():
     return jsonify(a=1)
 
 
-from .hualala.run import *
+from app.hualala.run import *
 
 @app.route('/run_hualala', methods=['GET', 'POST'])
 @run_hualala
@@ -703,7 +703,7 @@ def run_hual():
     pass
 
 
-from .hualala.run import *
+from app.hualala.run import *
 
 @app.route('/run_charge', methods=['GET', 'POST'])
 @run_charge
@@ -735,7 +735,7 @@ def delete_ben():
     return jsonify(statu='success')
 
 
-from .hualala.add_email import *
+from app.hualala.add_email import *
 
 @app.route('/add_email', methods=['GET', 'POST'])
 @add_email
@@ -807,7 +807,7 @@ def dingshi_result(id):
     return render_template('/hualala/pages/test_result.html', time=str(time.time()), z=z, total=total, timee=timee, job=job_r, taken=run_time_detail, url_detail=url_detail)
 
 
-from .hualala.yunxing_tongji import pic_yewu_email
+from app.hualala.yunxing_tongji import pic_yewu_email
 
 @app.route('/jiekou_result/<id>', methods=['GET', 'POST'])
 def jiekou_result(id):
@@ -975,7 +975,7 @@ def teach():
     return render_template('/hualala/pages/texch.html')
 
 
-from .hualala.locust_fiel import upload_fil
+from app.hualala.locust_fiel import upload_fil
 
 @app.route('/upload_file', methods=['GET', 'POST'])
 @upload_fil
@@ -983,7 +983,7 @@ def upload_file():
     pass
 
 
-from .hualala.locust_fiel import upload_fil_beizu
+from app.hualala.locust_fiel import upload_fil_beizu
 
 @app.route('/upload_fil_beizu', methods=['GET', 'POST'])
 @upload_fil_beizu
@@ -991,7 +991,7 @@ def upload_file():
     pass
 
 
-from .lenove_jie_kou.run_jiekou import jiekou_gitce
+from app.lenove_jie_kou.run_jiekou import jiekou_gitce
 
 @app.route('/jiekou_yun', methods=['GET', 'POST'])
 @jiekou_gitce
@@ -999,7 +999,7 @@ def jiekou_git():
     pass
 
 
-from .lenove_jie_kou.run_jiekou import guanlian_ip_dizhi
+from app.lenove_jie_kou.run_jiekou import guanlian_ip_dizhi
 
 @app.route('/guanlian_ip', methods=['GET', 'POST'])
 @guanlian_ip_dizhi
@@ -1007,7 +1007,7 @@ def guanlian_ip():
     pass
 
 
-from .lenove_jie_kou.run_jiekou import debugging
+from app.lenove_jie_kou.run_jiekou import debugging
 
 @app.route('/debugging', methods=['GET', 'POST'])
 @debugging
@@ -1015,7 +1015,7 @@ def run_dubbing():
     pass
 
 
-from .lenove_jie_kou.jekins import signal_job_detail
+from app.lenove_jie_kou.jekins import signal_job_detail
 
 @app.route('/signal_job_detail', methods=['GET', 'POST'])
 @signal_job_detail
@@ -1023,7 +1023,7 @@ def signal_job_detail():
     pass
 
 
-from .lenove_jie_kou.jekins import job_gengxin
+from app.lenove_jie_kou.jekins import job_gengxin
 
 @app.route('/job_gengxin', methods=['GET', 'POST'])
 @job_gengxin
@@ -1031,7 +1031,7 @@ def job_gengxin():
     pass
 
 
-from .lenove_jie_kou.jekins import delete_server
+from app.lenove_jie_kou.jekins import delete_server
 
 @app.route('/delete_server', methods=['GET', 'POST'])
 @delete_server
@@ -1039,7 +1039,7 @@ def delete_server():
     pass
 
 
-from .hualala.run import change_run_statu
+from app.hualala.run import change_run_statu
 
 @app.route('/change_run_statu', methods=['POST'])
 @change_run_statu
@@ -1047,7 +1047,7 @@ def change_run_statu():
     pass
 
 
-from .hualala.run import update_host
+from app.hualala.run import update_host
 
 @app.route('/updata_html', methods=['POST'])
 @update_host
@@ -1055,7 +1055,7 @@ def update_host22():
     pass
 
 
-from .hualala.submit_git import submit_git
+from app.hualala.submit_git import submit_git
 
 @app.route('/get_file_git', methods=['POST'])
 @submit_git
@@ -1063,7 +1063,7 @@ def get_file_git():
     pass
 
 
-from .hualala.submit_git import get_sumint_statu
+from app.hualala.submit_git import get_sumint_statu
 
 @app.route('/get_sumint_statu', methods=['POST'])
 @get_sumint_statu
@@ -1071,7 +1071,7 @@ def get_sumint_statu():
     pass
 
 
-from .hualala.yunxing_tongji import yunxing_tongji
+from app.hualala.yunxing_tongji import yunxing_tongji
 
 @app.route('/yunxing_tongji', methods=['POST'])
 @yunxing_tongji
@@ -1079,7 +1079,7 @@ def yunxing_tongji():
     pass
 
 
-from .hualala.yunxing_tongji import test_image
+from app.hualala.yunxing_tongji import test_image
 
 @app.route('/test_image/<id>', methods=['POST', 'GET'])
 @test_image
@@ -1087,7 +1087,7 @@ def test_image(id):
     pass
 
 
-from .hualala.yunxing_tongji import pic_yewu_today
+from app.hualala.yunxing_tongji import pic_yewu_today
 
 @app.route('/pic_yewu_oday/<testid>', methods=['POST', 'GET'])
 @pic_yewu_today
@@ -1095,7 +1095,7 @@ def pic_yewu_today(testid):
     pass
 
 
-from .hualala.yunxing_tongji import pic_yewu_today_email
+from app.hualala.yunxing_tongji import pic_yewu_today_email
 
 @app.route('/pic_yewu_today_email', methods=['POST', 'GET'])
 @pic_yewu_today_email
@@ -1103,7 +1103,7 @@ def pic_yewu_today_email():
     pass
 
 
-from .hualala.yunxing_tongji import tongji_mail
+from app.hualala.yunxing_tongji import tongji_mail
 
 @app.route('/tongji_mail', methods=['POST', 'GET'])
 @tongji_mail
@@ -1111,7 +1111,7 @@ def tongji_mail():
     pass
 
 
-from .hualala.user import add_user_team
+from app.hualala.user import add_user_team
 
 @app.route('/add_user_team', methods=['POST', 'GET'])
 @add_user_team
@@ -1119,7 +1119,7 @@ def add_user_team():
     pass
 
 
-from .hualala.user import gengxin_team
+from app.hualala.user import gengxin_team
 
 @app.route('/gengxin_team', methods=['POST', 'GET'])
 @gengxin_team
@@ -1127,7 +1127,7 @@ def gengxin_team():
     pass
 
 
-from .hualala.yunxing_tongji import local_tongji_seven
+from app.hualala.yunxing_tongji import local_tongji_seven
 
 @app.route('/local_seven_today', methods=['POST', 'GET'])
 @local_tongji_seven
@@ -1135,7 +1135,7 @@ def local_tongji_seven():
     pass
 
 
-from .hualala.yunxing_tongji import local_seven_pic
+from app.hualala.yunxing_tongji import local_seven_pic
 
 @app.route('/local_seven_pic/<testid>', methods=['POST', 'GET'])
 @local_seven_pic
@@ -1143,7 +1143,7 @@ def local_seven_pic(testid):
     pass
 
 
-from .hualala.yunxing_tongji import local_tongji_today
+from app.hualala.yunxing_tongji import local_tongji_today
 
 @app.route('/local_today_today', methods=['POST', 'GET'])
 @local_tongji_today
@@ -1151,7 +1151,7 @@ def local_tongji_today():
     pass
 
 
-from .hualala.yunxing_tongji import local_today_pic
+from app.hualala.yunxing_tongji import local_today_pic
 
 @app.route('/local_today_pic/<testid>', methods=['POST', 'GET'])
 @local_today_pic
@@ -1159,7 +1159,7 @@ def local_today_pic(testid):
     pass
 
 
-from .hualala.save_log_jiequ import save_log_jiequ
+from app.hualala.save_log_jiequ import save_log_jiequ
 
 @app.route('/save_log_jiequ', methods=['POST', 'GET'])
 @save_log_jiequ
@@ -1178,7 +1178,7 @@ def plot():
     src = 'data:image/png;base64,' + str(data)
 
 
-from .hualala.appium_server import appium_server
+from app.hualala.appium_server import appium_server
 
 @app.route('/appium_server', methods=['GET', 'POST'])
 @appium_server
@@ -1196,7 +1196,7 @@ def open_window_page_result():
     return render_template('/hualala/pages/local_ui_result.html', port=current_app.config.get('LOCAL_SERVER_PORT'))
 
 
-from .jmeter_log.jmeter_log import jemter_add_linux
+from app.jmeter_log.jmeter_log import jemter_add_linux
 
 @app.route('/jemter_add_linux', methods=['GET', 'POST'])
 @jemter_add_linux
@@ -1204,7 +1204,7 @@ def jemter_add_linux():
     pass
 
 
-from .jmeter_log.jmeter_log import jemter_get_all_linux
+from app.jmeter_log.jmeter_log import jemter_get_all_linux
 
 @app.route('/jemter_get_all_linux', methods=['GET', 'POST'])
 @jemter_get_all_linux
@@ -1212,7 +1212,7 @@ def jemter_get_all_linux():
     pass
 
 
-from .jmeter_log.jmeter_log import delete_simple_linux
+from app.jmeter_log.jmeter_log import delete_simple_linux
 
 @app.route('/delete_simple_linux', methods=['GET', 'POST'])
 @delete_simple_linux
@@ -1220,7 +1220,7 @@ def delete_simple_linux():
     pass
 
 
-from .jmeter_log.jmeter_log import run_linux
+from app.jmeter_log.jmeter_log import run_linux
 
 @app.route('/run_linux', methods=['GET', 'POST'])
 @run_linux
@@ -1228,7 +1228,7 @@ def run_linux():
     pass
 
 
-from .jmeter_log.jmeter_log import bianji_linux
+from app.jmeter_log.jmeter_log import bianji_linux
 
 @app.route('/bianji_linux', methods=['GET', 'POST'])
 @bianji_linux
@@ -1236,7 +1236,7 @@ def bianji_linux():
     pass
 
 
-from .jmeter_log.jmeter_log import stop_run_linux
+from app.jmeter_log.jmeter_log import stop_run_linux
 
 @app.route('/stop_run_linux', methods=['GET', 'POST'])
 @stop_run_linux
@@ -1266,7 +1266,7 @@ def run_jiankong():
     return jsonify(statu='run_success')
 
 
-from .hualala.phone import phone_changliang_add
+from app.hualala.phone import phone_changliang_add
 
 @app.route('/phone_changliang_add', methods=['GET', 'POST'])
 @phone_changliang_add
@@ -1274,7 +1274,7 @@ def phone_changliang_add():
     pass
 
 
-from .hualala.phone import add_phone_modal
+from app.hualala.phone import add_phone_modal
 
 @app.route('/add_phone_modal', methods=['GET', 'POST'])
 @add_phone_modal
@@ -1282,7 +1282,7 @@ def add_phone_modal():
     pass
 
 
-from .hualala.phone import bianji_phone_modal
+from app.hualala.phone import bianji_phone_modal
 
 @app.route('/bianji_phone_modal', methods=['GET', 'POST'])
 @bianji_phone_modal
@@ -1290,7 +1290,7 @@ def bianji_phone_modal():
     pass
 
 
-from .hualala.phone import shouye
+from app.hualala.phone import shouye
 
 @app.route('/zichan_shouye', methods=['GET', 'POST'])
 @shouye
@@ -1298,7 +1298,7 @@ def shouye():
     pass
 
 
-from .hualala.phone import phone_changliang_delete
+from app.hualala.phone import phone_changliang_delete
 
 @app.route('/phone_changliang_delete', methods=['GET', 'POST'])
 @phone_changliang_delete
@@ -1306,7 +1306,7 @@ def phone_changliang_delete():
     pass
 
 
-from .hualala.phone import phone_simple_caozuo
+from app.hualala.phone import phone_simple_caozuo
 
 @app.route('/phone_simple_caozuo/<name>', methods=['GET', 'POST'])
 @phone_simple_caozuo
@@ -1314,7 +1314,7 @@ def phone_simple_caozuo(name):
     pass
 
 
-from .hualala.phone import phone_submit
+from app.hualala.phone import phone_submit
 
 @app.route('/phone_submit', methods=['GET', 'POST'])
 @phone_submit
@@ -1322,7 +1322,7 @@ def phone_submit():
     pass
 
 
-from .hualala.phone import excel_daochu
+from app.hualala.phone import excel_daochu
 
 @app.route('/daochu_phone_list', methods=['GET'])
 @excel_daochu
@@ -1330,7 +1330,7 @@ def excel_daochu():
     pass
 
 
-from .hualala.phone import all_phone_delete
+from app.hualala.phone import all_phone_delete
 
 @app.route('/all_phone_delete', methods=['POST'])
 @all_phone_delete
@@ -1354,7 +1354,7 @@ def get_email_detail():
     return resp
 
 
-from .hualala.jiekou_fenxi import jiekou_fenxi_shouye
+from app.hualala.jiekou_fenxi import jiekou_fenxi_shouye
 
 @app.route('/jiekou_fenxi', methods=['GET'])
 @jiekou_fenxi_shouye
@@ -1362,7 +1362,7 @@ def jiekou_fenxi_shouye():
     pass
 
 
-from .hualala.jiekou_git_chonggou import chongou_test
+from app.hualala.jiekou_git_chonggou import chongou_test
 
 @app.route('/chongou_test', methods=['GET'])
 @chongou_test
@@ -1370,7 +1370,7 @@ def chongou_test():
     pass
 
 
-from .hualala.jiekou_git_chonggou import git_bianji
+from app.hualala.jiekou_git_chonggou import git_bianji
 
 @app.route('/git_bianji', methods=['POST'])
 @git_bianji
@@ -1378,7 +1378,7 @@ def git_bianji():
     pass
 
 
-from .hualala.jiekou_git_chonggou import new_get_run_statu
+from app.hualala.jiekou_git_chonggou import new_get_run_statu
 
 @app.route('/new_get_run_statu', methods=['POST'])
 @new_get_run_statu
@@ -1468,7 +1468,7 @@ def test_hengfeng_aa():
     return render_template('/1.html')
 
 
-from .hualala.jiekou_git_chonggou import get_renwu_detail
+from app.hualala.jiekou_git_chonggou import get_renwu_detail
 
 @app.route('/get_renwu_detail', methods=['POST', 'GET'])
 @get_renwu_detail
