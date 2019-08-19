@@ -370,7 +370,7 @@ def uplate_jiekou_list():
         if 'huanjing' not in list(session.keys()):
             session['huanjing'] = ''
         test_data = {'mulu': mulu, 'huanjing': session['huanjing'].encode('utf-8')}
-        test_data_urlencode = urllib.parse.urlencode(test_data)
+        test_data_urlencode = urllib.parse.urlencode(test_data).encode(encoding='utf-8')
         req = urllib.request.Request(url=url, data=test_data_urlencode)
         try:
             res_data = json.loads(urllib.request.urlopen(req).read())
