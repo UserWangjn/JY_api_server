@@ -106,9 +106,10 @@ def url_insert(func):
         db.commit()
         db.close()
         url = 'http://' + request.headers.get('X-Real-IP') + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/jiankong_mulu'
-        test_data = {'mulu': mulu.encode('utf-8').replace('\\', '/')}
-        test_data_urlencode = urllib.parse.urlencode(test_data)
-        req = urllib.request.Request(url=url, data=test_data_urlencode)
+        test_data = {'mulu': mulu.replace('\\', '/').encode('utf-8')}
+        test_data_urlencode = urllib.parse.urlencode(test_data).encode(encoding='utf-8')
+        headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}  
+        req = urllib.request.Request(url=url, data=test_data_urlencode, headers=headers)
         res_data = json.loads(urllib.request.urlopen(req).read())
         session['调试'] = request.args.get('mulu')
         return jsonify(statu='success')
@@ -217,11 +218,15 @@ def piliang_run(func):
         data = json.dumps({'all_jiekou': all_mulu, 'huanjing': request.form['huanjing'], 'run_time': session['run_time'], 'gen_mulu': request.form['gen_mulu'], 'ip_dizhi': request.headers.get('X-Real-IP')})
         url = 'http://' + ip_dizhi.strip() + ':' + current_app.config.get('LOCAL_SERVER_PORT') + '/piliang_run'
         test_data = {'data': data}
-        test_data_urlencode = urllib.parse.urlencode(test_data)
-        req = urllib.request.Request(url=url, data=test_data_urlencode)
+        test_data_urlencode = urllib.parse.urlencode(test_data).encode(encoding='utf-8')
+        headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}  
+        req = urllib.request.Request(url=url, data=test_data_urlencode, headers=headers)
         try:
             res_data = urllib.request.urlopen(req)
-        except:
+        except Exception as err:
+            print(err)
+            import traceback
+            print(traceback.format_exc())
             time.sleep(1)
             res_data = urllib.request.urlopen(req)
 

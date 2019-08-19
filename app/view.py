@@ -369,19 +369,20 @@ def uplate_jiekou_list():
     else:
         if 'huanjing' not in list(session.keys()):
             session['huanjing'] = ''
-        test_data = {'mulu': mulu, 'huanjing': session['huanjing'].encode('utf-8')}
-        test_data_urlencode = urllib.parse.urlencode(test_data).encode(encoding='utf-8')
-        req = urllib.request.Request(url=url, data=test_data_urlencode)
-        try:
-            res_data = json.loads(urllib.request.urlopen(req).read())
-        except:
-            return '找不到相应服务或目录'
-        else:
-            if 'error_detail' in list(res_data.keys()):
-                return res_data['error_detail']
+    test_data = {'mulu': mulu, 'huanjing': session['huanjing'].encode('utf-8')}
+    test_data_urlencode = urllib.parse.urlencode(test_data).encode(encoding='utf-8')
+    headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}  
+    req = urllib.request.Request(url=url, data=test_data_urlencode, headers=headers)
+    try:
+        res_data = json.loads(urllib.request.urlopen(req).read())
+    except:
+        return '找不到相应服务或目录'
+    else:
+        if 'error_detail' in list(res_data.keys()):
+            return res_data['error_detail']
 
-        if 'statu' in list(res_data.keys()) and res_data['statu'] == 'no dir':
-            return '目录不存在'
+    if 'statu' in list(res_data.keys()) and res_data['statu'] == 'no dir':
+        return '目录不存在'
     res = json.loads(res_data['data'])
     if session['huanjing'].strip() != '':
         res['select_huanjing'] = session['huanjing']
