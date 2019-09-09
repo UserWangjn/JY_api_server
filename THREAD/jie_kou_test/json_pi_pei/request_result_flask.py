@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-__author__ = 'SUNZHEN519'
 import sys
 import urllib.request, urllib.parse, urllib.error
 import urllib.request, urllib.error, urllib.parse

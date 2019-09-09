@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: E:\old_all_server\THREAD\THREAD_fuben\jie_kou_test\json_pi_pei\request_run.py
 # Compiled at: 2019-05-06 18:19:42
-__author__ = 'SUNZHEN519'
 import sys
 sys.path.append('../../')
 import requests, copy
@@ -95,8 +93,6 @@ class request_run(object):
             respons = requests.post(url=all_url, json=parm, auth=auth).text
         if self.path.get('sign', 'sign_type') == 'Backstage_web':
             parm = json.loads(data)
-            print(777777777777777777777777777777777777777777777)
-            print(self.path.get('login', 'token'))
             header = {'Authorization': self.path.get('login', 'token'), 'Content-type': 'application/json'}
             if len(url) != 0:
                 if 'http://' in url[0] or 'https://' in url[0]:
@@ -237,13 +233,9 @@ class request_run(object):
                 else:
                     request = urllib.request.Request(all_url, data=json.dumps(parm), headers=header)
                     respons = urllib.request.urlopen(request, timeout=60).read()
-                    print(4444444444444444444444444444444444444444)
-                    print(respons)
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print('接口返回信息')
-            print(respons)
         if self.path.get('sign', 'sign_type') == 'xiang_qian':
             parm = json.loads(data)
             header = {}
@@ -496,8 +488,6 @@ class request_run(object):
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print('接口返回信息 ')
-            print(respons)
         if self.path.get('sign', 'sign_type') == 'xiang_qian':
             parm = json.loads(data)
             header = {}
@@ -528,8 +518,6 @@ class request_run(object):
             except Exception as e:
                 respons = json.dumps({'error_detail': str(e)})
 
-            print('接口返回信息 ')
-            print(respons)
         if self.path.get('sign', 'sign_type') == 'Backstage_web':
             parm = json.loads(data)
             header = json.loads(self.path.get('app_head', 'app_head'))
