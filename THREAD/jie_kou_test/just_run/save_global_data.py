@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
@@ -36,12 +35,10 @@ class set_global_data(object):
                 self.data = copy.deepcopy(excel_dict)
                 self.all.append(jiekou)
                 self.s = read_data(jiekou, self.path).data
-                while 'before_request' in list(self.s.keys()) and self.s['before_request'].strip() != '':
+                while 'before_request' in self.s and self.s['before_request'].strip() != '':
                     self.all.append(self.s['before_request'])
                     self.s = read_data(self.s['before_request'], self.path).data
-                    if 'before_request' in list(self.s.keys()) and self.s['before_request'].strip() != '':
-                        pass
-                    else:
+                    if not('before_request' in self.s and self.s['before_request'].strip() != ''):
                         break
 
                 self.s = read_data(jiekou, self.path).data

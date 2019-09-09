@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\Users\sunzhen\Desktop\web flask\HGTP_socket3\app\jie_kou_test\json_pi_pei\excel_data.py
 # Compiled at: 2019-04-23 14:14:06
-__author__ = 'SUNZHEN519'
 import sys, re, requests, cx_Oracle, json, datetime
 from selenium import webdriver
 import time, chardet, unittest, demjson, pymysql, urllib.request, urllib.parse, urllib.error

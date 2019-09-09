@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\test_local\HGTP_socket3\app\jie_kou_test\just_run\change_request_after.py
 # Compiled at: 2018-08-06 13:46:00
-__author__ = 'SUNZHEN519'
 import sys
 sys.path.append('../../')
 from selenium import webdriver

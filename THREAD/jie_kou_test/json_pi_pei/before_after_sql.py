@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\Users\sunzhen\Desktop\web flask\HGTP_socket3\app\jie_kou_test\json_pi_pei\before_after_sql.py
 # Compiled at: 2019-04-09 19:19:24
-__author__ = 'SUNZHEN519'
 import sys, re, requests, json, datetime
 from selenium import webdriver
 import time, chardet, unittest, demjson, pymysql, urllib.request, urllib.parse, urllib.error
@@ -33,8 +31,6 @@ def before_after_sql(sql_detail, config):
                 statu = 1
                 break
 
-        print(9999999999999999999999999999999999999999999999999999999)
-        print(assert_str)
         if statu == 1:
             if not eval(assert_str):
                 ex = Exception('sql断言失败%s' % s.simple_data.replace('[none]', ''))

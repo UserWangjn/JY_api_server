@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\THREAD_BEIFEN\THREAD_fuben\jie_kou_test\json_pi_pei\begin_excel.py
 # Compiled at: 2019-05-05 14:06:36
-__author__ = 'SUNZHEN519'
 import sys
 sys.path.append('../../')
 import json, xlrd, os
