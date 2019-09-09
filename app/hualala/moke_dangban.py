@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\app\hualala\moke_dangban.py
 # Compiled at: 2018-12-21 15:55:51
-__author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
@@ -109,8 +107,6 @@ def yewuadd(func):
         db.close()
         name = request.form['name']
         id = request.form['id']
-        print(999999999999999999999999999999999)
-        print(id)
         request_url = request.form['request_url']
         jiekou_type = request.form['jiekou_type']
         yewu_request_method = request.form['yewu_request_method']

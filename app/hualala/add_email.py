@@ -5,7 +5,6 @@
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\app\hualala\add_email.py
 # Compiled at: 2018-11-08 11:24:41
-__author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response

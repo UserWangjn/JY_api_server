@@ -1,10 +1,6 @@
-#! /usr/bin/env python 2.7 (62211)
-#coding=utf-8
 # Compiled at: 2019-05-15 06:05:45
 #Powered by BugScaner
 #http://tools.bugscaner.com/
-#如果觉得不错,请分享给你朋友使用吧!
-__author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
@@ -104,14 +100,11 @@ def new_get_run_statu(func):
         name = cu.execute('select name from user where ip="%s" order  by time desc limit 0,1 ' % request.headers.get('X-Real-IP')).fetchall()[0][0]
         if 'statu' in list(request.form.keys()) and request.form['statu'] == 'jiekou_dingshi':
             dingshi_detail = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where name="%s" and run_time like "%s" order by update_time desc ' % (name, '\u63a5\u53e3%')).fetchall() ]
-            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and run_time like "%s"  order by update_time desc ' % (name, '\u63a5\u53e3%')).fetchall()
-                        ]
+            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and run_time like "%s"  order by update_time desc ' % (name, '\u63a5\u53e3%')).fetchall()]
         else:
             dingshi_detail = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where name="%s" and statu in ("0","1","2") order by update_time desc ' % name).fetchall() ]
-            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and statu in ("0","1","2")  order by update_time desc ' % name).fetchall()
-                        ]
-        shishi_statu = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where run_time="%s"  ' % '\u63a5\u53e3\u5b9e\u65f6').fetchall()
-                       ]
+            server_di = [ i[0] for i in cu.execute('select server from dingshi_run where name="%s"    and statu in ("0","1","2")  order by update_time desc ' % name).fetchall()]
+        shishi_statu = [ [i[4], i[6]] for i in cu.execute('select * from dingshi_run where run_time="%s"  ' % '\u63a5\u53e3\u5b9e\u65f6').fetchall()]
         db.close()
         for k, i in enumerate(dingshi_detail):
             if i[-2].strip() in ('0', '3'):

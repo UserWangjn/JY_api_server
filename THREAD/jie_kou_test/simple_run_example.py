@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-__author__ = 'SUNZHEN519'
 import os
 from .run import *
 import sys

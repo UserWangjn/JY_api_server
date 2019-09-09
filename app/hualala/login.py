@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: E:\HGTP_server\app\hualala\login.py
 # Compiled at: 2017-08-21 17:33:59
-__author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
@@ -29,9 +27,6 @@ def login_exe(func):
         ip = request.remote_addr
         name = request.form['name']
         passs = request.form['password']
-        print(1111111111111111)
-        print(name)
-        print(passs)
         user_check = cu.execute('select * from user where name="%s" and pass="%s" ' % (name, passs)).fetchall()
         if len(user_check) != 0:
             db.commit()
