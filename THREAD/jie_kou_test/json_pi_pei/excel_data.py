@@ -81,24 +81,23 @@ class change_data_db(object):
                 else:
                     change_data_db(self.config, self.data[k])
 
+        elif isinstance(self.data, list):
+             for k, i in enumerate(self.data):
+                if type(self.data[k]) in [list, dict]:
+                    try:
+                        self.data[k] = json.loads(self.data[k])
+                    except:
+                        pass
+
+                if type(self.data[k]) in [str, str]:
+                    self.data[k] = self.change_data(i, take_data)
+                elif len(take_data) != 0:
+                    change_data_db(self.config, i, take_data)
+                else:
+                    change_data_db(self.config, i)
+
         else:
-            if isinstance(self.data, list):
-                 for k, i in enumerate(self.data):
-                    if type(self.data[k]) in [list, dict]:
-                        try:
-                            self.data[k] = json.loads(self.data[k])
-                        except:
-                            pass
-
-                    if type(self.data[k]) in [str, str]:
-                        self.data[k] = self.change_data(i, take_data)
-                    elif len(take_data) != 0:
-                        change_data_db(self.config, i, take_data)
-                    else:
-                        change_data_db(self.config, i)
-
-            else:
-                self.change_data(self.data, take_data)
+            self.change_data(self.data, take_data)
         try:
             if self.data != '':
                 self.data = json.dumps(self.data)
@@ -154,10 +153,9 @@ class change_data_db(object):
                                             can_shu = i[1].split('_')[(-1)]
                                             try:
                                                 data = json.loads(data)
+                                                data = sql_json(data, can_shu)
                                             except:
                                                 data = 'sql返回的参数不是json格式'
-                                            else:
-                                                data = sql_json(data, can_shu)
 
                                         self.simple_data = self.simple_data.replace(guid[k], str(data).strip())
                                     else:
