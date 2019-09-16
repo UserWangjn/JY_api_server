@@ -17,38 +17,39 @@ from sing_data.sing_xiangqian import *
 class excel_data_exe(object):
 
     def han_shu(self, data):
+        a = None
+        res = ''
+        exe_data = data
         try:
             exe_data = json.loads(data)
         except:
-            exe_data = data
+            pass
+        if type(exe_data) == list:
+            for k, i in enumerate(exe_data):
+                if type(i) == dict:
+                    for z, u in i.items():
+                        if '##' in u:
+                            self.b = 'a='
+                            exec(self.b + u.split('##')[1])
+                            exe_data[k][z] = a
+            res = json.dumps(exe_data)
+        elif type(exe_data) == dict:
+            for k, i in exe_data:
+                if '##' in i:
+                    self.b = 'a='
+                    exec(self.b + i.split('##')[1])
+                    exe_data[k] = a
+            res = ('').join(random.sample(string.ascii_letters + string.digits, int(data.split('##')[1].split(':')[(-1)])))
         else:
-            if type(exe_data) == list:
-                for k, i in enumerate(exe_data):
-                    if type(i) == dict:
-                        for z, u in i.items():
-                            if '##' in u:
-                                self.b = 'self.a='
-                                exec(self.b + u.split('##')[1])
-                                exe_data[k][z] = self.a
-
-                return json.dumps(exe_data)
-            if type(exe_data) == dict:
-                for k, i in exe_data:
-                    if '##' in i:
-                        self.b = 'self.a='
-                        exec(self.b + i.split('##')[1])
-                        exe_data[k] = self.a
-
-            else:
-                if 'RSA:' in exe_data.split('##')[1]:
-                    de_str = exe_data.split('##')[1].split('RSA:')[(-1)]
-                    s = AESCipher('abcdnnnnnn123456')
-                    return s.encrypt(de_str)
-                if exe_data.split('##')[1] != 'random.str:12':
-                    self.b = 'self.a='
-                    exec(self.b + exe_data.split('##')[1])
-                    return self.a
-            return ('').join(random.sample(string.ascii_letters + string.digits, int(data.split('##')[1].split(':')[(-1)])))
+            if 'RSA:' in exe_data.split('##')[1]:
+                de_str = exe_data.split('##')[1].split('RSA:')[(-1)]
+                s = AESCipher('abcdnnnnnn123456')
+                res = s.encrypt(de_str)
+            elif exe_data.split('##')[1] != 'random.str:12':
+                self.b = 'a='
+                exec(self.b + exe_data.split('##')[1])
+                res = a
+        return res
 
 
 class change_data_db(object):
@@ -58,15 +59,31 @@ class change_data_db(object):
             self.take_data = take_data[0]
         self.config = config
         self.error_data = 0
+        self.data = data
         try:
             self.data = json.loads(data)
         except:
-            self.data = data
+            pass
+        if isinstance(self.data, dict):
+            for k in self.data:
+                if 'Comment' == k.strip():
+                    continue
+                if isinstance(self.data[k], (list, dict)):
+                    try:
+                        self.data[k] = json.loads(self.data[k])
+                    except:
+                        pass
+
+                if isinstance(self.data[k], str):
+                    self.data[k] = self.change_data(self.data[k], take_data)
+                elif len(take_data) != 0:
+                    change_data_db(self.config, self.data[k], take_data)
+                else:
+                    change_data_db(self.config, self.data[k])
+
         else:
-            if type(self.data) == dict:
-                for k in list(self.data.keys()):
-                    if 'Comment' == k.strip():
-                        continue
+            if isinstance(self.data, list):
+                 for k, i in enumerate(self.data):
                     if type(self.data[k]) in [list, dict]:
                         try:
                             self.data[k] = json.loads(self.data[k])
@@ -74,35 +91,19 @@ class change_data_db(object):
                             pass
 
                     if type(self.data[k]) in [str, str]:
-                        self.data[k] = self.change_data(self.data[k], take_data)
+                        self.data[k] = self.change_data(i, take_data)
                     elif len(take_data) != 0:
-                        change_data_db(self.config, self.data[k], take_data)
+                        change_data_db(self.config, i, take_data)
                     else:
-                        change_data_db(self.config, self.data[k])
+                        change_data_db(self.config, i)
 
             else:
-                if type(self.data) == list:
-                    for k, i in enumerate(self.data):
-                        if type(self.data[k]) in [list, dict]:
-                            try:
-                                self.data[k] = json.loads(self.data[k])
-                            except:
-                                pass
-
-                        if type(self.data[k]) in [str, str]:
-                            self.data[k] = self.change_data(i, take_data)
-                        elif len(take_data) != 0:
-                            change_data_db(self.config, i, take_data)
-                        else:
-                            change_data_db(self.config, i)
-
-                else:
-                    self.change_data(self.data, take_data)
-            try:
-                if self.data != '':
-                    self.data = json.dumps(self.data)
-            except:
-                pass
+                self.change_data(self.data, take_data)
+        try:
+            if self.data != '':
+                self.data = json.dumps(self.data)
+        except:
+            pass
 
     def change_data(self, simple_data, take_data):
         self.simple_data = simple_data
