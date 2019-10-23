@@ -493,15 +493,15 @@ def jiekou_page():
     pass
 
 
-from app.hualala.moke_dangban import moke_dangban
+from app.hualala.mock_dangban import mock_dangban
 
-@app.route('/moke_dangban', methods=['GET', 'POST'])
-@moke_dangban
-def moke_dangban():
+@app.route('/mock_dangban', methods=['GET', 'POST'])
+@mock_dangban
+def mock_dangban():
     pass
 
 
-from app.hualala.moke_dangban import add_case
+from app.hualala.mock_dangban import add_case
 
 @app.route('/add_case', methods=['GET', 'POST'])
 @add_case
@@ -509,7 +509,7 @@ def add_case():
     pass
 
 
-from app.hualala.moke_dangban import case_read
+from app.hualala.mock_dangban import case_read
 
 @app.route('/case_read', methods=['GET', 'POST'])
 @case_read
@@ -517,7 +517,7 @@ def case_read():
     pass
 
 
-from app.hualala.moke_dangban import bianji_case
+from app.hualala.mock_dangban import bianji_case
 
 @app.route('/bianji_case', methods=['GET', 'POST'])
 @bianji_case
@@ -525,7 +525,7 @@ def bianji_case():
     pass
 
 
-from app.hualala.moke_dangban import yewu_bianji_show
+from app.hualala.mock_dangban import yewu_bianji_show
 
 @app.route('/yewu_bianji_show', methods=['GET', 'POST'])
 @yewu_bianji_show
@@ -533,7 +533,7 @@ def yewu_bianji_show():
     pass
 
 
-from app.hualala.moke_dangban import linux_add
+from app.hualala.mock_dangban import linux_add
 
 @app.route('/linux_add', methods=['GET', 'POST'])
 @linux_add
@@ -541,7 +541,7 @@ def linux_add():
     pass
 
 
-from app.hualala.moke_dangban import top_add_ceshi
+from app.hualala.mock_dangban import top_add_ceshi
 
 @app.route('/top_add', methods=['GET', 'POST'])
 @top_add_ceshi
@@ -549,15 +549,15 @@ def top_add_ceshi():
     pass
 
 
-from app.hualala.moke_dangban import moke_return
+from app.hualala.mock_dangban import mock_return
 
-@app.route('/moke_return/<id>', methods=['GET', 'POST'])
-@moke_return
-def moke_return(id):
+@app.route('/mock_return/<id>', methods=['GET', 'POST'])
+@mock_return
+def mock_return(id):
     pass
 
 
-from app.hualala.moke_dangban import yewuadd
+from app.hualala.mock_dangban import yewuadd
 
 @app.route('/yewu_add', methods=['GET', 'POST'])
 @yewuadd
@@ -565,7 +565,7 @@ def yewuadd():
     pass
 
 
-from app.hualala.moke_dangban import server_use
+from app.hualala.mock_dangban import server_use
 
 @app.route('/server_use', methods=['GET', 'POST'])
 @server_use
@@ -573,10 +573,10 @@ def server_use():
     pass
 
 
-from app.hualala.moke_dangban import delete_moke_xiangmu
+from app.hualala.mock_dangban import delete_mock_xiangmu
 
-@app.route('/delete_moke_xiangmu', methods=['GET', 'POST'])
-@delete_moke_xiangmu
+@app.route('/delete_mock_xiangmu', methods=['GET', 'POST'])
+@delete_mock_xiangmu
 def top_add_ceshi():
     pass
 

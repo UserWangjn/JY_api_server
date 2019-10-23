@@ -71,7 +71,7 @@
                             </div>
 
                              <div class="btn-group" role="group" aria-label="...">
-                                 <h5  id="moke_url_show"  moke_url_gen={{ moke_gen_url}}><span class="label label-info">moke地址:</span>{{  moke_url }}</h5>
+                                 <h5  id="mock_url_show"  mock_url_gen={{ mock_gen_url}}><span class="label label-info">mock地址:</span>{{  mock_url }}</h5>
 </div>
                         </div>
 
@@ -567,15 +567,15 @@ $(this).click(function(){
 
               $(this).parent().find('tr').removeAttr('class')
               $(this).attr('class','success')
-              moke_url=$(this).attr('name')
+              mock_url=$(this).attr('name')
               //是否点击的项目，如果是则根据项目显示业务
               if ($(this).parent().attr('id')=='xiangmu_body')
               {
               $('#xiangmu_next').find('tr').removeAttr('class')
-              moke_url=$('#moke_url_show').attr('moke_url_gen')
+              mock_url=$('#mock_url_show').attr('mock_url_gen')
               var find_statu=0
                  var id=$(this).attr('id')
-                  $('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+id)
+                  $('#mock_url_show').html('<span class="label label-info">mock地址:</span>'+mock_url+id)
                 var yewuid=''
                  $('#xiangmu_guanli').attr('xiangmu_type',id)
                   var statu=0
@@ -591,7 +591,7 @@ $(this).click(function(){
                  statu=1
                  $('[name="case_add_new"]').attr('yewuid',yewuid)
                   $('[name="case_add_new"]').attr('xiangmuid',id)
-                  $('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+id+'_'+yewuid)
+                  $('#mock_url_show').html('<span class="label label-info">mock地址:</span>'+mock_url+id+'_'+yewuid)
                  $(this).attr('class','success')
                  }
                  }
@@ -676,7 +676,7 @@ $.post($SCRIPT_ROOT+'/yewu_bianji_show',{id:yewu_id},function(data)
 
     {
  $('[name="yewu_name_add"]').val(data.name)
-  $('[name="yewu_request_url"]').val(data.moke_url)
+  $('[name="yewu_request_url"]').val(data.mock_url)
    $('[name="yewu_chuancan_type"]').val(data.chuancan_type)
     $('[name="jiekou_type"]').val(data.jiekou_type)
      $('[name="yewu_request_method"]').val(data.yewu_request_moetho)
@@ -713,7 +713,7 @@ function()
         shadeClose: true
         ,yes: function(index){
             layer.close(index);
-                        $.post($SCRIPT_ROOT + '/delete_moke_xiangmu', {type: type,id:id},
+                        $.post($SCRIPT_ROOT + '/delete_mock_xiangmu', {type: type,id:id},
                 function (data) {
                     if (data.statu=='success')
                     {
@@ -745,13 +745,13 @@ $(this).parent().parent().parent().parent().modal('hide')
 
             var id=$(this).parent().parent().parent().parent().attr('id')
             var name=$(this).parent().parent().parent().parent().find('td').eq(0).html()
-            var moke_url=$(this).parent().parent().parent().parent().attr('name')
+            var mock_url=$(this).parent().parent().parent().parent().attr('name')
              var request_url=$(this).parent().parent().parent().parent().find('td').eq(1).html()
                 $('#xiangmu_modal').attr('name','top_bianji'+'#'+id)
                     $('#xiangmu_modal').modal('show')
              $('[name="add_name"]').val(name)
              $('[name="request_url"]').val(request_url)
-             //$('[name="moke_url"]').val(moke_url)
+             //$('[name="mock_url"]').val(mock_url)
 
             })
         }
@@ -784,7 +784,7 @@ $(this).parent().parent().parent().parent().modal('hide')
             $('#xiangmu_modal').modal('hide')
             var name=$('#xiangmu_modal').find('input').eq(0).val()
             var request_url=$('#xiangmu_modal').find('input').eq(1).val()
-            var moke_url=$('#xiangmu_modal').find('input').eq(2).val()
+            var mock_url=$('#xiangmu_modal').find('input').eq(2).val()
             $('#xiangmu_modal').find('input').each(function()
                 {
                     if ($.trim($(this).val())=='')
@@ -805,7 +805,7 @@ $(this).parent().parent().parent().parent().modal('hide')
 
             if (statu!=1)
             {
-                $.post($SCRIPT_ROOT + '/top_add', {name: name, request_url: request_url, moke_url: moke_url,type:$('#xiangmu_modal').attr('name')},
+                $.post($SCRIPT_ROOT + '/top_add', {name: name, request_url: request_url, mock_url: mock_url,type:$('#xiangmu_modal').attr('name')},
                     function (data) {
                         if  (data.statu=='success')
                         {
@@ -1001,8 +1001,8 @@ $(this).click(function()
 {
 yewuid=$(this).attr('id')
 xiangmu_id=$(this).attr('xiangmu_id')
-moke_url=$('#moke_url_show').attr('moke_url_gen')
-$('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+xiangmu_id+'_'+yewuid)
+mock_url=$('#mock_url_show').attr('mock_url_gen')
+$('#mock_url_show').html('<span class="label label-info">mock地址:</span>'+mock_url+xiangmu_id+'_'+yewuid)
 $('#case_list').find('tr').show()
 $('#case_list').find('tr').each(function()
 

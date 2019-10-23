@@ -1,8 +1,7 @@
 # uncompyle6 version 3.3.4
-# Python bytecode 2.7 (62211)
-# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
+# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02)
 # [GCC 9.1.0]
-# Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\app\hualala\moke_dangban.py
+# Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\app\hualala\mock_dangban.py
 # Compiled at: 2018-12-21 15:55:51
 from tempfile import mktemp
 from app import app
@@ -15,15 +14,15 @@ from werkzeug.utils import secure_filename
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify
 import datetime
 
-def moke_dangban(fun):
+def mock_dangban(fun):
 
-    def moke_dangban():
+    def mock_dangban():
         fun()
         db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
         cu = db.cursor()
         name = cu.execute('select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get('X-Real-IP')).fetchall()[0][0]
         db.close()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         xiangmu = cu.execute('select * from xiangmu_data').fetchall()
         yewu = cu.execute('select * from yewu_data').fetchall()
@@ -31,15 +30,15 @@ def moke_dangban(fun):
         case_list = cu.execute('select * from case_data').fetchall()
         mulu_url = ('/').join(request.url.split('/')[:-1]).replace('8080', '5025')
         if len(xiangmu) > 0 and len(yewu) > 0:
-            moke_url = mulu_url + '/' + current_app.config.get('MOKE_URL') + '/' + str(xiangmu[0][0]) + '_' + str(yewu[0][0])
+            mock_url = mulu_url + '/' + current_app.config.get('MOCK_URL') + '/' + str(xiangmu[0][0]) + '_' + str(yewu[0][0])
         else:
-            moke_url = 'none'
-        moke_gen_url = mulu_url + '/' + current_app.config.get('MOKE_URL') + '/'
+            mock_url = 'none'
+        mock_gen_url = mulu_url + '/' + current_app.config.get('MOCK_URL') + '/'
         db.commit()
         db.close()
-        return render_template('/hualala/jiekou_test/dangban_server.html', xiangmu=xiangmu, yewu=yewu, linux=linux, case_list=case_list, moke_url=moke_url, moke_gen_url=moke_gen_url)
+        return render_template('/hualala/jiekou_test/dangban_server.html', xiangmu=xiangmu, yewu=yewu, linux=linux, case_list=case_list, mock_url=mock_url, mock_gen_url=mock_gen_url)
 
-    return moke_dangban
+    return mock_dangban
 
 
 def top_add_ceshi(fun):
@@ -50,7 +49,7 @@ def top_add_ceshi(fun):
         cu = db.cursor()
         name = cu.execute('select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get('X-Real-IP')).fetchall()[0][0]
         db.close()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         if request.form['type'] == 'top_add':
             if len(cu.execute('select * from xiangmu_data where  name="%s" ' % request.form['name']).fetchall()) != 0:
@@ -76,11 +75,11 @@ def top_add_ceshi(fun):
     return top_add
 
 
-def delete_moke_xiangmu(fun):
+def delete_mock_xiangmu(fun):
 
-    def delete_moke_xiangmu():
+    def delete_mock_xiangmu():
         fun()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         if request.form['type'] == 'top_delete':
             cu.execute('delete from xiangmu_data where id="%s"' % request.form['id'])
@@ -94,7 +93,7 @@ def delete_moke_xiangmu(fun):
         db.close()
         return jsonify(statu='success')
 
-    return delete_moke_xiangmu
+    return delete_mock_xiangmu
 
 
 def yewuadd(func):
@@ -112,9 +111,9 @@ def yewuadd(func):
         yewu_request_method = request.form['yewu_request_method']
         yewu_send_type = request.form['yewu_send_type']
         header_json = request.form['header_json']
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
-        before_save = cu.execute('select * from yewu_data where moke_url="%s" and xiangmu_id="%s"' % (request.form['request_url'], str(id))).fetchall()
+        before_save = cu.execute('select * from yewu_data where mock_url="%s" and xiangmu_id="%s"' % (request.form['request_url'], str(id))).fetchall()
         if len(before_save) == 0:
             cu.executemany('INSERT INTO  yewu_data values (null,?,?,?,?,?,?,?,?,?)', [(name, user, str(time.time()), request_url, jiekou_type, yewu_request_method, yewu_send_type, id, header_json)])
         else:
@@ -130,7 +129,7 @@ def linux_add(func):
 
     def linux_add():
         func()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         before_save = cu.execute('select * from linux_detail where ip="%s"' % request.form['linux_url']).fetchall()
         if len(before_save) == 0:
@@ -146,10 +145,10 @@ def yewu_bianji_show(func):
 
     def yewu_bianji_show():
         func()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         before_save = cu.execute('select * from yewu_data where id="%s"' % request.form['id']).fetchall()[0]
-        return jsonify(name=before_save[1], moke_url=before_save[4], chuancan_type=before_save[5], jiekou_type=before_save[6], yewu_request_moetho=before_save[7], yewu_send_type=before_save[8])
+        return jsonify(name=before_save[1], mock_url=before_save[4], chuancan_type=before_save[5], jiekou_type=before_save[6], yewu_request_moetho=before_save[7], yewu_send_type=before_save[8])
 
     return yewu_bianji_show
 
@@ -158,7 +157,7 @@ def add_case(funct):
 
     def add_case():
         funct()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         try:
             json.loads(request.form['request_json'])
@@ -182,7 +181,7 @@ def case_read(func):
 
     def case_read():
         func()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         data = cu.execute('select * from case_data where id="%s"' % request.form['id']).fetchall()[0]
         session['case_di'] = request.form['id']
@@ -197,7 +196,7 @@ def bianji_case(func):
 
     def bianji_case():
         func()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         try:
             json.loads(request.form['request_json'])
@@ -219,7 +218,7 @@ def server_use(func):
 
     def server_use():
         func()
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         linux_detail = cu.execute('select * from linux_detail where name="%s"' % request.form['name']).fetchall()[0]
         import paramiko
@@ -231,11 +230,11 @@ def server_use(func):
     return server_use
 
 
-def moke_return(func):
+def mock_return(func):
 
-    def moke_return(id):
+    def mock_return(id):
         func(id)
-        db = sqlite3.connect(current_app.config.get('MOKE_DIZHI'))
+        db = sqlite3.connect(current_app.config.get('MOCK_DIZHI'))
         cu = db.cursor()
         xiangmuid = id.split('_')[0]
         yewuid = id.split('_')[1]
@@ -263,4 +262,4 @@ def moke_return(func):
 
         return jsonify(statu='not find case')
 
-    return moke_return
+    return mock_return

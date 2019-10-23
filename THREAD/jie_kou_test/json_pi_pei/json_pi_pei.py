@@ -1,6 +1,5 @@
 # uncompyle6 version 3.3.4
-# Python bytecode 2.7 (62211)
-# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
+# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02)
 # [GCC 9.1.0]
 # Embedded file name: C:\Users\sunzhen\Desktop\web flask\HGTP_socket3\app\jie_kou_test\json_pi_pei\json_pi_pei.py
 # Compiled at: 2019-04-08 13:04:05

@@ -386,7 +386,7 @@ if (!document.createElement('canvas').getContext) {
     turquoise: '#40E0D0',
     violet: '#EE82EE',
     wheat: '#F5DEB3',
-    whitesmoke: '#F5F5F5',
+    whitesmock: '#F5F5F5',
     yellowgreen: '#9ACD32'
   };
 

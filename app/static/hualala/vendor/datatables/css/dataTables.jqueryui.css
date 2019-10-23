@@ -93,7 +93,7 @@ table.dataTable.display tbody tr.odd > .sorting_2, table.dataTable.order-column.
   background-color: #f3f3f3;
 }
 table.dataTable.display tbody tr.odd > .sorting_3, table.dataTable.order-column.stripe tbody tr.odd > .sorting_3 {
-  background-color: whitesmoke;
+  background-color: whitesmock;
 }
 table.dataTable.display tbody tr.odd.selected > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd.selected > .sorting_1 {
   background-color: #a6b4cd;

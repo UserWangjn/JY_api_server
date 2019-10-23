@@ -1,10 +1,4 @@
-#! /usr/bin/env python 2.7 (62211)
-#coding=utf-8
 # Compiled at: 2019-06-21 03:22:47
-#Powered by BugScaner
-#http://tools.bugscaner.com/
-#如果觉得不错,请分享给你朋友使用吧!
-__author__ = 'SUNZHEN519'
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
@@ -136,7 +130,7 @@ def test_image(func):
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
-                current_app.config.pop('seven_ci_pic')
+                current_app.config.pop('seven_ci_pic')me.localti
         if 'seven_ci_pic' not in list(current_app.config.keys()) and 'yewu_seven' in id:
             plt.figure(1, figsize=(9, 4))
             plt.rcParams['savefig.dpi'] = 500
@@ -150,7 +144,7 @@ def test_image(func):
             git_detail = cu_jiekou.execute('select name,branch from git_detail').fetchall()
             otherStyleTime = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             seven_day = int(time.mktime(time.strptime(otherStyleTime, '%Y-%m-%d'))) - 604800
-            seven_day = time.strftime('%Y-%m-%d', time.localtime(seven_day))
+            seven_day = time.strftime('%Y-%m-%d', time(seven_day))
             fail_list = []
             pass_list = []
             tongguolv_list = []

@@ -1,6 +1,5 @@
 # uncompyle6 version 3.3.4
-# Python bytecode 2.7 (62211)
-# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
+# Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02)
 # [GCC 9.1.0]
 # Embedded file name: E:\old_all_server\THREAD\THREAD_fuben\jie_kou_test\json_pi_pei\request_run.py
 # Compiled at: 2019-05-06 18:19:42
@@ -8,9 +7,9 @@ import sys
 sys.path.append('../../')
 import requests, copy
 from .json_pi_pei import *
-from sing_data.sing_data import *
+from ..sing_data.sing_data import *
 import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, hashlib
-from sing_data.sing_data import *
+from ..sing_data.sing_data import *
 from .excel_data import *
 
 class request_run(object):
