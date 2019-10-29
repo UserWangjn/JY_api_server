@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-__author__ = 'SUNZHEN519'
 #增加用户权限表quanxian，字段值模型为众筹,   只有出现在字段中 的模块用户才会有权限进行脚本管理
 import sqlite3
 from .fileconfig import DB_DIZHI
