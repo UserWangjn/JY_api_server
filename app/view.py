@@ -1396,7 +1396,7 @@ def git_hengfeng_detail():
     data['serviceName'] = 'PERSONAL_REGISTER_EXPAND'
     data['platformNo'] = '5000001104'
     data['keySerial'] = '1'
-    ss = {'redirectUrl': 'http://192.168.33.216:5025/23adadff232323', 
+    ss = {'redirectUrl': 'http://localhost:8080/23adadff232323',
        'platformUserNo': 'HFJYJFCR190509000065999', 
        'realName': '苏秦', 
        'checkType': 'LIMIT', 
@@ -1415,25 +1415,24 @@ def git_hengfeng_detail():
        'status': 'SUCCESS'}
     data['reqData'] = json.dumps(ss)
     print(data['reqData'])
-    url_sing = 'http://xq-app-server.jc1.jieyue.com/xqAppServer/api/APPBizRest/sign/v1/'
+    url = 'http://xq-app-server.jc1.jieyue.com/xqAppServer/api/APPBizRest/sign/v1/'
     headers = {'Content-Type': 'application/json'}
-    headers_sing = {'Content-Type': 'application/json'}
-    headers_sing['reqJSON'] = data['reqData']
-    k = requests.post(url_sing, data=data['reqData'], headers=headers_sing)
+    headers['reqJSON'] = data['reqData']
+    k = requests.post(url, data=data['reqData'], headers=headers)
     print(8888888888888888888888888)
     print(k.text)
     k = json.loads(k.text)['responseBody']['sign']
     print(k)
     data['sign'] = k
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    dd = 'http://47.95.110.16:8096/bha-neo-app/lanmaotech/gateway'
+    dd = 'https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway'
     s = requests.post(dd, data=data, headers=headers)
     print(11111111111111111111111111111111)
     print(data)
     requestkey = s.text.split("requestKey: '")[(-1)].split("',")[0]
     print(requestkey)
     print(222222222222222)
-    url_msg = 'http://47.95.110.16:8096/bha-neo-app/gateway/sms/smsForEnterprise'
+    url_msg = 'https://hubk.lanmaoly.com/bha-neo-app/gateway/sms/smsForEnterprise'
     data = {'requestKey': requestkey, 
        'bizType': 'REGISTER', 
        'mobile': '19992131029'}
@@ -1441,7 +1440,7 @@ def git_hengfeng_detail():
     print(3333333333333333333333333)
     print(s.text)
     print(44444444444444444)
-    url3 = 'http://47.95.110.16:8096/bha-neo-app/gateway/mobile/personalRegisterExpand/register'
+    url3 = 'https://hubk.lanmaoly.com/bha-neo-app/gateway/mobile/personalRegisterExpand/register'
     data = {'serviceType': 'BANKCARD_AUTH', 
        'realName': '苏秦', 
        'credType': 'PRC_ID', 
