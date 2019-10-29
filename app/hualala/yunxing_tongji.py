@@ -130,7 +130,7 @@ def test_image(func):
             timeArray = time.strftime('%Y--%m--%d', time.localtime(time_pic))
             otherStyleTime = time.strftime('%Y--%m--%d', time.localtime(time.time()))
             if timeArray != otherStyleTime:
-                current_app.config.pop('seven_ci_pic')me.localti
+                current_app.config.pop('seven_ci_pic')
         if 'seven_ci_pic' not in list(current_app.config.keys()) and 'yewu_seven' in id:
             plt.figure(1, figsize=(9, 4))
             plt.rcParams['savefig.dpi'] = 500
