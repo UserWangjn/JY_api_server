@@ -1,5 +1,3 @@
-#-*-coding:utf-8-*-
-__author__ = 'SUNZHEN519'
 import socket   #socket模块
 import subprocess   #执行系统命令模块
 import os
@@ -25,7 +23,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 import shutil
 import requests
-from fileconfig import DB_DIZHI
+from fileconfig import basedir
+
 #调用http接口，设置运行状态
 def run_statu_change(statu,data,ip):
     data=urllib.parse.urlencode({'statu':statu,'data':data})
@@ -128,123 +127,122 @@ class MyThread(threading.Thread):
         threading.Thread.__init__(self)
     def run(self):
         #脚本地址
-                        time0=time.time()
-                        for i in [os.path.join(os.path.join(basedir,'run'), i) for i in os.listdir(os.path.join(basedir,'run'))]:
-                                       os.chmod(i, stat.S_IWRITE)
-                                       if os.path.isdir(i):
-                                           shutil.rmtree(i)
-                                       else:
-                                          os.remove(i)
-                        run_path=os.path.join(os.path.join(basedir,'run'),self.data['name']+os.path.basename(self.data['run_dir'])+'.py')
-                        print(self.data['id'])
-                        id=str(self.data['id'])
-                        #删除结果文件
-                        if self.data['statu'] != 'jiekou_shishi':
-                              run_db_mo=os.path.join(self.data['server_di'],'example.db')
-                        run_statu_change('running',self.data['id'],self.data['server_ip'])
-                        email_detail=json.loads(self.data['email_detail'])
-                        #运行job
-                        job=json.loads(self.data['job'])
-                        zidong_statu='SUCCESS'
-                        if job['name'].strip()!='no select'  and self.data['job_id'].strip()!='':
-                            jobs=run_statu_change('jekins', json.dumps({'job_name':job['name'],'job_id':self.data['job_id'],'user_name':self.data['name']}), self.data['server_ip'])
-                            jobs=json.loads(jobs)['data']
+        time0=time.time()
+        run_dir = os.path.join(basedir,'run')
+        if os.path.exists(run_dir):
+            for i in [os.path.join(run_dir, i) for i in os.listdir(run_dir)]:
+                os.chmod(i, stat.S_IWRITE)
+                if os.path.isdir(i):
+                    shutil.rmtree(i)
+                else:
+                   os.remove(i)
+        run_path=os.path.join(run_dir, self.data['name']+os.path.basename(self.data['run_dir'])+'.py')
+        print(self.data['id'])
+        id=str(self.data['id'])
+        #删除结果文件
+        if self.data['statu'] != 'jiekou_shishi':
+            run_db_mo=os.path.join(self.data['server_di'],'example.db')
+        run_statu_change('running',self.data['id'],self.data['server_ip'])
+        email_detail=json.loads(self.data['email_detail'])
+        #运行job
+        job=json.loads(self.data['job'])
+        zidong_statu='SUCCESS'
+        if job['name'].strip()!='no select'  and self.data['job_id'].strip()!='':
+            jobs=run_statu_change('jekins', json.dumps({'job_name':job['name'],'job_id':self.data['job_id'],'user_name':self.data['name']}), self.data['server_ip'])
+            jobs=json.loads(jobs)['data']
 
-                            jenkins_server_url=jobs[-3].strip()
-                            user_id=jobs[0].strip()
-                            api_token=jobs[2].strip()
-                            server = jenkins.Jenkins(jenkins_server_url, username=user_id, password=api_token)
-                            job_name = jobs[3].strip()
-                            num = server.get_job_info(job_name)['lastBuild']['number']
-                            server.build_job(job_name,parameters=json.loads(jobs[-1]))
-                            while True:
-                                if server.get_job_info(job_name)['lastBuild']['number'] - 1 == num:
-                                    num = server.get_job_info(job_name)['lastBuild']['number']
-                                    break
-                            time.sleep(1)
-                            while server.get_build_info(job_name, num)['building']:
-                                time.sleep(1)
-                            result=job
-                            result['result']=server.get_build_info(job_name, num)['result']
-                            zidong_statu=result['result']
-                            result=json.dumps({'id':self.data['id'],'result':result})
-                            run_statu_change('job_result', result, self.data['server_ip'])
-                        if zidong_statu=='SUCCESS':
-                            if       self.data['statu'] not in ['jiekou_shishi','jiekou_dingshi']:
-                                         s = open(run_path, 'w')
-                                         id = str(self.data['id'])
-                                         s.write(open(os.path.join(basedir, 'model.py'), 'r').read().replace('##', str(self.data['id'])).replace('%%',
-                                                                                                                                        self.data[
-                                                                                                                                            'run_dir'].encode(
-                                                                                                                                            'gb2312')).replace('***',run_db_mo.encode('gb2312')))
-                                         s.close()
-                                         os.system('python '+run_path)
-                                         for parent, dirnames, filenames in os.walk(self.data['run_dir']):
-                                              for filename in filenames:
-                                                   os.chmod(os.path.join(parent, filename), stat.S_IWRITE)
-                            elif self.data['statu'] == 'jiekou_shishi' or self.data['statu']=='jiekou_dingshi':
-                                parent_mulu=os.path.join(os.path.dirname(__file__),'data_mulu',self.data['name'])
-                                if os.path.isdir(parent_mulu):
-                                    pass
-                                else:
-                                    os.mkdir(parent_mulu)
-                                run_dir = os.path.join(parent_mulu, str(time.time()))
-                                self.data['run_dir']=run_dir
-                                try:
-                                    os.chdir(run_dir)
-                                except:
-                                    os.mkdir(run_dir)
-                                    os.chdir(run_dir)
-                                os.popen('git init')
-                                find_git={}
-                                for k, i in enumerate(self.data['git_path']):
-                                    # 查找git地址
-                                    zanshi_mulu = os.path.join(run_dir, i.split('/')[-1].split('.')[0] + self.data['git_branch'][k])
-                                    find_git[os.path.basename(i).split('.git')[0]+self.data['git_branch'][k]]=i
-                                    os.mkdir(zanshi_mulu)
-                                    open(os.path.join(zanshi_mulu, '__init__.py'), 'w').close()
-                                    os.chdir(zanshi_mulu)
-                                    os.popen('git init')
-                                    if 'http://' not in i:
-                                        i = 'http://' + i
-                                    #i = i.split('http://')[-1]
-                                    os.system('git clone  -b  %s    %s' % (self.data['git_branch'][k], i))
-                                self.data['run_id']=str(time.time())+str(random.randint(0,100))
-                                piliang_run(json.dumps(self.data),find_git)
-                                for parent, dirnames, filenames in os.walk(self.data['run_dir']):
-                                    for filename in filenames:
-                                        os.chmod(os.path.join(parent, filename), stat.S_IWRITE)
+            jenkins_server_url=jobs[-3].strip()
+            user_id=jobs[0].strip()
+            api_token=jobs[2].strip()
+            server = jenkins.Jenkins(jenkins_server_url, username=user_id, password=api_token)
+            job_name = jobs[3].strip()
+            num = server.get_job_info(job_name)['lastBuild']['number']
+            server.build_job(job_name,parameters=json.loads(jobs[-1]))
+            while True:
+                if server.get_job_info(job_name)['lastBuild']['number'] - 1 == num:
+                    num = server.get_job_info(job_name)['lastBuild']['number']
+                    break
+            time.sleep(1)
+            while server.get_build_info(job_name, num)['building']:
+                time.sleep(1)
+            result=job
+            result['result']=server.get_build_info(job_name, num)['result']
+            zidong_statu=result['result']
+            result=json.dumps({'id':self.data['id'],'result':result})
+            run_statu_change('job_result', result, self.data['server_ip'])
+        if zidong_statu=='SUCCESS':
+            if self.data['statu'] not in ['jiekou_shishi','jiekou_dingshi']:
+                s = open(run_path, 'w')
+                id = str(self.data['id'])
+                s.write(open(os.path.join(basedir, 'model.py'), 'r').read().replace('##', str(self.data['id'])).replace('%%', self.data['run_dir'].encode('gb2312')).replace('***', run_db_mo.encode('gb2312')))
+                s.close()
+                os.system('python '+run_path)
+                for parent, dirnames, filenames in os.walk(self.data['run_dir']):
+                    for filename in filenames:
+                        os.chmod(os.path.join(parent, filename), stat.S_IWRITE)
+            elif self.data['statu'] == 'jiekou_shishi' or self.data['statu']=='jiekou_dingshi':
+                parent_mulu=os.path.join(os.path.dirname(__file__),'data_mulu',self.data['name'])
+                if os.path.isdir(parent_mulu):
+                    pass
+                else:
+                    os.mkdir(parent_mulu)
+                run_dir = os.path.join(parent_mulu, str(time.time()))
+                self.data['run_dir']=run_dir
+                try:
+                    os.chdir(run_dir)
+                except:
+                    os.mkdir(run_dir)
+                    os.chdir(run_dir)
+                os.popen('git init')
+                find_git={}
+                for k, i in enumerate(self.data['git_path']):
+                    # 查找git地址
+                    zanshi_mulu = os.path.join(run_dir, i.split('/')[-1].split('.')[0] + self.data['git_branch'][k])
+                    find_git[os.path.basename(i).split('.git')[0]+self.data['git_branch'][k]]=i
+                    os.mkdir(zanshi_mulu)
+                    open(os.path.join(zanshi_mulu, '__init__.py'), 'w').close()
+                    os.chdir(zanshi_mulu)
+                    os.popen('git init')
+                    if 'http://' not in i:
+                        i = 'http://' + i
+                    #i = i.split('http://')[-1]
+                    os.system('git clone  -b  %s    %s' % (self.data['git_branch'][k], i))
+                self.data['run_id']=str(time.time())+str(random.randint(0,100))
+                piliang_run(json.dumps(self.data),find_git)
+                for parent, dirnames, filenames in os.walk(self.data['run_dir']):
+                    for filename in filenames:
+                        os.chmod(os.path.join(parent, filename), stat.S_IWRITE)
 
-                        # s删除多余文件夹
-                        for i in os.listdir(os.path.dirname(self.data['run_dir'])):
-                                           if os.path.isdir(os.path.join(os.path.dirname(self.data['run_dir']), i)):
-                                               try:
-                                                   shutil.rmtree(os.path.join(os.path.dirname(self.data['run_dir']), i))
-                                               except:
-                                                   pass
-                        run_statu_change('over', self.data['id'], self.data['server_ip'])
-                        if 'dingshi' not in self.data['id']:
-                            run_statu_change('run', self.data['name'], self.data['server_ip'])
-                        time1=time.time()
-                        end_time=time1-time0
-                        run_statu_change('end_time',json.dumps({'end_time':end_time,'id':self.data['id']}), self.data['server_ip'])
-                        s = email_detail
-                        if s['receive'].strip() != '' and s['send'].strip() != '':
-                            send_emali(self.data['name'], self.data['id'].split('dingshi')[-1], email_detail,os.path.join(self.data['server_di'],'test/example.db'),self.data['server_ip'],self.data['statu'],self.data['pic_mulu'])
-                        '''
-                        result_path=os.path.join(r"C:\HGTP_server - test\app\templates\result",self.data[0]+'.html')
-                        now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))  # 输出当前时间
-                        fp = open(result_path, 'wb')
-                        runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
-                        runner.run(unittest.defaultTestLoader.discover(os.path.join(r'E:\run_mulu',self.data[0]), pattern="*.py", top_level_dir=None))
-                        fp.close()
-                        db = sqlite3.connect(r'C:\HGTP_server - test\example.db')
-                        cu = db.cursor()
-                        time.sleep(1)
-                        cu.execute('update  run  set statu=0 where name="%s"' % self.data[0])
-                        db.commit()
-                        db.close()
-                        '''
+        # s删除多余文件夹
+        for i in os.listdir(os.path.dirname(self.data['run_dir'])):
+            if os.path.isdir(os.path.join(os.path.dirname(self.data['run_dir']), i)):
+                try:
+                    shutil.rmtree(os.path.join(os.path.dirname(self.data['run_dir']), i))
+                except:
+                    pass
+        run_statu_change('over', self.data['id'], self.data['server_ip'])
+        if 'dingshi' not in self.data['id']:
+            run_statu_change('run', self.data['name'], self.data['server_ip'])
+        time1=time.time()
+        end_time=time1-time0
+        run_statu_change('end_time',json.dumps({'end_time':end_time,'id':self.data['id']}), self.data['server_ip'])
+        s = email_detail
+        if s['receive'].strip() != '' and s['send'].strip() != '':
+            send_emali(self.data['name'], self.data['id'].split('dingshi')[-1], email_detail,os.path.join(self.data['server_di'],'test/example.db'),self.data['server_ip'],self.data['statu'],self.data['pic_mulu'])
+        '''
+        result_path=os.path.join(r"C:\HGTP_server - test\app\templates\result",self.data[0]+'.html')
+        now = time.strftime('%Y-%m-%d-%H-%M', time.localtime(time.time()))  # 输出当前时间
+        fp = open(result_path, 'wb')
+        runner = HtmlTestRunner.HtmlTestRunner(stream=fp, title=u'用例执行情况', description=u'报告:')
+        runner.run(unittest.defaultTestLoader.discover(os.path.join(r'E:\run_mulu',self.data[0]), pattern="*.py", top_level_dir=None))
+        fp.close()
+        db = sqlite3.connect(r'C:\HGTP_server - test\example.db')
+        cu = db.cursor()
+        time.sleep(1)
+        cu.execute('update  run  set statu=0 where name="%s"' % self.data[0])
+        db.commit()
+        db.close()
+        '''
 
 def start():
     while 1:
@@ -257,9 +255,9 @@ def start():
         s.listen(15)#开始TCP监听
         #接口实时调试数据池
         basedir = os.path.abspath(os.path.dirname(__file__))
-        jiekou_shishi={}
-        name=None
         conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
         data=conn.recv(4096)   #把接收的数据实例化
+        print(data)
+        print('============================================')
         ub=MyThread(data)
         ub.start()

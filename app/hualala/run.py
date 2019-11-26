@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 # uncompyle6 version 3.3.4
 # Python bytecode 2.7 (62211)
 # Decompiled from: Python 3.7.3 (default, Jun 24 2019, 04:54:02) 
 # [GCC 9.1.0]
 # Embedded file name: C:\jieyuelianhe\old_all_server\HGTP_server\app\hualala\run.py
 # Compiled at: 2019-02-20 15:28:42
-__author__ = 'SUNZHEN519'
+
 from tempfile import mktemp
 from app import app
 from flask import send_from_directory, send_file, Response
@@ -249,11 +248,11 @@ def run_hualala(fun):
         data = json.dumps(s)
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if run_server.strip() == '':
-            port = cu.execute('select duan_kou from all_server where ip="%s"' % '172.16.32.141').fetchall()[0][0]
-            s.connect(('192.168.151.224', port))
+            port = cu.execute('select duan_kou from all_server where ip="%s"' % '192.168.69.207').fetchall()[0][0]
+            s.connect(('192.168.69.207', port))
         else:
             s.connect((run_server, int(port)))
-        data = data.replace('//', '')
+        data = data.replace('//', '').encode('utf-8')
         s.send(data)
         s.close()
         return jsonify(statu='scuess')

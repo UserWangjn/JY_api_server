@@ -13,6 +13,9 @@ from flask import current_app
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify
 import datetime, shutil
+import matplotlib.pyplot as plt
+import datetime
+
 
 def yunxing_tongji(func):
 
@@ -142,9 +145,8 @@ def test_image(func):
             db_jeikou = sqlite3.connect(current_app.config.get('JIE_KOU'))
             cu_jiekou = db_jeikou.cursor()
             git_detail = cu_jiekou.execute('select name,branch from git_detail').fetchall()
-            otherStyleTime = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-            seven_day = int(time.mktime(time.strptime(otherStyleTime, '%Y-%m-%d'))) - 604800
-            seven_day = time.strftime('%Y-%m-%d', time(seven_day))
+
+            seven_day = (datetime.datetime.now() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')
             fail_list = []
             pass_list = []
             tongguolv_list = []
